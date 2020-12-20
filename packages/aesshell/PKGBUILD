@@ -1,52 +1,48 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='aesshell'
-pkgver='0.7'
-pkgrel=2
+pkgname=aesshell
+pkgver=0.7
+pkgrel=4
 groups=('blackarch' 'blackarch-backdoor' 'blackarch-windows')
 pkgdesc='A backconnect shell for Windows and Unix written in python and uses AES
 in CBC mode in conjunction with HMAC-SHA256 for secure transport.'
 arch=('any')
 url='https://packetstormsecurity.com/files/132438/AESshell-0.7.html'
 license=('custom:unknown')
-depends=('python2' 'python2-crypto')
-source=("https://dl.packetstormsecurity.net/UNIX/penetration/rootkits/aesshell-${pkgver}.tar.bz2")
-sha1sums=('0a3b547d59c94ddae5dc148d845b29312210f5cc')
+depends=('python2' 'python2-pycryptodome')
+source=("https://dl.packetstormsecurity.net/UNIX/penetration/rootkits/aesshell-$pkgver.tar.bz2")
+sha512sums=('b4a71b3ffdde3a913990ec553c98c7a75b5ae57314d740b1771f1430733ecc9b798ff98ac3a2199845d33f41e2d07ead87b6fe30a91a6ba96ff9558bedc79755')
 
 package() {
-  cd "$srcdir/aesshell"
+  cd $pkgname
 
-  local tools="bc listen prepare"
+  _tools="bc listen prepare"
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/aesshell/windows"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  install -Dm644 readme.txt "$pkgdir/usr/share/doc/aesshell/readme.txt"
+  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/windows/" bc.exe *.dll
+  install -Dm 644 readme.txt "$pkgdir/usr/share/doc/$pkgname/readme.txt"
 
-  rm readme.txt
+  rm readme.txt bc.exe *.dll
 
-  install -Dm644 -t "$pkgdir/usr/share/aesshell/windows/" bc.exe *.dll
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  rm bc.exe *.dll
-
-  cp -a * "$pkgdir/usr/share/aesshell/"
-
-  for i in ${tools}
-  do
-    if [ "${i}" = "prepare" ]
+  for i in $_tools ; do
+    if [ "$i" = "prepare" ]
     then
-      cat > "$pkgdir/usr/bin/aesshell-${i}" << EOF
+      cat > "$pkgdir/usr/bin/$pkgname-$i" << EOF
 #!/bin/sh
 cd /usr/share/aesshell
-exec python2 ${i}.py
+exec python2 $i.py
 EOF
     else
-      cat > "$pkgdir/usr/bin/aesshell-${i}" << EOF
+      cat > "$pkgdir/usr/bin/$pkgname-$i" << EOF
 #!/bin/sh
-exec python2 /usr/share/aesshell/${i}.py "\$@"
+exec python2 /usr/share/aesshell/$i.py "\$@"
 EOF
     fi
-    chmod a+x "$pkgdir/usr/bin/aesshell-${i}"
+    chmod +x "$pkgdir/usr/bin/$pkgname-$i"
   done
 }
+

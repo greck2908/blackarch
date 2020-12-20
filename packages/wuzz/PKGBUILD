@@ -1,45 +1,47 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='wuzz'
-pkgver=204.37fd354
+pkgname=wuzz
+pkgver=225.b654366
 pkgrel=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-misc')
 pkgdesc='Interactive cli tool for HTTP inspection.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/asciimoo/wuzz'
-license=('GAGPL3')
-depends=('go')
-makedepends=('go' 'git')
-source=('git+https://github.com/asciimoo/wuzz.git')
-sha1sums=('SKIP')
-_url="github.com/asciimoo/wuzz"
+license=('AGPL3')
+depends=('glibc')
+makedepends=('git' 'go-pie')
+source=("git+https://github.com/asciimoo/$pkgname.git")
+sha512sums=('SKIP')
+_url="github.com/asciimoo/$pkgname"
 
 pkgver() {
-  cd "$srcdir/wuzz"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir"
+  cd $pkgname
 
-  mkdir -p src/$_url && rm -rf src/$_url && mv wuzz src/$_url && cd src/$_url
+  #mkdir -p "src/$_url" && rm -rf "src/$_url" && mv $pkgname "src/$_url" &&
+  #  cd "src/$_url"
 
-  GOPATH="$srcdir" go get -d -t $_url
+  GOPATH="$srcdir" go get -v -d -t .
 }
 
 package() {
-  cd "$srcdir"
+  cd "$pkgname"
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/doc/wuzz"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
 
-  GOPATH="$srcdir" go build -v github.com/asciimoo/wuzz
+  GOPATH="$srcdir" go build -v .
 
-  install -Dm755 "$srcdir/wuzz" "$pkgdir/usr/bin/wuzz"
-  install -Dm644 src/$_url/README.md "$pkgdir/usr/share/doc/wuzz/README.md"
-  install -Dm644 src/$_url/LICENSE "$pkgdir/usr/share/licenses/wuzz/LICENSE"
+  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
-  cp -a src/$_url/docs/* "$pkgdir/usr/share/doc/wuzz/"
+  cp -a docs/* "$pkgdir/usr/share/doc/$pkgname/"
 }
+

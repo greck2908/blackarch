@@ -1,43 +1,44 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='wpseku'
-pkgver=13.4333147
-pkgrel=1
-epoch=1
+pkgname=wpseku
+pkgver=39.862fb2c
+pkgrel=2
+epoch=2
 pkgdesc='Simple Wordpress Security Scanner.'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 arch=('any')
 url='https://github.com/m4ll0k/WPSeku'
 license=('custom:unknown')
-depends=('python2' 'python2-requests')
+depends=('python' 'python-requests' 'python-urllib3' 'python-humanfriendly')
 makedepends=('git')
-source=('git+https://github.com/m4ll0k/WPSeku.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/m4ll0k/WPSeku.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/WPSeku"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/WPSeku"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/wpseku"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/wpseku/" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/wpseku/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/wpseku" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/wpseku
-exec python2 wpseku.py "\${@}"
+cd /usr/share/$pkgname
+exec python $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/wpseku"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

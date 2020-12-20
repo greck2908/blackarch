@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='oscanner'
-pkgver='1.0.6'
+pkgname=oscanner
+pkgver=1.0.6
 pkgrel=7
 groups=('blackarch' 'blackarch-fuzzer')
 pkgdesc='An Oracle assessment framework developed in Java.'
@@ -11,16 +11,16 @@ url='http://www.cqure.net/wp/oscanner/'
 license=('GPL')
 depends=('java-environment')
 source=("http://www.cqure.net/tools/oscanner_bin_${pkgver//./_}.zip")
-sha1sums=('87a7268d7d1122137cfaab09c08980d95926732b')
+sha512sums=('87a7268d7d1122137cfaab09c08980d95926732b')
 
 prepare() {
-  cd "$srcdir/oscanner_bin"
+  cd oscanner_bin
 
   sed -i "4i\\cd /usr/share/oscanner" *.sh
 }
 
 package() {
-  cd "$srcdir/oscanner_bin"
+  cd oscanner_bin
 
   rm COPYING
 
@@ -32,13 +32,12 @@ package() {
   chmod -R +X .
   chmod +x *.sh
 
-  # This isn't love.
-  mkdir -p "$pkgdir/usr/share/oscanner"
-  mkdir -p "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  cp --no-preserve=ownership -r * "$pkgdir/usr/share/oscanner"
+  cp --no-preserve=ownership -r * "$pkgdir/usr/share/$pkgname/"
 
-  # This isn't Java.
-  mv "$pkgdir/usr/share/oscanner/oscanner.sh" "$pkgdir/usr/bin/oscanner"
-  mv "$pkgdir/usr/share/oscanner/reportviewer.sh" "$pkgdir/usr/bin/reportviewer"
+  mv "$pkgdir/usr/share/$pkgname/$pkgname.sh" "$pkgdir/usr/bin/$pkgname"
+  mv "$pkgdir/usr/share/$pkgname/reportviewer.sh" "$pkgdir/usr/bin/reportviewer"
 }
+

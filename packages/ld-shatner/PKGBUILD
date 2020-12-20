@@ -1,42 +1,42 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='ld-shatner'
+pkgname=ld-shatner
 pkgver=4.5c215c4
 pkgrel=3
 groups=('blackarch' 'blackarch-backdoor' 'blackarch-binary')
 pkgdesc='ld-linux code injector.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/sduverger/ld-shatner'
 license=('custom:unknown')
 depends=('gcc-libs' 'gcc')
 makedepends=('git')
-source=('git+https://github.com/sduverger/ld-shatner.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/sduverger/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/ld-shatner"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/ld-shatner"
+  cd $pkgname
 
   sed -i 's|ld-shatner.c -o $@|ld-shatner.c -m32 -o $@|' Makefile
 }
 
 build() {
-  cd "$srcdir/ld-shatner"
+  cd $pkgname
 
-  local opt=""
+  _opt=""
 
   gcc -fpie -c obj.c -o obj.o
   ld -pie obj.o -o obj.elf -e func
 
-  opt="-m32"
+  _opt="-m32"
 
-  gcc hooked.s ld-shatner.c ${opt} -o ld-shatner
+  gcc hooked.s "$pkgname.c" $_opt -o $pkgname
 
   gcc interpatch.c -o interpatch
 
@@ -44,15 +44,16 @@ build() {
 }
 
 package() {
-  cd "$srcdir/ld-shatner"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/ld-shatner"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgnmae"
 
-  cp -a interpatch ld-shatner obj.elf "$pkgdir/usr/share/ld-shatner/"
+  cp -a interpatch $pkgname obj.elf "$pkgdir/usr/share/$pkgname/"
 
-  install -Dm644 README "$pkgdir/usr/share/doc/ld-shatner/README"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README
 
-  ln -s "/usr/share/ld-shatner/ld-shatner" "$pkgdir/usr/bin/ld-shatner"
-  ln -s "/usr/share/ld-shatner/interpatch" "$pkgdir/usr/bin/interpatch"
+  ln -s "/usr/share/$pkgname/$pkgname" "$pkgdir/usr/bin/$pkgname"
+  ln -s "/usr/share/$pkgname/interpatch" "$pkgdir/usr/bin/interpatch"
 }
+

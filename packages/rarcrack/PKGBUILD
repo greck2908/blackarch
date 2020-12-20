@@ -1,33 +1,34 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='rarcrack'
-pkgver='0.2'
+pkgname=rarcrack
+pkgver=0.2
 pkgrel=5
 url='http://rarcrack.sourceforge.net/'
 groups=('blackarch' 'blackarch-cracker')
 pkgdesc='This program uses bruteforce algorithm to find correct password (rar, 7z, zip).'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 license=('GPL2')
 depends=('libxml2')
-source=("http://downloads.sourceforge.net/rarcrack/rarcrack-${pkgver}.tar.bz2")
-sha1sums=('413c70dc3ed57dfbdd7d618aa81f0ab925334b02')
+source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.bz2")
+sha512sums=('ee8da7ce868a60eaf0bf3fad429bbc1c29a625e15890013cbef28595a7d04d7b7f41943800d2e7bbe6758e8f9d1b9b8d497efc52b1101867ebd9802802c346da')
 
 prepare() {
-  cd "$srcdir/rarcrack-$pkgver"
+  cd "$pkgname-$pkgver"
 
   sed -i "s/-O2/$CFLAGS/" Makefile
 }
 
 build() {
-  cd "$srcdir/rarcrack-$pkgver"
+  cd "$pkgname-$pkgver"
 
   make
 }
 
 package() {
-  cd "$srcdir/rarcrack-$pkgver"
+  cd "$pkgname-$pkgver"
 
-  install -Dm755 rarcrack "$pkgdir/usr/bin/rarcrack"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/rarcrack/LICENSE"
+  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

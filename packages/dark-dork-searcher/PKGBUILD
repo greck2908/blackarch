@@ -1,31 +1,28 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='dark-dork-searcher'
-pkgver='1.0'
-pkgrel=2
+pkgname=dark-dork-searcher
+pkgver=1.0
+pkgrel=5
 pkgdesc='Dark-Dork Searcher.'
 url='http://rafale.org/~mattoufoutu/darkc0de.com/c0de/c/'
 groups=('blackarch' 'blackarch-windows' 'blackarch-scanner')
 license=('custom:unknown')
 arch=('any')
-source=('http://rafale.org/~mattoufoutu/darkc0de.com/c0de/c/Dark-Dork_Searcher.rar')
-noextract=('Dark-Dork_Searcher.rar')
+source=("$pkgname.rar::http://rafale.org/~mattoufoutu/darkc0de.com/c0de/c/Dark-Dork_Searcher.rar")
+noextract=("$pkgname.rar")
 makedepends=('unrar')
-sha1sums=('df60c5d4bac5452ba53db57f5c1dffcc156df38a')
+sha512sums=('6adef37de43bfd76a752a1ea1d9f2e1609c39a641442a1791c3a9074a263da7d892c4e6fa3e6fde40620791f05eeb13814462cf43011da6b7e8c2f4984358c0f')
 
 prepare() {
-  cd "$srcdir"
-
-  unrar x -y Dark-Dork_Searcher.rar
+  unrar x -y "$pkgname.rar"
 }
 
 package() {
-  cd "$srcdir"
+  install -dm 755 "$pkgdir/usr/share/windows/$pkgname"
 
-  mkdir -p "$pkgdir/usr/share/windows/dark-dork-searcher"
+  rm "$pkgname.rar"
 
-  rm *.rar
-
-  cp -a * "$pkgdir/usr/share/windows/dark-dork-searcher"
+  cp -a * "$pkgdir/usr/share/windows/$pkgname/"
 }
+

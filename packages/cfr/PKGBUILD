@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='cfr'
-pkgver=123
+pkgname=cfr
+pkgver=150
 pkgrel=1
 groups=('blackarch' 'blackarch-decompiler')
 pkgdesc='Another Java decompiler.'
@@ -10,21 +10,22 @@ arch=('any')
 url='http://www.benf.org/other/cfr/'
 license=('MIT')
 depends=('java-runtime' 'java-environment' 'bash')
-source=("http://www.benf.org/other/cfr/cfr_0_${pkgver}.jar")
-noextract=("cfr_0_${pkgver}.jar")
-sha1sums=('f2cb95ba21fc558a3795ab5b7777678ddc13d64e')
+source=("https://www.benf.org/other/$pkgname/$pkgname-0.${pkgver}.jar")
+noextract=("${pkgname}_0_${pkgver}.jar")
+sha512sums=('f22a4591b695fe297242ef4eb5f27efac880024d8d382de52903a1445183e61620b48481eebdca2c37ba601c679b38305e8484c69b19b9aa4f44d136ca87f039')
 
 package() {
-  cd "$srcdir"
 
-  mkdir -p "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  install -Dm644 "cfr_0_${pkgver}.jar" "$pkgdir/usr/share/cfr/cfr.jar"
+  install -Dm 644 "$pkgname-0.${pkgver}.jar" \
+    "$pkgdir/usr/share/$pkgname/$pkgname.jar"
 
-  cat > "$pkgdir/usr/bin/cfr" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-exec java -jar /usr/share/cfr/cfr.jar "\${@}"
+exec java -jar /usr/share/$pkgname/$pkgname.jar "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/cfr"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

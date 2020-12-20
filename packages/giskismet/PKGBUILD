@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='giskismet'
-pkgver='20110805'
+pkgname=giskismet
+pkgver=20110805
 pkgrel=7
 groups=('blackarch' 'blackarch-wireless')
 pkgdesc="A program to visually represent the Kismet data in a flexible manner."
@@ -19,7 +19,7 @@ _svnname=giskismet
 
 build() {
   msg "Starting SVN checkout..."
-  cd ${srcdir}
+
   if [ -d $_svnname/.svn ] ; then
     (cd $_svnname && svn up)
   else
@@ -27,15 +27,16 @@ build() {
   fi
   msg "SVN checkout done or server timeout"
 
-  cd "${srcdir}/${_svnname}"
+  cd "$srcdir/$_svnname"
   perl Makefile.PL
   make
 }
 
 package() {
-  cd "${srcdir}/${_svnname}"
+  cd "$_svnname"
 
-  make DESTDIR="${pkgdir}" MANDIR=/usr/share/man install
-  ln -s site_perl/${_svnname} ${pkgdir}/usr/bin/${_svnname}
+  make DESTDIR="$pkgdir" MANDIR=/usr/share/man install
+
+  ln -s "site_perl/$_svnname" "$pkgdir/usr/bin/$_svnname"
 }
-md5sums=()
+

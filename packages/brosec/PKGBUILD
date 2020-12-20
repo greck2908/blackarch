@@ -1,32 +1,39 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname="brosec"
-pkgver='1.4.1'
+pkgname=brosec
+pkgver=277.4b335e5
 pkgrel=1
 groups=('blackarch' 'blackarch-exploitation')
 pkgdesc='An interactive reference tool to help security professionals utilize useful payloads and commands.'
 url='https://github.com/gabemarshall/Brosec'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 license=('custom:unknown')
 depends=('nodejs' 'xsel')
-makedepends=('npm')
-source=("https://github.com/gabemarshall/Brosec/archive/${pkgver}.tar.gz")
-sha1sums=("f2e94bd993e433a74ca0b1c104157e534e7854da")
+makedepends=('git' 'npm')
+source=("$pkgname::git+https://github.com/gabemarshall/Brosec.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
 
 package(){
-  cd "${srcdir}/Brosec-${pkgver}"
+  cd $pkgname
 
-  local _npmdir="${pkgdir}/usr/lib/node_modules/"
+  local _npmdir="$pkgdir/usr/lib/node_modules/"
 
-  mkdir -p "${_npmdir}"
-  mkdir -p "${pkgdir}/usr/share/doc/${pkgname}"
+  install -dm 755 "$_npmdir"
+  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
 
-  cd "${_npmdir}"
+  cd "$_npmdir"
 
-  npm install --user root -g --prefix "${pkgdir}/usr" "Brosec@${pkgver}"
+  npm install --user root -g --prefix "$pkgdir/usr" Brosec@
 
-  cd "${srcdir}/Brosec-${pkgver}"
+  cd "$srcdir/$pkgname"
 
-  install -Dm644 -t "${pkgdir}/usr/share/doc/${pkgname}" README.md CHANGELOG.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md CHANGELOG.md
 }
+

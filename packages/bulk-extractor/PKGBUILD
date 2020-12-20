@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='bulk-extractor'
-pkgver='1.5.5'
-pkgrel=3
+pkgname=bulk-extractor
+pkgver=1551.b287b06
+pkgrel=1
 groups=('blackarch' 'blackarch-forensic' 'blackarch-misc')
 pkgdesc='Bulk Email and URL extraction tool.'
 arch=('x86_64')
@@ -11,17 +11,29 @@ url='https://github.com/simsong/bulk_extractor'
 license=('GPL')
 depends=('tre' 'java-environment' 'openssl' 'exiv2' 'afflib' 'libewf'
          'ncurses5-compat-libs')
-source=("http://digitalcorpora.org/downloads/bulk_extractor/bulk_extractor-${pkgver}.tar.gz")
-sha1sums=('59cab1d96089043ad4a74483bd09179262b136ab')
+makedepends=('git' 'autoconf' 'automake')
+#source=("http://digitalcorpora.org/downloads/bulk_extractor/bulk_extractor-$pkgver.tar.gz")
+source=("git+https://github.com/simsong/${pkgname//-/_}.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd "${pkgname//-/_}"
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
 
 prepare() {
-  cd "$srcdir/bulk_extractor-$pkgver"
+  cd ${pkgname//-/_}
+
+  git submodule update --recursive --remote
 
   sed -i 's|`dirname $0`|/usr/share/bulk-extractor|' java_gui/BEViewer
+
+  sh bootstrap.sh
 }
 
 build() {
-  cd "$srcdir/bulk_extractor-$pkgver"
+  cd ${pkgname//-/_}
 
   ./configure --prefix=/usr --sysconfdir=/etc
 
@@ -31,12 +43,13 @@ build() {
 }
 
 package() {
-  cd "$srcdir/bulk_extractor-$pkgver"
+  cd ${pkgname//-/_}
 
-  mkdir -p "$pkgdir/usr/share/bulk-extractor"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
   make DESTDIR="$pkgdir" install
 
-  install -m644 java_gui/BEViewer.jar "$pkgdir/usr/share/bulk-extractor"
-  install -m755 java_gui/BEViewer "$pkgdir/usr/bin"
+  install -m 644 java_gui/BEViewer.jar "$pkgdir/usr/share/$pkgname"
+  install -m 755 java_gui/BEViewer "$pkgdir/usr/bin"
 }
+

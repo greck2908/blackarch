@@ -1,21 +1,21 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='sasm'
-pkgver='3.9.0'
+pkgname=sasm
+pkgver=3.11.1
 pkgrel=1
 pkgdesc='A simple crossplatform IDE for NASM, MASM, GAS and FASM assembly languages.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 groups=('blackarch' 'blackarch-misc')
 url='https://github.com/Dman95/SASM'
 license=('custom')
 depends=('nasm' 'libxcb' 'gdb' 'qt5-base' 'mesa')
 makedepends=('qt4>=4.8')
-sha1sums=('3df0e13e6e311ef12475e5032256c80224fa485e')
-source=("https://github.com/Dman95/SASM/archive/v${pkgver}.tar.gz")
+source=("https://github.com/Dman95/SASM/archive/v$pkgver.tar.gz")
+sha512sums=('d838ddfda61e1ee69b0eb7cc3298b493137c5e9baf6b6fcee62cb0bb30cd5900fa40a485819da20c7f94af36eb2296fbd1f43407e0870309bebc121320935062')
 
 build() {
-  cd "$srcdir/SASM-$pkgver"
+  cd "SASM-$pkgver"
 
   qmake QMAKE_CXXFLAGS="$CFLAGS -Wa,--noexecstack -Wl,-z,noexecstack -W \
     -D_REENTRANT -fPIE -fPIC" QMAKE_LFLAGS="-Wl,-z,noexecstack,-fPIC"
@@ -25,30 +25,26 @@ build() {
 }
 
 package() {
-  cd "$srcdir/SASM-$pkgver"
+  cd "SASM-$pkgver"
 
-  mkdir -p "$pkgdir/usr/bin/"
-  mkdir -p "$pkgdir/usr/share/sasm"
-  mkdir -p "$pkgdir/usr/share/doc/sasm"
-  mkdir -p "$pkgdir/usr/share/sasm/NASM"
-  mkdir -p "$pkgdir/usr/share/sasm/Projects"
-  mkdir -p "$pkgdir/usr/share/sasm/include"
+  install -dm 755 "$pkgdir/usr/bin/"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"{NASM,Projects,include}
+  install -dm 755 "$pkgdir/usr/share/doc/sasm"
 
-  # Bins
-  install -Dm755 Linux/bin/fasm "$pkgdir/usr/bin/fasm"
-  install -Dm755 Linux/bin/listing "$pkgdir/usr/bin/listing"
-  install -Dm755 sasm "$pkgdir/usr/bin/sasm"
+  install -Dm 755 sasm "$pkgdir/usr/bin/$pkgname"
+  install -Dm 755 Linux/bin/fasm "$pkgdir/usr/bin/fasm"
+  install -Dm 755 Linux/bin/listing "$pkgdir/usr/bin/listing"
 
-  # Docs & License
-  install -Dm644 Linux/share/doc/sasm/* "$pkgdir/usr/share/doc/sasm/"
-  install -Dm644 Linux/share/doc/sasm/copyright \
-    "$pkgdir/usr/share/licenses/sasm/copyright"
+  install -Dm 644 Linux/share/doc/sasm/* "$pkgdir/usr/share/doc/$pkgname/"
+  install -Dm 644 Linux/share/doc/sasm/copyright \
+    "$pkgdir/usr/share/licenses/$pkgname/copyright"
 
-  # Share dir
-  install -Dm644 Linux/share/sasm/keys.ini "$pkgdir/usr/share/sasm/"
-  install -Dm644 Linux/share/sasm/sasm.png "$pkgdir/usr/share/sasm/"
-  install -Dm644 Linux/share/sasm/NASM/* "$pkgdir/usr/share/sasm/NASM/"
-  install -Dm644 Linux/share/sasm/Projects/* "$pkgdir/usr/share/sasm/Projects/"
-  install -Dm644 Linux/share/sasm/include/* "$pkgdir/usr/share/sasm/include/"
-
+  install -Dm 644 Linux/share/sasm/keys.ini "$pkgdir/usr/share/$pkgname/"
+  install -Dm 644 Linux/share/sasm/sasm.png "$pkgdir/usr/share/$pkgname/"
+  install -Dm 644 Linux/share/sasm/NASM/* "$pkgdir/usr/share/$pkgname/NASM/"
+  install -Dm 644 Linux/share/sasm/Projects/* \
+    "$pkgdir/usr/share/$pkgname/Projects/"
+  install -Dm 644 Linux/share/sasm/include/* \
+    "$pkgdir/usr/share/$pkgname/include/"
 }
+

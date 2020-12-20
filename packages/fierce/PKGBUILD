@@ -1,26 +1,37 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='fierce'
-pkgver='0.9.9'
-pkgrel=5
-groups=('blackarch' 'blackarch-scanner')
-pkgdesc="A DNS scanner"
+pkgname=fierce
+pkgver=126.2ef6794
+pkgrel=2
+groups=('blackarch' 'blackarch-recon' 'blackarch-scanner')
+pkgdesc='A DNS reconnaissance tool for locating non-contiguous IP space.'
 arch=('any')
-url='http://ha.ckers.org/fierce/'
-license=(unknown)
-depends=(perl perl-net-dns)
-source=("http://ha.ckers.org/fierce/fierce.pl"
-        "http://ha.ckers.org/fierce/hosts.txt")
-sha1sums=('245d4063473283ad523baa05719600d8213d392b'
-          '2fb2129f79dad6a8a9a9a346127814817caa403b')
+url='https://github.com/mschwager/fierce'
+license=('GPL3')
+depends=('python' 'python-dnspython')
+makedepends=('git' 'python-setuptools')
+source=("git+https://github.com/mschwager/$pkgname.git")
+sha512sums=('SKIP')
 
-prepare() {
-  # Conform to our install location.
-  sed -i 's|hosts\.txt|/etc/fierce/hosts.txt|' "$srcdir/fierce.pl"
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $pkgname
+
+  python setup.py build
 }
 
 package() {
-  install -D -m755 "$srcdir"/fierce.pl "$pkgdir"/usr/bin/fierce.pl
-  install -D -m644 "$srcdir"/hosts.txt "$pkgdir"/etc/fierce/hosts.txt
+  cd $pkgname
+
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" *.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

@@ -1,42 +1,44 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='bbscan'
-pkgver=39.57a2e33
-pkgrel=1
-pkgdesc='A tiny Batch weB vulnerability Scanner.'
+pkgname=bbscan
+pkgver=44.4b82032
+pkgrel=2
+pkgdesc='A tiny Batch web vulnerability Scanner.'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner' 'blackarch-fuzzer')
 arch=('any')
 url='https://github.com/lijiejie/bbscan'
-license=('Apache2')
-depends=('python2' 'python2-beautifulsoup4' 'python2-ipaddress')
+license=('Apache')
+depends=('python2' 'python2-beautifulsoup4' 'python2-ipaddress' 'python2-gevent'
+         'python2-urllib3')
 makedepends=('git')
-source=('git+https://github.com/lijiejie/BBScan.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/lijiejie/BBScan.git")
+sha512sums=('SKIP')
 
 pkgver() {
-	cd "$srcdir/BBScan"
+	cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-	cd "$srcdir/BBScan"
+	cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/bbscan"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/bbscan" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/bbscan"
+  cp -a * "$pkgdir/usr/share/$pkgname"
 
-  cat > "$pkgdir/usr/bin/bbscan" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/bbscan
+cd /usr/share/$pkgname
 exec python2 BBScan.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/bbscan"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='fbid'
+pkgname=fbid
 pkgver=16.1b35eb9
 pkgrel=1
 groups=('blackarch' 'blackarch-recon' 'blackarch-social')
@@ -11,24 +11,25 @@ url='https://github.com/guelfoweb/fbid'
 license=('GPL3')
 depends=('python2' 'python2-simplejson')
 makedepends=('git')
-source=('git+https://github.com/guelfoweb/fbid.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/guelfoweb/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/fbid"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/fbid"
+  cd $pkgname
 
-  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' fbid.py
+  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' "$pkgname.py"
 }
 
 package() {
-  cd "$srcdir/fbid"
+  cd $pkgname
 
-  install -Dm755 fbid.py "$pkgdir/usr/bin/fbid"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/fbid/README.md"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 }
+

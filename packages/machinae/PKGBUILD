@@ -1,38 +1,47 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='machinae'
-pkgver=70.0f4dc7c
-pkgrel=1
+pkgname=machinae
+pkgver=192.d1c78b8
+pkgrel=2
 groups=('blackarch' 'blackarch-recon')
 pkgdesc='A tool for collecting intelligence from public sites/feeds about various security-related pieces of data.'
 arch=('any')
 url='https://github.com/HurricaneLabs/machinae'
 license=('MIT')
-depends=('python' 'python-dateutil' 'python-ipaddress' 'python-requests'
-         'python-yaml' 'python-magic' 'python-stopit' 'python-feedparser'
-         'python-ipwhois' 'python-pytz' 'python-beautifulsoup4'
-         'python-filemagic' 'python-tzlocal' 'python-relatime'
-         'python-html5lib')
+depends=('python' 'python-dateutil' 'python-requests' 'python-yaml'
+         'python-magic' 'python-stopit' 'python-feedparser' 'python-ipwhois'
+         'python-pytz' 'python-beautifulsoup4' 'python-filemagic'
+         'python-tzlocal' 'python-relatime' 'python-html5lib' 'python-defang'
+         'python-dnspython')
 makedepends=('git' 'python-setuptools')
-source=('git+https://github.com/HurricaneLabs/machinae.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/HurricaneLabs/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/machinae"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
+prepare() {
+  cd $pkgname
+
+  # psst, tmp fix...
+  sed -i 's/import machinae//g' setup.py
+  sed -i 's|VERSION = machinae.__version__|VERSION = "1.4.5"|' setup.py
+  sed -i 's|ipwhois<0.11|ipwhois|' setup.py
+  sed -i 's|dnspython3|dnspython|' setup.py
+}
+
 package() {
-  cd "$srcdir/machinae"
+  cd $pkgname
 
   python setup.py install --root="$pkgdir" --optimize=1
 
-  install -Dm644 machinae.yml "$pkgdir/etc/machinae.yml"
+  install -Dm 644 "$pkgname.yml" "$pkgdir/etc/$pkgname.yml"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/machinae/" README.md
-  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/machinae/LICENSE.txt"
-
-  rm README.* LICENSE.txt
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

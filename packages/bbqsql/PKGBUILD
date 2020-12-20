@@ -1,36 +1,44 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='bbqsql'
-pkgver=259.4f7c086
-pkgrel=2
+pkgname=bbqsql
+pkgver=261.b9859d2
+pkgrel=3
 groups=('blackarch' 'blackarch-webapp' 'blackarch-exploitation')
 pkgdesc='SQL injection exploit tool.'
 arch=('any')
 url='https://github.com/neohapsis/bbqsql'
 license=('BSD')
-depends=('python2' 'python2-requests' 'python2-gevent')
-makedepends=('git' 'python2-distribute')
-source=('git+https://github.com/neohapsis/bbqsql')
-sha1sums=('SKIP')
+depends=('python2' 'python2-requests' 'python2-gevent' 'python2-eventlet'
+         'python2-configparser')
+makedepends=('git' 'python2-setuptools')
+source=("git+https://github.com/neohapsis/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/bbqsql"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/bbqsql"
+  cd $pkgname
 
   sed -i 's|import os|import os, pwd\nos.getlogin = lambda: pwd.getpwuid(os.getuid())[0]|' bbqsql/menu/bbq_core.py
 }
 
-package() {
-  cd "$srcdir/bbqsql"
+build() {
+  cd $pkgname
 
-  python2 setup.py install --root="$pkgdir" --optimize=1
-
-  install -Dm644 README.md "$pkgdir/usr/share/doc/bbqsql/README.md"
-  install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/bbqsql/LICENSE.md"
+  python2 setup.py build
 }
+
+package() {
+  cd $pkgname
+
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

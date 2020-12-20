@@ -1,28 +1,30 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python2-tqdm'
-pkgver='4.19.4'
+pkgname=python2-tqdm
+_pkgname=tqdm
+pkgver=4.38.0
 pkgrel=1
 pkgdesc='Fast, Extensible Progress Meter.'
-url='https://pypi.python.org/pypi/tqdm/'
 arch=('any')
-license=('MPL2' 'MIT')
+url='https://pypi.org/project/tqdm/#files'
+license=('MIT')
 depends=('python2')
 makedepends=('python2-setuptools')
-source=("https://pypi.python.org/packages/68/bf/f1f515b82e15d367c073d4b1fd6d47ac072657b0b1ace45f17c50f8dc84c/tqdm-${pkgver}.tar.gz")
-sha1sums=('35bab7afa806a8626a631f33b2ea4239f6d0815d')
+source=("https://files.pythonhosted.org/packages/08/ad/be20d03f9fae7059cd2bd866f47cef00cfaebab304d3699200245bc31583/$_pkgname-$pkgver.tar.gz")
+sha512sums=('54d6e63213a4bb07c16fc36e821c963764fba4fa23593b0116a967877c11306259dbf77ffb8c24048548127cb06583c8d5cfcbf5e7538df9856c5056ad091d6d')
 
 build() {
-  cd "$srcdir/tqdm-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/tqdm-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  python2 setup.py install --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
-  mv "$pkgdir/usr/bin/tqdm" "$pkgdir/usr/bin/tqdm2"
+  mv "$pkgdir/usr/bin/$_pkgname" "$pkgdir/usr/bin/${_pkgname}2"
 }
+

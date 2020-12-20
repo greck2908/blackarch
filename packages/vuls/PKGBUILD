@@ -1,41 +1,48 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='vuls'
-pkgver=758.d926b7f
+pkgname=vuls
+pkgver=1040.cfbf779
 pkgrel=1
 groups=('blackarch' 'blackarch-scanner')
 pkgdesc='Vulnerability scanner for Linux/FreeBSD, agentless, written in Go.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/future-architect/vuls'
 license=('GPL3')
-depends=('glibc' 'go' 'sqlite')
-makedepends=('go' 'git')
-source=('git+https://github.com/future-architect/vuls.git')
-sha1sums=('SKIP')
+depends=('glibc' 'sqlite')
+makedepends=('dep' 'git' 'go-pie')
+source=("git+https://github.com/future-architect/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/vuls"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
+prepare() {
+  export GOROOT=/usr/lib/go
+  export GOPATH="$srcdir/go"
+  export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+  mkdir -p "go/src/github.com/future-architect"
+
+  ln -rTsf $pkgname "go/src/github.com/future-architect/$pkgname"
+}
+
 build() {
-  cd "$srcdir"
+  cd "$GOPATH/src/github.com/future-architect/$pkgname"
 
-  mkdir -p src/$url && rm -rf src/$url && mv vuls src/$url && cd src/$url
-
-  GOPATH="$srcdir" go get -d -t $url
+  make install
 }
 
 package() {
-  cd "$srcdir"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  mkdir -p "$pkgdir/usr/bin"
-
-  GOPATH="$srcdir" go build -v $url
-
-  install -Dm755 "$srcdir/vuls" "$pkgdir/usr/bin/vuls"
-  install -Dm644 -t "$pkgdir/usr/share/doc/vuls/" src/$url/*.md
-  install -Dm644 src/$url/LICENSE "$pkgdir/usr/share/licenses/vuls/LICENSE"
+  install -Dm 755 "$GOPATH/bin/$pkgname" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" \
+    "go/src/github.com/future-architect/$pkgname/"*.md
+  install -Dm 644 "go/src/github.com/future-architect/$pkgname/LICENSE" \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

@@ -1,36 +1,37 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='redsocks'
-pkgver=200.27b1788
-pkgrel=1
+pkgname=redsocks
+pkgver=211.19b822e
+pkgrel=2
 pkgdesc='Transparent redirector of any TCP connection to proxy.'
 groups=('blackarch' 'blackarch-proxy' 'blackarch-networking')
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/darkk/redsocks'
-license=('Apache2')
+license=('Apache')
 depends=('libevent')
 makedepends=('git')
-source=('git+https://github.com/darkk/redsocks.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/darkk/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/redsocks"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/redsocks"
+  cd $pkgname
 
   make
 }
 
 package() {
-  cd "$srcdir/redsocks"
+  cd $pkgname
 
-  install -Dm755 redsocks "$pkgdir/usr/bin/redsocks"
-  install -Dm644 -t "$pkgdir/usr/share/redsocks/" redsocks.conf.example \
-    redsocks.service
-  install -Dm644 README "$pkgdir/usr/share/doc/redsocks/README"
+  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" "$pkgname.conf.example" \
+    "$pkgname.service"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 }
+

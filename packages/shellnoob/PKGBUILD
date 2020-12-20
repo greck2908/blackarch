@@ -1,39 +1,47 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='shellnoob'
-pkgver='2.1'
-pkgrel=3
+pkgname=shellnoob
+pkgver=30.c923d5e
+pkgrel=1
+pkgdesc='A toolkit that eases the writing and debugging of shellcode.'
 groups=('blackarch' 'blackarch-debugger' 'blackarch-exploitation')
-pkgdesc="A toolkit that eases the writing and debugging of shellcode"
-url="https://github.com/reyammer/shellnoob"
+url='https://github.com/reyammer/shellnoob'
 arch=('any')
 license=('MIT')
 depends=('python2')
-source=("https://github.com/reyammer/shellnoob/archive/v${pkgver}.tar.gz")
-sha1sums=('545c7b3328f810ecbaf7d0e1364ed6cafd9dafd5')
+makedepends=('git')
+source=("git+https://github.com/reyammer/$pkgname.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
 
 prepare() {
-  cd "shellnoob-$pkgver"
+  cd $pkgname
 
-  sed -e 's/env python$/env python2/g' -i shellnoob.py
-  sed -e "s|README|/usr/share/doc/shellnoob/README.md|g" -i shellnoob.py
+  sed -e 's/env python$/env python2/g' -i "$pkgname.py"
+  sed -e "s|README|/usr/share/doc/shellnoob/README.md|g" -i "$pkgname.py"
 }
 
 package() {
-  cd "shellnoob-$pkgver"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/lib/python2.7/site-packages"
-  mkdir -p "$pkgdir/usr/share/doc/shellnoob/samples/x86-linux"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/lib/python2.7/site-packages"
+  install -dm 755 "$pkgdir/usr/share/doc/$pkgname/samples/x86-linux"
 
-  install -m755 shellnoob.py \
+  install -m 755 "$pkgname.py" \
     "$pkgdir/usr/lib/python2.7/site-packages/shellnoob.py"
   ln -s "/usr/lib/python2.7/site-packages/shellnoob.py" \
     "$pkgdir/usr/bin/shellnoob"
 
-  install -m644 README.md "$pkgdir/usr/share/doc/shellnoob/README.md"
-  mkdir -p "$pkgdir/usr/share/doc/shellnoob/samples/x86-linux"
-  install -m644 samples/x86-linux/* \
-    "$pkgdir/usr/share/doc/shellnoob/samples/x86-linux"
+  install -m 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -dm 755 "$pkgdir/usr/share/doc/$pkgname/samples/x86-linux"
+  install -m 644 samples/x86-linux/* \
+    "$pkgdir/usr/share/doc/$pkgname/samples/x86-linux"
 }
+

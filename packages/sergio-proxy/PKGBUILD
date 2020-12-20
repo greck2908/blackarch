@@ -1,30 +1,42 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='sergio-proxy'
-pkgver='0.2.1'
-pkgrel=6
+pkgname=sergio-proxy
+pkgver=20.8a91bb4
+pkgrel=1
 groups=('blackarch' 'blackarch-proxy' 'blackarch-spoof')
 pkgdesc='A multi-threaded transparent HTTP proxy for manipulating web traffic.'
-url='https://github.com/darkoperator/dnsrecon'
+url='https://github.com/supernothing/sergio-proxy'
 license=('GPL3')
 arch=('any')
-depends=('python2')
-source=("https://sergio-proxy.googlecode.com/files/sergio-proxy-v${pkgver}.tar.gz")
-sha1sums=('c7c16f248b5f36d32990a5d683354e2f5723467f')
+depends=('python2' 'python2-twisted' 'python2-pyopenssl')
+source=("git+https://github.com/supernothing/$pkgname.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
 
 package() {
-  cd "$srcdir/sergio-proxy"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/sergio-proxy"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  cp -a * "$pkgdir/usr/share/sergio-proxy"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.txt
 
-  cat > "$pkgdir/usr/bin/sergio-proxy" <<EOF
+  rm README.txt
+
+  cp -a * "$pkgdir/usr/share/$pkgname/"
+
+  cat > "$pkgdir/usr/bin/$pkgname" <<EOF
 #!/bin/sh
-exec python2 /usr/share/sergio-proxy/sergio-proxy.py "\$@"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/sergio-proxy"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

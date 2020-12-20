@@ -1,34 +1,37 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='wifijammer'
-pkgver=79.879c3eb
-pkgrel=1
+pkgname=wifijammer
+pkgver=92.5f69529
+pkgrel=2
 groups=('blackarch' 'blackarch-wireless')
-pkgdesc='A python script to continuosly jam all wifi clients within range.'
+pkgdesc='A python script to continuously jam all wifi clients within range.'
 arch=('any')
 url='https://github.com/DanMcInerney/wifijammer'
 license=('GPL2')
-depends=('python2' 'scapy')
-makedepends=('git')
-source=('git+https://github.com/DanMcInerney/wifijammer.git')
-sha1sums=('SKIP')
+depends=('python2' 'python2-scapy')
+makedepends=('git' 'python2-setuptools')
+source=("git+https://github.com/DanMcInerney/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/wifijammer"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare(){
-  cd "$srcdir/wifijammer"
+build() {
+  cd $pkgname
 
-  #sed -i 's|/usr/bin/env python|/usr/bin/env python2|g' wifijammer.py
+  python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/wifijammer"
+  cd $pkgname
 
-  install -Dm755 wifijammer.py "$pkgdir/usr/bin/wifijammer"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/wifijammer"
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+
+  #install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 }
+

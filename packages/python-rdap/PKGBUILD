@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-rdap
+_pkgname=rdap
+pkgver=1.1.0
+pkgrel=2
+pkgdesc='Registration Data Access Protocol tools.'
+arch=('any')
+url='https://pypi.org/project/rdap/#files'
+license=('Apache')
+depends=('python' 'python-six')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/0f/fa/56d9c38157f303effa0ab9cbf50e164543ab7dbeaefc61525a403985add9/$_pkgname-$pkgver.tar.gz")
+sha512sums=('2df3cf03a08dd110654c5e7c73da3c0f89e9065f67b401bdd666b4f5eabb6209523eafa86606265925b8ac3b3a8e9d28c92a67e67e66d674877883b254c5f973')
+
+build() {
+  cd "$_pkgname-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "$_pkgname-$pkgver"
+
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+}
+

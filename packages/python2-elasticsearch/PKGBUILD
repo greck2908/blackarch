@@ -1,26 +1,28 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python2-elasticsearch'
-pkgver='6.0.0'
-pkgrel=1
-pkgdesc='Python client for Elasticsearch.'
+pkgname=python2-elasticsearch
+_pkgname=elasticsearch
+pkgver=7.6.0
+pkgrel=2
+pkgdesc='Python client for Elasticsearch'
+url='https://pypi.org/project/elasticsearch/#files'
 arch=('any')
-url='https://pypi.python.org/pypi/elasticsearch/'
 license=('Apache')
-depends=('python2')
+depends=('python2' 'python2-urllib3')
 makedepends=('python2-setuptools')
-source=("https://pypi.python.org/packages/58/d8/de6d8a4658c94acffc9ff8b61942ac80b5b4b6d2b2b92ef8f4a503a09844/elasticsearch-${pkgver}.tar.gz")
-sha1sums=('e7deec92e32b30f27dc2a080794f1a1cbf3379e1')
+source=("https://files.pythonhosted.org/packages/94/1a/2369fc9264c655c20908053b59fae7f65ddc47f123d89b533a724ae1d19d/$_pkgname-$pkgver.tar.gz")
+sha512sums=('981b77f415b3744b88baf02eca5ce37ddedad524c9992f1d1e50ea1604ee13e6c093a2fe723cefc71338452fdfc64d36ab6b94a9f6453e8820dc54eab917dce3')
 
 build() {
-  cd "$srcdir/elasticsearch-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/elasticsearch-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 }
+

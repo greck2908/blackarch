@@ -1,33 +1,41 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='pyjfuzz'
-pkgver=143.b8198c4
-pkgrel=1
+pkgname=pyjfuzz
+pkgver=157.f777067
+pkgrel=3
 pkgdesc='Python JSON Fuzzer.'
 groups=('blackarch' 'blackarch-fuzzer')
 arch=('any')
 url='https://github.com/mseclab/PyJFuzz'
 license=('MIT')
 depends=('python2' 'python2-bottle' 'python2-netifaces' 'python2-argparse'
-         'python2-wsgiref' 'python2-pyopenssl' 'python2-gramfuzz')
+         'python2-wsgiref' 'python2-pyopenssl' 'python2-gramfuzz'
+         'python2-gitpython')
 makedepends=('git' 'python2-setuptools')
-source=('git+https://github.com/mseclab/PyJFuzz.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/mseclab/PyJFuzz.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/PyJFuzz"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-package() {
-  cd "$srcdir/PyJFuzz"
+build() {
+  cd $pkgname
 
-  python2 setup.py install --root="$pkgdir"
-
-  install -Dm644 -t "$pkgdir/usr/share/doc/pyjfuzz/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/pyjfuzz/LICENSE"
-
-  mv "$pkgdir/usr/bin/pjf" "$pkgdir/usr/bin/pyjfuzz"
+  python2 setup.py build
 }
+
+package() {
+  cd $pkgname
+
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  mv "$pkgdir/usr/bin/pjf" "$pkgdir/usr/bin/$pkgname"
+}
+

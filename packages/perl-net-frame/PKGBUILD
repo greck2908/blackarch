@@ -1,21 +1,22 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='perl-net-frame'
-pkgver='1.17'
-pkgrel=3
+pkgname=perl-net-frame
+_pkgname=Net-Frame
+pkgver=1.21
+pkgrel=2
 pkgdesc='The base framework for frame crafting.'
 arch=('any')
 license=('PerlArtistic' 'GPL')
 options=('!emptydirs')
 depends=('perl-bit-vector>=0' 'perl-class-gomor>=1.00' 'perl-net-ipv6addr>=0'
          'perl-socket6>=0')
-url='http://search.cpan.org/dist/Net-Frame'
-source=("http://search.cpan.org/CPAN/authors/id/G/GO/GOMOR/Net-Frame-${pkgver}.tar.gz")
-sha1sums=('9dd8228bc60d26789cbd427d12810cedac8a2f6a')
+url='https://metacpan.org/release/Net-Frame'
+source=("http://search.cpan.org/CPAN/authors/id/G/GO/GOMOR/$_pkgname-$pkgver.tar.gz")
+sha512sums=('a0c8a8a7825bd82b5ef7bcb1872a53b38199adcc601fbf7a16653f57923659fd46454539b616a1aacb17a175363c005a88ef2948f41cecf32d6edbf46cdcca4f')
 
 prepare() {
-  cd "$srcdir/Net-Frame-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   export PERL_MM_USE_DEFAULT=1 PERL5LIB="" \
     PERL_AUTOINSTALL=--skipdeps \
@@ -27,15 +28,16 @@ prepare() {
 }
 
 build() {
-  cd "$srcdir/Net-Frame-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   make
 }
 
 package() {
-  cd "$srcdir/Net-Frame-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  make install
+  make DESTDIR="$pkgdir" install
 
   find "$pkgdir" -name .packlist -o -name perllocal.pod -delete
 }
+

@@ -1,20 +1,20 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='aphopper'
-pkgver='0.3'
+pkgname=aphopper
+pkgver=0.3
 pkgrel=4
-pkgdesc='A program that automatically hops between access points of different wireless networks.'
-url="http://aphopper.sourceforge.net/"
 groups=('blackarch' 'blackarch-wireless')
+arch=('x86_64' 'aarch64')
+pkgdesc='A program that automatically hops between access points of different wireless networks.'
+url='http://aphopper.sourceforge.net/'
 license=('GPL')
 makedepends=('git')
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
-source=('git+https://github.com/BlackArch/aphopper')
-sha1sums=('SKIP')
+source=("git+https://github.com/BlackArch/$pkgname.git")
+sha512sums=('SKIP')
 
 build() {
-  cd "$srcdir/aphopper"
+  cd $pkgname
 
   CPPFLAGS= ./configure --prefix=/usr
 
@@ -22,7 +22,8 @@ build() {
 }
 
 package() {
-  cd "$srcdir/aphopper"
+  cd $pkgname
 
-  install -Dm755 hopper "$pkgdir/usr/bin/aphopper"
+  install -Dm 755 hopper "$pkgdir/usr/bin/$pkgname"
 }
+

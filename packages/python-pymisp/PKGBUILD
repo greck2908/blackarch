@@ -1,0 +1,33 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgbase=python-pymisp
+pkgname=('python-pymisp')
+_pkgname=pymisp
+pkgver=2.4.135.3
+pkgrel=2
+pkgdesc='Python API for MISP.'
+arch=('any')
+url='https://pypi.org/project/pymisp/#files'
+license=('BSD')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/42/4f/e43db204c86c107ac978d7b64e1d0fea7d343505333796ad4190704cb90a/$_pkgname-$pkgver.tar.gz")
+sha512sums=('e0c1f8aac80bf2bc9fc3d0ef16bffb7c180003b74f0ecf64cdc7c7b1d9db0bcedb1e78c834491fd4735d184ab43333613fc1ceff47d8b640559f947e5c9d1f45')
+
+build() {
+  cd "$srcdir/$_pkgname-$pkgver"
+
+  python setup.py build
+}
+
+package_python-pymisp() {
+  depends=('python' 'python-six' 'python-dateutil' 'python-jsonschema'
+           'python-requests' 'python-deprecated')
+  optdepends=('python-virustotal-api: VirusTotal support')
+
+  cd "$_pkgname-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

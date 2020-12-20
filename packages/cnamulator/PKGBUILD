@@ -1,41 +1,40 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='cnamulator'
+pkgname=cnamulator
 pkgver=5.4667c68
-pkgrel=1
+pkgrel=2
 groups=('blackarch' 'blackarch-mobile' 'blackarch-recon')
 pkgdesc='A phone CNAM lookup utility using the OpenCNAM API.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/packetassailant/cnamulator'
 license=('MIT')
-depends=('glibc' 'go')
-makedepends=('go' 'git')
-source=('git+https://github.com/packetassailant/cnamulator.git')
-sha1sums=('SKIP')
+depends=('glibc')
+makedepends=('git' 'go-pie')
+source=("git+https://github.com/packetassailant/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/cnamulator"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir"
+  mkdir -p "src/$url" && rm -rf "src/$url" && mv $pkgname "src/$url" &&
+    cd "src/$url"
 
-  mkdir -p src/$url && rm -rf src/$url && mv cnamulator src/$url && cd src/$url
-
-  GOPATH="$srcdir" go get -d -t github.com/packetassailant/cnamulator
+  GOPATH="$srcdir" go get -d -t $url
 }
 
 package() {
-  cd "$srcdir"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  mkdir -p "$pkgdir/usr/bin"
+  GOPATH="$srcdir" go build -v $url
 
-  GOPATH="$srcdir" go build -v github.com/packetassailant/cnamulator
-
-  install -Dm755 "$srcdir/cnamulator" "$pkgdir/usr/bin/cnamulator"
-  install -Dm644 src/$url/README.md "$pkgdir/usr/share/doc/cnamulator/README.md"
-  install -Dm644 src/$url/LICENSE "$pkgdir/usr/share/licenses/cnamulator/LICENSE"
+  install -Dm 755 "$srcdir/$pkgname" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" "src/$url/README.md"
+  install -Dm 644 "src/$url/LICENSE" \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

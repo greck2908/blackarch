@@ -1,52 +1,41 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='autopsy'
-pkgver='2.24'
-pkgrel=10
+pkgname=autopsy
+pkgver=4.17.0
+_skver=4.10.1
+pkgrel=1
+epoch=1
+pkgdesc='The forensic browser. A GUI for the Sleuth Kit.'
 groups=('blackarch' 'blackarch-forensic')
-pkgdesc='A GUI for The Sleuth Kit.'
-arch=('any')
-url='http://www.sleuthkit.org/autopsy'
-license=("GPL2")
-depends=("perl" "sleuthkit")
-options=(!emptydirs)
-source=("http://downloads.sourceforge.net/autopsy/autopsy-${pkgver}.tar.gz"
-        "autopsy.pl")
-sha1sums=('084a6554a1494f5f34df4a5a3635c8d3dc3b8822'
-          '0a5c32785bc0f7866103966f65d00a904118705c')
-
-prepare() {
-  cd "$srcdir/autopsy-$pkgver"
-
-  cat > autopsy << EOF
-#!/usr/bin/perl -wT
-use lib '/usr/lib/autopsy/';
-use lib '/usr/lib/autopsy/lib/';
-EOF
-  cat base/autopsy.base >> autopsy
-
-  sed -i 's:conf.pl:/etc/autopsy.pl:' autopsy lib/Main.pm
-}
+arch=('x86_64')
+url='http://www.sleuthkit.org/autopsy/'
+license=('MIT' 'Apache')
+depends=('java-runtime=8' 'testdisk' 'sleuthkit' 'sleuthkit-java'
+         'java8-openjfx' 'python2-pytsk3' 'python-pytsk3')
+source=("https://github.com/sleuthkit/$pkgname/releases/download/$pkgname-$pkgver/$pkgname-$pkgver.zip"
+        'Autopsy.desktop')
+sha512sums=('2a720a351755bd44ba71f08e1422800663fe2805faee53279fe30dedb0221c61107c0ac7c90e1bde92949dd71a6fccfcbd89e23db14867bc107ec29679c86f68'
+            '5182844950b8930277a92b9c99f39e77b1d2828134b5cb0a65997277a892e768b50daaeb85ba2b52c8decf7a8fa1d7200055a34510f408ef705639b6d0d7a93a')
 
 package() {
-  cd "$srcdir/autopsy-$pkgver"
+  cd "$pkgname-$pkgver"
 
-  mkdir -p "$pkgdir/etc"
-  mkdir -p "$pkgdir/usr/lib/autopsy/help"
-  mkdir -p "$pkgdir/usr/lib/autopsy/lib"
-  mkdir -p "$pkgdir/usr/lib/autopsy/pict"
-  mkdir -p "$pkgdir/usr/share/man/man1"
-  mkdir -p "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/opt/$pkgname"
 
-  install -m755 autopsy "$pkgdir/usr/lib/autopsy/"
+  cp -r * "$pkgdir/opt/$pkgname/"
 
-  chmod +x "$pkgdir/usr/lib/autopsy/autopsy"
+  rm -f \
+    "$pkgdir/opt/$pkgname/$pkgname/modules/ext/sleuthkit-postgresql-$_skver.jar"
+  ln -sf "/usr/share/java/sleuthkit-$_skver.jar" \
+    "$pkgdir/opt/$pkgname/$pkgname/modules/ext/sleuthkit-postgresql-$_skver.jar"
 
-  install -m644 "$srcdir/autopsy.pl" "$pkgdir/etc"
+  install -m 755 "bin/$pkgname" "$pkgdir/opt/$pkgname/bin/$pkgname"
+  install -Dm 644 icon.ico "$pkgdir/usr/share/pixmaps/$pkgname.ico"
+  install -Dm 644 "$srcdir/Autopsy.desktop" \
+    "$pkgdir/usr/share/applications/Autopsy.desktop"
 
-  cp --no-preserve=ownership -r help lib pict "$pkgdir/usr/lib/autopsy/"
-  cp --no-preserve=ownership -r man "$pkgdir/usr/share"
-
-  ln -s ../lib/autopsy/autopsy "$pkgdir/usr/bin/autopsy"
+  ln -sf "/opt/$pkgname/bin/$pkgname" "$pkgdir/usr/bin/$pkgname"
 }
+

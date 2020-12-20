@@ -1,27 +1,27 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='crackle'
-pkgver=100.ff47a48
+pkgname=crackle
+pkgver=111.d83b4b6
 pkgrel=1
 groups=('blackarch' 'blackarch-cracker' 'blackarch-bluetooth')
-pkgdesc="Crack and decrypt BLE encryption"
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+pkgdesc='Crack and decrypt BLE encryption.'
+arch=('x86_64' 'aarch64')
 url='https://github.com/mikeryan/crackle/'
 license=('GPL')
 depends=('libpcap')
 makedepends=('git')
-source=('git+https://github.com/mikeryan/crackle/')
-sha1sums=('SKIP')
+source=("git+https://github.com/mikeryan/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd crackle
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/crackle"
+  cd $pkgname
 
   CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
 
@@ -29,9 +29,10 @@ build() {
 }
 
 package() {
-  cd "$srcdir/crackle"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  make "INSTALL_DIR=$pkgdir/usr/bin" install
+  make INSTALL_DIR="$pkgdir/usr/bin" install
 }
+

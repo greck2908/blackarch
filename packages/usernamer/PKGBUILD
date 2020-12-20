@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='usernamer'
-pkgver='7.813139d'
-pkgrel=3
+pkgname=usernamer
+pkgver=20.12983f8
+pkgrel=1
 groups=('blackarch' 'blackarch-misc' 'blackarch-automation')
 pkgdesc='Pentest Tool to generate usernames/logins based on supplied names.'
 arch=('any')
@@ -11,24 +11,25 @@ url='https://github.com/jseidl/usernamer'
 license=('GPL3')
 depends=('python2')
 makedepends=('git')
-source=('git+https://github.com/jseidl/usernamer.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/jseidl/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/usernamer"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/usernamer"
+  cd $pkgname
 
-  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' usernamer.py
+  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' "$pkgname.py"
 }
 
 package() {
-  cd "$srcdir/usernamer"
+  cd $pkgname
 
-  install -Dm755 usernamer.py "$pkgdir/usr/bin/usernamer"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/usernamer/README.md"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
 }
+

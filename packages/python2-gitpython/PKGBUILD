@@ -1,24 +1,30 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python2-gitpython'
-pkgver='2.1.7'
-pkgrel=1
+pkgname=python2-gitpython
+_pkgname=GitPython
+pkgver=3.0.5
+pkgrel=2
 pkgdesc='A python library used to interact with Git repositories.'
-arch=('any')
-url='http://gitorious.org/git-python'
+url='https://github.com/gitpython-developers/gitpython'
 license=('BSD')
-depends=('python2' 'git' 'python2-gitdb>=0.6.0')
-makedepends=('python2' 'python2-distribute')
-conflicts=('gitpython-git' 'gitpython')
-replaces=('gitpython')
-source=("https://pypi.python.org/packages/e1/ec/9f2bbc86a0188bf83221212be87fa4b70dc71a9385efcc95a25e9789894e/GitPython-${pkgver}.tar.gz")
-sha1sums=('60c5ffd02e558dcefcaad13d652340021c192d1b')
+arch=('any')
+depends=('git' 'python2-gitdb')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/d2/e8/0bd80cc9e1422f5449d663479459c3c032ff7acaf6609a63324d23bde9ac/GitPython-$pkgver.tar.gz")
+sha512sums=('bb47f1dcbe753d7c413f51e48e545b4406b793ad795dd7de3c6aeee313a0ad6409876886cb4b7ebbbddae6a4d2a3f108f403b22133069a61ccb3aef32ab120ad')
+
+build() {
+  cd "$_pkgname-$pkgver"
+
+  python2 setup.py build
+}
 
 package() {
-  cd "$srcdir/GitPython-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  python2 setup.py install --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/python2-gitpython/LICENSE"
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

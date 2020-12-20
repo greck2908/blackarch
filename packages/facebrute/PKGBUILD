@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='facebrute'
+pkgname=facebrute
 pkgver=7.ece355b
 pkgrel=3
 groups=('blackarch' 'blackarch-cracker' 'blackarch-webapp')
@@ -11,19 +11,20 @@ url='https://github.com/emerinohdz/FaceBrute'
 license=('Artistic')
 depends=('python2' 'python2-httplib2')
 makedepends=('git')
-source=('git+https://github.com/emerinohdz/FaceBrute.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/emerinohdz/FaceBrute.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/FaceBrute"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/FaceBrute"
+  cd $pkgname
 
-  install -Dm755 facebrute.py "$pkgdir/usr/bin/facebrute"
-  install -Dm644 README "$pkgdir/usr/share/doc/facebrute/README"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/facebrute/LICENSE"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

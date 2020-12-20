@@ -1,34 +1,29 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='hash-buster'
-pkgver=24.12bceef
-pkgrel=1
+pkgname=hash-buster
+pkgver=48.3f1d7c9
+pkgrel=2
 pkgdesc='A python script which scraps online hash crackers to find cleartext of a hash.'
 groups=('blackarch' 'blackarch-crypto')
 arch=('any')
 url='https://github.com/UltimateHackers/Hash-Buster/'
 license=('MIT')
-depends=('python2')
+depends=('python' 'python-requests')
 makedepends=('git')
-source=('git+https://github.com/UltimateHackers/Hash-Buster/')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/UltimateHackers/Hash-Buster.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/Hash-Buster"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  cd "$srcdir/Hash-Buster"
-
-  sed -i 's|env python|env python2|' hash.py
-}
-
 package() {
-  cd "$srcdir/Hash-Buster"
+  cd $pkgname
 
-  install -Dm755 hash.py "$pkgdir/usr/bin/hash-buster"
-  install -Dm644 -t "$pkgdir/usr/share/doc/hash-buster/" README.md
+  install -Dm 755 hash.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 }
+

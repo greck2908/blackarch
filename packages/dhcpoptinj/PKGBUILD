@@ -1,29 +1,29 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='dhcpoptinj'
-pkgver=45.ec80d98
+pkgname=dhcpoptinj
+pkgver=123.58a12c6
 pkgrel=1
 pkgdesc='DHCP option injector.'
 groups=('blackarch' 'blackarch-networking')
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/misje/dhcpoptinj'
 license=('GPL3')
 depends=('libnetfilter_queue')
 makedepends=('git' 'cmake')
-source=('git+https://github.com/misje/dhcpoptinj.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/misje/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/dhcpoptinj"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/dhcpoptinj"
+  cd $pkgname
 
-  mkdir build
+  mkdir -p build
 
   cd build
 
@@ -33,9 +33,10 @@ build() {
 }
 
 package() {
-  cd "$srcdir/dhcpoptinj"
+  cd $pkgname
 
-  install -Dm755 build/dhcpoptinj "$pkgdir/usr/bin/dhcpoptinj"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/dhcpoptinj/README.md"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/dhcpoptinj/LICENSE"
+  install -Dm 755 "build/$pkgname" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

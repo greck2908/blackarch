@@ -1,29 +1,31 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='blackarch-config-x11'
-pkgver=1.f195684
-pkgrel=2
+pkgname=blackarch-config-x11
+pkgver=21.e38cf84
+pkgrel=1
 pkgdesc='BlackArch config for the X11 user settings.'
 arch=('any')
+groups=('blackarch-config')
 url='https://github.com/BlackArch/blackarch-config-x11'
 license=('custom:unknown')
-depends=()
+depends=('xterm' 'rxvt-unicode' 'terminus-font')
 makedepends=('git')
-source=('git+https://github.com/BlackArch/blackarch-config-x11.git')
-install='blackarch-config-x11.install'
-sha1sums=('SKIP')
+source=("git+https://github.com/BlackArch/$pkgname.git")
+sha512sums=('SKIP')
+install="$pkgname.install"
 
 pkgver() {
-  cd "$srcdir/blackarch-config-x11"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/blackarch-config-x11"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/share/blackarch/config/x11"
+  install -dm 755 "$pkgdir/usr/share/blackarch/config/x11"
 
-  cp -a Xresources xprofile "$pkgdir/usr/share/blackarch/config/x11/"
+  cp -a * "$pkgdir/usr/share/blackarch/config/x11/"
 }
+

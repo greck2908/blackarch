@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='pathzuzu'
+pkgname=pathzuzu
 pkgver=64.4f4533c
 pkgrel=2
 pkgdesc='Checks for PATH substitution vulnerabilities and logs the commands executed by the vulnerable executables.'
@@ -11,20 +11,21 @@ url='https://github.com/ShotokanZH/Pa-th-zuzu'
 license=('GPL2')
 depends=('bash')
 makedepends=('git')
-source=('git+https://github.com/ShotokanZH/Pa-th-zuzu.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/ShotokanZH/Pa-th-zuzu.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/Pa-th-zuzu"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/Pa-th-zuzu"
+  cd $pkgname
 
-  install -Dm755 pathzuzu.sh "$pkgdir/usr/bin/pathzuzu"
-  install -Dm644 -t "$pkgdir/usr/share/pathzuzu" pathzuzu.sh.md5 version.txt
-  install -Dm644 README.md "$pkgdir/usr/share/doc/pathzuzu/README.md"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/pathzuzu/LICENSE"
+  install -Dm 755 "$pkgname.sh" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" pathzuzu.sh.md5 version.txt
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

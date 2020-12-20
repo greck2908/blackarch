@@ -1,31 +1,39 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='sipvicious'
-pkgver='0.2.8'
-pkgrel=8
+pkgname=sipvicious
+pkgver=387.f76b03c
+pkgrel=1
 groups=('blackarch' 'blackarch-automation' 'blackarch-exploitation')
-pkgdesc="Tools for auditing SIP devices"
+pkgdesc='Tools for auditing SIP devices.'
 arch=('any')
-url='http://blog.sipvicious.org'
+url='http://blog.sipvicious.org/'
 license=('GPL2')
-depends=('python2')
-source=("https://github.com/EnableSecurity/sipvicious/archive/v${pkgver}.tar.gz")
+depends=('python')
+makedepends=('git' 'python-setuptools')
+source=("git+https://github.com/EnableSecurity/$pkgname.git")
 conflicts=('sipvicious-svn')
-sha1sums=('6b0af366109bf0e8922cc97578d70b7a6c5913c8')
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $pkgname
+
+  python setup.py build
+}
 
 package() {
-  cd ${srcdir}/sipvicious-${pkgver}
+  cd $pkgname
 
-  chmod 755 *.py
-  sed -i "s:/usr/bin/env python:/usr/bin/env python2:" *.py
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
-  mkdir -p "${pkgdir}/usr/bin"
-  mkdir -p "${pkgdir}/usr/share"
-
-  for _prog in svmap.py svwar.py svcrack.py svreport.py svcrash.py ; do
-    ln -s "../share/sipvicious/$_prog" "$pkgdir/usr/bin/${_prog%%.*}"
+  for i in "$pkgdir/usr/bin/"*; do
+    mv $i "$(echo $i | tr -s '_' '-')"
   done
-
-  mv ${srcdir}/sipvicious-${pkgver} ${pkgdir}/usr/share/sipvicious
 }
+

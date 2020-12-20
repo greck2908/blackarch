@@ -1,26 +1,28 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python2-scrypt'
-pkgver='0.8.0'
+pkgname=python2-scrypt
+_pkgname=scrypt
+pkgver=0.8.13
 pkgrel=1
 pkgdesc='Bindings for the scrypt key derivation function library.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
-url='https://pypi.python.org/pypi/scrypt/'
+url='https://pypi.org/project/scrypt/#files'
+arch=('x86_64' 'aarch64')
 license=('BSD')
 depends=('python2')
 makedepends=('python2-setuptools')
-source=("https://pypi.python.org/packages/af/82/44b030646b9de44ba5a5c7e87b0419a4d44318ba18468f5292b9c16737ac/scrypt-${pkgver}.tar.gz")
-sha1sums=('b798a5c2d640af1fa384b6cb9377e077b9117f2b')
+source=("https://files.pythonhosted.org/packages/80/3d/141eb80e754b86f6c25a2ffaf6c3af3acdb65a3e3700829a05ab0c5d965d/$_pkgname-$pkgver.tar.gz")
+sha512sums=('a65e24b0a7dbe02e16c0b38b52c66549f36370e267aacf348a107cb980221806ca783cee0caa95ab6af978dd2b0d8efdb6b06798bb43742d4623bd8f6535e9a5')
 
 build() {
-  cd "$srcdir/scrypt-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/scrypt-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 }
+

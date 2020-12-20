@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='swap-digger'
-pkgver=36.1533a83
+pkgname=swap-digger
+pkgver=41.dcf50e2
 pkgrel=1
 pkgdesc='A tool used to automate Linux swap analysis during post-exploitation or forensics.'
 groups=('blackarch' 'blackarch-forensic')
@@ -11,19 +11,20 @@ url='https://github.com/sevagas/swap_digger'
 license=('GPL3')
 depends=('bash')
 makedepends=('git')
-source=('git+https://github.com/sevagas/swap_digger.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/sevagas/swap_digger.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/swap_digger"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/swap_digger"
+  cd $pkgname
 
-  install -Dm755 swap_digger.sh "$pkgdir/usr/bin/swap-digger"
-  install -Dm644 -t "$pkgdir/usr/share/doc/swap-digger/" README.txt
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/swap-digger/LICENSE"
+  install -Dm 755 swap_digger.sh "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

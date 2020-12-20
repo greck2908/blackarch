@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='wireless-ids'
-pkgver='24.b132071'
+pkgname=wireless-ids
+pkgver=24.b132071
 pkgrel=3
 groups=('blackarch' 'blackarch-wireless' 'blackarch-sniffer' 'blackarch-defensive')
 pkgdesc='Ability to detect suspicious activity such as (WEP/WPA/WPS) attack by sniffing the air for wireless packets.'
@@ -11,30 +11,31 @@ url='https://github.com/SYWorks/wireless-ids'
 license=('GPL2')
 depends=('python2')
 makedepends=('git')
-source=('git+https://github.com/SYWorks/wireless-ids.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/SYWorks/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/wireless-ids"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/wireless-ids"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  install -Dm644 mac-oui.db "$pkgdir/usr/share/wireless-ids/mac-oui.db"
-  install -Dm644 wids.py "$pkgdir/usr/share/wireless-ids/wids.py"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/wireless-ids/README"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/wireless-ids/LICENSE"
+  install -Dm 644 mac-oui.db "$pkgdir/usr/share/$pkgname/mac-oui.db"
+  install -Dm 644 wids.py "$pkgdir/usr/share/$pkgname/wids.py"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
-cat > "$pkgdir/usr/bin/wireless-ids" << EOF
+cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/wireless-ids
+cd /usr/share/$pkgname
 exec python2 ./wids.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/wireless-ids"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

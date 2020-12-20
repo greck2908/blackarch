@@ -1,43 +1,26 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='skipfish'
-pkgver='2.10b'
-pkgrel=8
-groups=('blackarch' 'blackarch-fuzzer' 'blackarch-scanner' 'blackarch-webapp')
+pkgname=skipfish
+pkgver=2.10b
+pkgrel=10
+groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner' 'blackarch-fuzzer')
 pkgdesc='A fully automated, active web application security reconnaissance tool.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 license=('Apache')
 url='http://code.google.com/p/skipfish/'
-depends=('openssl' 'libidn')
-source=('git+https://github.com/spinkham/skipfish.git'
-        "skipfish.patch")
-sha1sums=('SKIP'
-          '36b5b90f9569d364687d618c45d9ffab8b6db566')
-
-build() {
-  cd "$srcdir/skipfish"
-
-  # Patch fixes application run directory system error
-  patch -Np0 -i ../skipfish.patch
-  make
-}
+depends=('openssl-1.0' 'libidn' 'libidn11')
+source=('skipfish-bin.tar.xz')
+sha512sums=('25a922ba5d8a768e132f600c5272ad7303462a54f60f2d10ac7203a89bd9d7b6aa2047e6e087b5a16debf82384598e758de5d932f070dd0691eac7c1165d7997')
 
 package() {
-  cd "$srcdir/skipfish"
+  cd skipfish-bin
 
-  mkdir -p "$pkgdir/usr/share/skipfish"
-  mkdir -p "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  mkdir -p "$pkgdir/usr/share/skipfish/dictionaries"
-  install -Dm644 dictionaries/* "$pkgdir/usr/share/skipfish/dictionaries"
+  install -Dm 755 -t "$pkgdir/usr/bin/" bin/*
+  install -Dm 644 man1/* "$pkgdir/usr/share/man/man1/$pkgname.1"
 
-  mkdir -p assets "$pkgdir/usr/share/skipfish/assets"
-  install -Dm644 assets/* "$pkgdir/usr/share/skipfish/assets/"
-
-  mkdir -p "$pkgdir/usr/share/skipfish/signatures"
-  install -Dm644 signatures/* "$pkgdir/usr/share/skipfish/signatures/"
-
-  install -Dm755 skipfish tools/* "$pkgdir/usr/bin/"
-  install -Dm644 doc/skipfish.1 "$pkgdir/usr/share/man/man1/skipfish.1"
+  cp -a share/* "$pkgdir/usr/share/$pkgname/"
 }
+

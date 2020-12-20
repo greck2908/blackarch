@@ -1,45 +1,45 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='cansina'
-pkgver=230.1d79ee9
-pkgrel=1
-epoch=1
+pkgname=cansina
+pkgver=51.9d171bd
+pkgrel=3
+epoch=2
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 pkgdesc='A python-based Web Content Discovery Tool.'
 arch=('any')
 url='https://github.com/deibit/cansina'
 license=('GPL3')
-depends=('python2' 'python2-requests' 'java-environment' 'fuzzdb')
+depends=('python' 'python-requests' 'java-environment' 'fuzzdb')
 makedepends=('git')
-source=('git+https://github.com/deibit/cansina.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/deibit/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/cansina"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/cansina"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/cansina"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/cansina/" *.py
+  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" *.py
 
-  for i in core plugins utils
-  do
-    install -dm755 "${i}" "${pkgdir}/usr/share/cansina/$i"
-    cp -a --no-preserve=ownership "${i}"/* "$pkgdir/usr/share/cansina/$i"
+  for i in core plugins utils ; do
+    install -dm 755 "$i" "$pkgdir/usr/share/$pkgname/$i"
+    cp -a --no-preserve=ownership "$i"/* "$pkgdir/usr/share/$pkgname/$i"
   done
 
-  cat > "$pkgdir/usr/bin/cansina" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/cansina
-exec python2 ./cansina.py "\$@"
+cd /usr/share/$pkgname
+exec python ./$pkgname.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/cansina"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

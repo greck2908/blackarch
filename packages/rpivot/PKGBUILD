@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='rpivot'
-pkgver=2.c280a92
+pkgname=rpivot
+pkgver=5.4963487
 pkgrel=1
 pkgdesc='Socks4 reverse proxy for penetration testing.'
 groups=('blackarch' 'blackarch-proxy')
@@ -11,41 +11,41 @@ url='https://github.com/artkond/rpivot'
 license=('custom:unknown')
 depends=('python2' 'python2-ntlm-auth')
 makedepends=('git')
-source=('git+https://github.com/artkond/rpivot.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/artkond/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/rpivot"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/rpivot"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/rpivot"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/rpivot/" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/rpivot/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/rpivot-server" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname-server" << EOF
 #!/bin/sh
-cd /usr/share/rpivot
-exec python2 server.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 server.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/rpivot-server"
+  chmod +x "$pkgdir/usr/bin/$pkgname-server"
 
-  cat > "$pkgdir/usr/bin/rpivot-client" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname-client" << EOF
 #!/bin/sh
-cd /usr/share/rpivot
-exec python2 client.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 client.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/rpivot-client"
-
+  chmod +x "$pkgdir/usr/bin/$pkgname-client"
 }
+

@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='htcap'
-pkgver=53.dcc0078
+pkgname=htcap
+pkgver=154.e4535f0
 pkgrel=1
 epoch=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
@@ -12,32 +12,33 @@ url='https://github.com/segment-srl/htcap'
 license=('GPL3')
 depends=('python2' 'python2-simplejson' 'phantomjs')
 makedepends=('git')
-source=('git+https://github.com/segment-srl/htcap.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/segment-srl/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/htcap"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/htcap"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/htcap"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/htcap/README.md"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/htcap/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/htcap" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/htcap
-exec python2 htcap.py "\$@"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/htcap"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -1,43 +1,45 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='pulsar'
-pkgver=34.633c8a6
+pkgname=pulsar
+pkgver=47.1658d4d
 pkgrel=1
 pkgdesc='Protocol Learning and Stateful Fuzzing.'
 groups=('blackarch' 'blackarch-fuzzer')
 arch=('any')
 url='https://github.com/hgascon/pulsar'
 license=('BSD')
-depends=('python2' 'cuckoo' 'python2-pygraphviz' 'python2-levenshtein')
+depends=('python2' 'cuckoo' 'python2-pygraphviz' 'python2-levenshtein'
+         'python2-progressbar' 'python2-numpy')
 makedepends=('git')
-source=('git+https://github.com/hgascon/pulsar.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/hgascon/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/pulsar"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/pulsar"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/pulsar"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/pulsar/README.md"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/pulsar/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/pulsar/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/pulsar" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/pulsar
-exec python2 pulsar.py "\$@"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/pulsar"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='facebot'
+pkgname=facebot
 pkgver=23.57f6025
 pkgrel=3
 groups=('blackarch' 'blackarch-recon' 'blackarch-webapp')
@@ -16,31 +16,32 @@ depends=('python2' 'python2-beautifulsoup4' 'python2-configparser'
          'python2-markupsafe' 'python2-six' 'python2-pager' 'cookiejar'
          'python2-setuptools')
 makedepends=('git')
-source=('git+https://github.com/pun1sh3r/facebot.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/pun1sh3r/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/facebot"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/facebot"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/facebot"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/facebot" README.md Dependencies \
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md Dependencies \
     requirements.txt
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/facebot"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/facebot" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/facebot
+cd /usr/share/$pkgname
 exec python2 facebotv2.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/facebot"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

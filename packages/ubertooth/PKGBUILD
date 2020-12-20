@@ -1,22 +1,22 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='ubertooth'
-pkgver='2017.03.R2'
-pkgrel=1
+pkgname=ubertooth
+pkgver=2018.12.R1
+pkgrel=2
 groups=('blackarch' 'blackarch-bluetooth')
 pkgdesc='A 2.4 GHz wireless development board suitable for Bluetooth experimentation. Open source hardware and software. Tools only.'
 url='https://github.com/greatscottgadgets/ubertooth/releases'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 license=('GPL')
-depends=('libusbx' 'libbtbb' 'bluez-libs' 'libpcap' 'python2' 'python2-numpy'
+depends=('libusb' 'libbtbb' 'bluez-libs' 'libpcap' 'python2' 'python2-numpy'
          'python2-pyside' 'python2-pyqt4' 'python2-pyusb')
 makedepends=('cmake')
 source=("https://github.com/greatscottgadgets/ubertooth/archive/${pkgver//./-}.tar.gz")
-sha1sums=('a685db6317ee7e125da0a5ea93b694acc41a5cc6')
+sha512sums=('b7d1ac06c826261c8089a8e3714354b067ed83447ddca1ca7047078c2dbc9a077fd158cd2075611a23a313ab51034f42352dba16002802ffb30690d9bd3df99f')
 
 prepare() {
-  cd "$srcdir/ubertooth-${pkgver//./-}/host"
+  cd "$pkgname-${pkgver//./-}/host"
 
   find "$srcdir/" -name "*.py" -exec sed -i 's|env python|env python2|' {} \;
   find "$srcdir/" -name "*.py" -exec \
@@ -24,9 +24,9 @@ prepare() {
 }
 
 build() {
-  cd "$srcdir/ubertooth-${pkgver//./-}/host"
+  cd "$pkgname-${pkgver//./-}/host"
 
-  mkdir build
+  mkdir -p build
 
   cd build
 
@@ -37,9 +37,10 @@ build() {
 }
 
 package() {
-  cd "$srcdir/ubertooth-${pkgver//./-}/host"
+  cd "$pkgname-${pkgver//./-}/host"
 
   cd build
 
   make DESTDIR="$pkgdir" install
 }
+

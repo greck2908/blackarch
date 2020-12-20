@@ -1,26 +1,32 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python2-recommonmark'
-pkgver='0.4.0'
+pkgname=python2-recommonmark
+_pkgname=recommonmark
+pkgver=0.6.0
 pkgrel=1
-pkgdesc='A markdown parser for docutils.'
+pkgdesc='A docutils-compatibility bridge to CommonMark, enabling you to write CommonMark inside of Docutils & Sphinx projects.'
+url='https://pypi.org/project/recommonmark/#files'
 arch=('any')
-url='https://pypi.python.org/pypi/recommonmark/'
-license=('BSD')
-depends=('python2')
+license=('MIT')
+depends=('python2' 'python2-commonmark' 'python2-docutils' 'python2-sphinx')
 makedepends=('python2-setuptools')
-source=("https://pypi.python.org/packages/3d/95/aa1085573adf3dc7b164ae8569d57b1af5e98922e40345bb7efffed5ad2e/recommonmark-${pkgver}.tar.gz")
-sha1sums=('fde7ab7f2bbb3f14237f1479be8808869b45adb5')
+source=("https://files.pythonhosted.org/packages/f5/71/046160d730f664662d65b3f8b399b519ad378ffa4369ff3b6060cf1318d7/$_pkgname-$pkgver.tar.gz")
+sha512sums=('f94f1ee426015478a95c2ed4b6ea87a75012447ae65d6623445f923d9d616b34efb055bcfde157862fcce38749c827905b839194fa1af3a1fe1cb7e11f18835a')
 
 build() {
-  cd "$srcdir/recommonmark-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/recommonmark-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+
+  for i in "$pkgdir/usr/bin/"*; do
+    mv $i "${i}2"
+  done
 }
+

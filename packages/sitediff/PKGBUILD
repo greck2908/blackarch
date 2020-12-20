@@ -1,43 +1,44 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='sitediff'
+pkgname=sitediff
 pkgver=3.1383935
-pkgrel=1
+pkgrel=8
 groups=('blackarch' 'blackarch-webapp' 'blackarch-fingerprint')
 pkgdesc='Fingerprint a web app using local files as the fingerprint sources.'
 arch=('any')
 url='https://github.com/digininja/sitediff'
 license=('custom:unknown')
-depends=('ruby')
-makedepends=('ruby' 'git')
-source=('git+https://github.com/digininja/sitediff.git')
-install='sitediff.install'
-sha1sums=('SKIP')
+depends=('ruby' 'ruby-bundler' 'libxslt')
+makedepends=('git')
+source=("git+https://github.com/digininja/$pkgname.git")
+install="$pkgname.install"
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/sitediff"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/sitediff"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/sitediff"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/sitediff/" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/sitediff"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/sitediff" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/sitediff
-exec ruby sitediff.rb "\${@}"
+cd /usr/share/$pkgname
+exec bundle exec $pkgname.rb "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/sitediff"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

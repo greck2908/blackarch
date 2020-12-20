@@ -1,44 +1,40 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='netscan2'
-pkgver=50.aebdb9c
-pkgrel=1
+pkgname=netscan2
+pkgver=58.a1db723
+pkgrel=2
+epoch=1
 groups=('blackarch' 'blackarch-scanner' 'blackarch-recon')
 pkgdesc='Active / passive network scanner.'
 arch=('any')
 url='https://github.com/walchko/netscan2'
 license=('MIT')
-depends=('python2' 'python2-pcapy'  'python2-dpkt' 'mitmproxy'
-         'python2-nose' 'python2-requests' 'python2-netaddr' 'python2-awake')
-makedepends=('git' 'python2-setuptools')
-source=('git+https://github.com/walchko/netscan2.git')
-sha1sums=('SKIP')
+depends=('python2' 'python2-pcapy'  'python2-dpkt' 'mitmproxy' 'python2-nose'
+         'python2-simplejson' 'python2-requests' 'python2-netaddr'
+         'python2-awake')
+makedepends=('git' 'python2-setuptools' 'python2-build-utils')
+source=("git+https://github.com/walchko/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/netscan2"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/netscan2"
+  cd $pkgname
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/netscan2"
+  cd $pkgname
 
-  python2 setup.py install --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/netscan2/" README.rst MANIFEST.in
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/netscan2/LICENSE"
-
-  cd "$pkgdir/usr/bin"
-
-  for tool in *
-  do
-    mv ${tool} "netscan2-${tool}"
-  done
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.rst
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

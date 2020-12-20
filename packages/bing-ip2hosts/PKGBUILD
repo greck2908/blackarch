@@ -1,27 +1,23 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='bing-ip2hosts'
-pkgver='0.4'
-pkgrel=2
+pkgname=bing-ip2hosts
+pkgver=1.0.3
+pkgrel=1
 groups=('blackarch' 'blackarch-recon')
 pkgdesc='Enumerates all hostnames which Bing has indexed for a specific IP address.'
 arch=('any')
 url='http://www.morningstarsecurity.com/research/bing-ip2hosts'
 license=('GPL3')
-source=("http://www.morningstarsecurity.com/downloads/bing-ip2hosts-$pkgver.tar.gz")
-sha1sums=('f95b519dd107b9e4009d4c19e33304aba9e22fb6')
+depends=('bash' 'wget' 'bind-tools')
+source=("https://github.com/urbanadventurer/bing-ip2hosts/archive/v$pkgver.tar.gz")
+sha512sums=('eb2a0531e53893b942bebf43ca2f2ced3a5d323d8223685443ef6c45c2678c7d060839759770c3a586143636b79bd98bb0598877cbc3d85a840588669dadaf10')
 
 package() {
-  cd "$srcdir/bing-ip2hosts-$pkgver"
+  cd "$pkgname-$pkgver"
 
-  # Base directories
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/doc/bing-ip2hosts"
-
-  # Bin
-  install -m755 bing-ip2hosts "$pkgdir/usr/bin"
-
-  # Doc
-  install -m644 README CHANGELOG "$pkgdir/usr/share/doc/bing-ip2hosts"
+  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

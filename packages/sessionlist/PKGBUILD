@@ -1,29 +1,36 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='sessionlist'
-pkgver='1.0'
-pkgrel=2
+pkgname=sessionlist
+pkgver=6.3efc3b2
+pkgrel=1
 groups=('blackarch' 'blackarch-networking' 'blackarch-sniffer')
 pkgdesc='Sniffer that intents to sniff HTTP packets and attempts to reconstruct interesting authentication data from websites that do not employ proper secure cookie auth.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='http://www.0xrage.com/'
 license=('GPL3')
 depends=('libpcap' 'ncurses')
 makedepends=('git')
-source=('git+https://github.com/iamrage/sessionlist.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/iamrage/$pkgname.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
 
 build() {
-  cd "$srcdir/sessionlist"
+  cd $pkgname
 
   make
 }
 
 package() {
-  cd "$srcdir/sessionlist"
+  cd $pkgname
 
-  install -Dm755 sessionlist "$pkgdir/usr/bin/sessionlist"
-  install -Dm644 README "$pkgdir/usr/share/sessionlist/README"
-  install -Dm644 COPYING "$pkgdir/usr/share/licenses/sessionlist/COPYING"
+  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" README
+  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
 }
+

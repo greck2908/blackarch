@@ -1,30 +1,31 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='ctunnel'
-pkgver='0.7'
+pkgname=ctunnel
+pkgver=0.7
 pkgrel=1
 pkgdesc='Tunnel and/or proxy TCP or UDP connections via a cryptographic tunnel.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='http://nardcore.org/ctunnel'
 license=('GPL')
 depends=('zlib' 'libgcrypt')
 groups=('blackarch' 'blackarch-tunnel')
-source=("http://nardcore.org/ctunnel/$pkgver/ctunnel-${pkgver}.tar.gz")
+source=("http://nardcore.org/$pkgname/$pkgver/$pkgname-$pkgver.tar.gz")
 DLAGENTS=("https::/usr/bin/curl -k -o %o %u")
-sha1sums=('9d369fe3df9ba65880caacede0e9bb9e8e79021b')
+sha512sums=('9d369fe3df9ba65880caacede0e9bb9e8e79021b')
 
 build() {
-  cd "$srcdir/ctunnel-$pkgver"
+  cd "$pkgname-$pkgver"
 
   make
 }
 
 package(){
-  cd "$srcdir/ctunnel-$pkgver"
+  cd "$pkgname-$pkgver"
 
-  install -Dm755 src/ctunnel "$pkgdir/usr/bin/ctunnel"
-  install -Dm644 ctunnel.1 "$pkgdir/usr/share/man/man1/ctunnel.1"
-  install -Dm644 -t "$pkgdir/usr/share/doc/ctunnel" AUTHORS ChangeLog INSTALL \
-    README
+  install -Dm 755 "src/$pkgname" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 "$pkgname.1" "$pkgdir/usr/share/man/man1/$pkgname.1"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" AUTHORS ChangeLog README \
+    INSTALL
 }
+

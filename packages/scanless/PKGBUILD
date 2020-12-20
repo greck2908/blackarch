@@ -1,37 +1,38 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='scanless'
-pkgver=43.29039d3
+pkgname=scanless
+pkgver=85.d775b0c
 pkgrel=1
 pkgdesc='Utility for using websites that can perform port scans on your behalf.'
 groups=('blackarch' 'blackarch-scanner')
 arch=('any')
 url='https://github.com/vesche/scanless'
 license=('custom:unknown')
-depends=('python2' 'python2-argparse' 'python2-beautifulsoup4'
-         'python2-requests')
+depends=('python' 'python-beautifulsoup4' 'python-crayons' 'python-requests'
+         'python-bs4')
 makedepends=('git')
-source=('git+https://github.com/vesche/scanless.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/vesche/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/scanless"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/scanless"
+  cd $pkgname
 
-  python2 setup.py build
+  python setup.py build
 }
 
 package() {
-  cd "$srcdir/scanless"
+  cd $pkgname
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr --optimize=1
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/scanless/" README.md
-  install -Dm644 UNLICENSE "$pkgdir/usr/share/licenses/scanless/UNLICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 UNLICENSE "$pkgdir/usr/share/licenses/$pkgname/UNLICENSE"
 }
+

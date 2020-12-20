@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='githack'
-pkgver=6.b83a744
-pkgrel=2
+pkgname=githack
+pkgver=10.1fed62c
+pkgrel=1
 pkgdesc='A `.git` folder disclosure exploit.'
 groups=('blackarch' 'blackarch-recon')
 arch=('any')
@@ -11,32 +11,33 @@ url='https://github.com/lijiejie/githack'
 license=('custom:unknown')
 depends=('python2')
 makedepends=('git')
-source=('git+https://github.com/lijiejie/githack.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/lijiejie/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-	cd "$srcdir/githack"
+	cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-	cd "$srcdir/githack"
+	cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/githack"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/githack" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/githack"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/githack" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/githack
+cd /usr/share/$pkgname
 exec python2 GitHack.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/githack"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

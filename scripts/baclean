@@ -71,17 +71,18 @@ start_ssh_agent() {
 remote_old_cleanup() {
 	tmp=$(mktemp -d /tmp/baclean.XXXXXXXX)
 	trap "rm -rf $tmp" EXIT
-	for a in x86_64 armv6h armv7h aarch64 ; do
+	for a in x86_64 aarch64 ; do
 		cd "$a"
 		echo "ARCH: $a"
 
 		tar xzf blackarch.db.tar.gz -C "$tmp"
-		for p in *.pkg.tar.xz ; do
-			pkgnamever=$(sed 's/-[^-]\+.pkg.tar.xz$//' <<< "$p")
+		for p in *.pkg.tar.{xz,zst} ; do
+			pkgnamever=$(sed 's/-[^-]\+.pkg.tar.*$//' <<< "$p")
 			[[ -e "$tmp/$pkgnamever" ]] || rm -v "$p" "$p.sig"
 		done
 		cd ..
 	done
+  date +%s > /var/www/blackarch/lastupdate
 }
 
 main() {

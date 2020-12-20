@@ -1,41 +1,46 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='libbde'
-pkgver=232.7621829
+pkgname=libbde
+pkgver=289.c893c79
 pkgrel=1
 pkgdesc='A library to access the BitLocker Drive Encryption (BDE) format.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+groups=('blackarch' 'blackarch-crypto')
+arch=('x86_64' 'aarch64')
 url='https://github.com/libyal/libbde'
 license=('LGPL3')
 provides=('libbde')
+depends=('python' 'python2')
 makedepends=('git' 'autoconf' 'automake' 'libtool' 'gettext' 'pkg-config'
              'bison' 'flex')
-source=('git+https://github.com/libyal/libbde.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/libyal/$pkgname.git")
+sha512sums=('SKIP')
 
 _gitname='libbde'
 
 pkgver() {
-  cd "$srcdir/$_gitname"
+  cd $_gitname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$_gitname"
+  cd $_gitname
 
   ./synclibs.sh
   ./autogen.sh
   ./configure \
     --prefix=/usr \
-    --sysconfdir=/etc
+    --sysconfdir=/etc \
+    --enable-python2 \
+    --enable-python
 
   make
 }
 
 package() {
-  cd "$_gitname"
+  cd $_gitname
 
-  make DESTDIR="$pkgdir/" install
+  make DESTDIR="$pkgdir" install
 }
+

@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='easy-creds'
-pkgver='3.9'
-pkgrel=2
+pkgname=easy-creds
+pkgver=45.bf9f00c
+pkgrel=1
 groups=('blackarch' 'blackarch-automation' 'blackarch-networking')
 pkgdesc='A bash script that leverages ettercap and other tools to obtain credentials.'
 arch=('any')
@@ -12,24 +12,32 @@ license=('GPL2')
 depends=('bash' 'ettercap' 'dsniff' 'dhcp' 'hostapd' 'ipcalc' 'screen'
          'freeradius' 'hamster' 'sslstrip' 'metasploit' 'mdk3' 'aircrack-ng'
          'asleap')
-source=("https://github.com/brav0hax/easy-creds/archive/v${pkgver}.tar.gz")
-sha1sums=('689a1a6d75a4569891d0712c70cde4e94f03ef2b')
+makedepends=('git')
+source=("git+https://github.com/brav0hax/$pkgname.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
 
 package() {
-  cd "$srcdir/easy-creds-$pkgver"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  install -Dm755 easy-creds.sh "$pkgdir/usr/share/easy-creds/easy-creds.sh"
-  install -m644 definitions.sslstrip \
-    "$pkgdir/usr/share/easy-creds/definitions.sslstrip"
-  install -Dm644 README "$pkgdir/usr/share/easy-creds/"
+  install -Dm 755 "$pkgname.sh" "$pkgdir/usr/share/$pkgname/$pkgname.sh"
+  install -m 644 definitions.sslstrip \
+    "$pkgdir/usr/share/$pkgname/definitions.sslstrip"
+  install -Dm 644 README "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/easy-creds" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/easy-creds
-exec ./easy-creds.sh
+cd /usr/share/$pkgname
+exec ./$pkgname.sh "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/easy-creds"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

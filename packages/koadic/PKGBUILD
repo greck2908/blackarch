@@ -1,43 +1,52 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='koadic'
-pkgver=109.26a4de2
-pkgrel=1
+pkgname=koadic
+pkgver=627.20b977f
+pkgrel=2
+epoch=1
 pkgdesc='A Windows post-exploitation rootkit similar to other penetration testing tools such as Meterpreter and Powershell Empire.'
-groups=('blackarch' 'blackarch-exploitation' 'blackarch-automation')
+groups=('blackarch' 'blackarch-automation' 'blackarch-exploitation')
 arch=('any')
 url='https://github.com/zerosum0x0/koadic'
-license=('custom:unknown')
-depends=('python2' 'python2-crypto' 'python2-pyasn1' 'impacket')
+license=('APACHE')
+depends=('impacket' 'python' 'python-pycryptodome' 'python-pyasn1'
+         'python-tabulate' 'python-flask' 'python-rjsmin')
 makedepends=('git')
-source=('git+https://github.com/zerosum0x0/koadic.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/zerosum0x0/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/koadic"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
+prepare() {
+  cd $pkgname
+
+  git submodule update --init --recursive
+}
+
 package() {
-  cd "$srcdir/koadic"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/koadic"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/koadic/" README.md DEFCON25.pdf
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/koadic/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" DEFCON25.pdf README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
-  rm README.md LICENSE DEFCON25.pdf
+  rm DEFCON25.pdf LICENSE README.md
 
-  cp -a * "$pkgdir/usr/share/koadic/"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/koadic" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/koadic
-exec python2 koadic "\${@}"
+cd /usr/share/$pkgname
+exec python3 $pkgname "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/koadic"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

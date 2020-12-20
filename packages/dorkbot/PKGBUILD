@@ -1,43 +1,37 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='dorkbot'
-pkgver=6.cf616d4
-pkgrel=1
+pkgname=dorkbot
+pkgver=157.b5d7e7d
+pkgrel=2
 pkgdesc='Command-line tool to scan Google search results for vulnerabilities.'
 groups=('blackarch' 'blackarch-scanner')
 arch=('any')
 url='https://github.com/utiso/dorkbot'
 license=('custom:unknown')
-depends=('python2' 'python2-argparse')
-makedepends=('git')
-source=('git+https://github.com/utiso/dorkbot.git')
-sha1sums=('SKIP')
+depends=('python')
+makedepends=('git' 'python-setuptools')
+source=("git+https://github.com/utiso/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/dorkbot"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-package() {
-  cd "$srcdir/dorkbot"
+build() {
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/dorkbot"
-
-  install -Dm644 -t "$pkgdir/usr/share/doc/dorkbot/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/dorkbot/LICENSE"
-
-  rm README.md LICENSE
-
-  cp -a * "$pkgdir/usr/share/dorkbot/"
-
-  cat > "$pkgdir/usr/bin/dorkbot" << EOF
-#!/bin/sh
-cd /usr/share/dorkbot
-exec python2 dorkbot.py "\${@}"
-EOF
-
-  chmod a+x "$pkgdir/usr/bin/dorkbot"
+  python setup.py build
 }
+
+package() {
+  cd $pkgname
+
+  python setup.py install --root="$pkgdir" --skip-build
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

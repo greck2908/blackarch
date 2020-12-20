@@ -1,39 +1,41 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='barf'
-pkgver=811.d3ec350
-pkgrel=1
+pkgname=barf
+pkgver=923.9547ef8
+pkgrel=3
 pkgdesc='A multiplatform open source Binary Analysis and Reverse engineering Framework.'
 groups=('blackarch' 'blackarch-binary' 'blackarch-reversing')
 arch=('any')
 url='https://github.com/programa-stic/barf-project'
 license=('BSD')
-depends=('python2' 'python2-pygments' 'python2-pyparsing' 'python2-pydot'
-         'python2-pyelftools' 'python2-capstone' 'python2-ropper' 'ropgadget')
-makedepends=('git' 'python2-setuptools')
-source=('git+https://github.com/programa-stic/barf-project.git')
-sha1sums=('SKIP')
+depends=('python' 'python-pygments' 'python-pyparsing' 'python-pydot'
+         'python-pyelftools' 'python-capstone' 'python-ropper' 'ropgadget'
+         'python-future' 'python-networkx' 'python-pefile')
+makedepends=('git' 'python-setuptools')
+source=("$pkgname::git+https://github.com/programa-stic/barf-project.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/barf-project"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/barf-project"
+  cd $pkgname
 
-  python2 setup.py build
+  python setup.py build
 }
 
 package() {
-  cd "$srcdir/barf-project"
+  cd $pkgname
 
-  python2 setup.py install --root="$pkgdir" --optimize=1
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/barf/" README.md MANIFEST.in \
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md MANIFEST.in \
     CHANGELOG.md doc/papers/*
 
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/barf/LICENSE"
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

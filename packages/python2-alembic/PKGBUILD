@@ -1,27 +1,31 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python2-alembic'
-pkgver='0.9.6'
-pkgrel=1
+pkgname=python2-alembic
+_pkgname=alembic
+pkgver=1.4.2
+pkgrel=2
 pkgdesc='A database migration tool for SQLAlchemy.'
+url='https://pypi.org/project/alembic/#files'
 arch=('any')
-url='https://bitbucket.org/zzzeek/alembic'
 license=('MIT')
-depends=('python2' 'python2-sqlalchemy' 'python2-mako' 'python2-editor')
-source=("https://pypi.python.org/packages/bf/b3/b28ea715824f8455635ece3c12f59d5d205f98cc378858e414e3aa6ebdbc/alembic-${pkgver}.tar.gz")
-sha1sums=('be22df78c2c9d49ebd0c6b7451eb6ca78dc12098')
+depends=('python2' 'python2-sqlalchemy' 'python2-dateutil' 'python2-mako'
+         'python2-editor')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/60/1e/cabc75a189de0fbb2841d0975243e59bde8b7822bacbb95008ac6fe9ad47/$_pkgname-$pkgver.tar.gz")
+sha512sums=('82bdfe442c19033aa2b802ec49edd13ed265c00a2b5a048490a83ffa8e53587c56a90b64d554e746a9189923419c528482cb7a7c950c210e0de47b32fa7c270e')
 
 build() {
-  cd "$srcdir/alembic-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir"/alembic-${pkgver}
+  cd "$_pkgname-$pkgver"
 
-  python2 setup.py install --root="$pkgdir" --prefix="/usr" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
-  mv $pkgdir/usr/bin/alembic $pkgdir/usr/bin/alembic2
+  mv "$pkgdir/usr/bin/$_pkgname" "$pkgdir/usr/bin/${_pkgname}2"
 }
+

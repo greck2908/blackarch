@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='arybo'
-pkgver=38.57c7f90
-pkgrel=1
+pkgname=arybo
+pkgver=65.89d9a42
+pkgrel=2
 pkgdesc='Manipulation, canonicalization and identification of mixed boolean-arithmetic symbolic expressions.'
 groups=('blackarch' 'blackarch-misc')
 arch=('any')
@@ -11,27 +11,28 @@ url='https://github.com/quarkslab/arybo'
 license=('BSD')
 depends=('python' 'python-networkx' 'python-six' 'python-pytanque' 'ipython')
 makedepends=('git')
-source=('git+https://github.com/quarkslab/arybo.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/quarkslab/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/arybo"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/arybo"
+  cd $pkgname
 
   python3 setup.py build
 }
 
 package() {
-  cd "$srcdir/arybo"
+  cd $pkgname
 
-  python3 setup.py install --root="$pkgdir"
+  python3 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/arybo/" README.rst CHANGELOG \
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.rst CHANGELOG \
     CONTRIBUTORS
-  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/arybo/LICENSE.txt"
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

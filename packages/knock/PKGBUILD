@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='knock'
-pkgver=265.319844d
+pkgname=knock
+pkgver=279.7b9f813
 pkgrel=1
 epoch=1
 groups=('blackarch' 'blackarch-scanner' 'blackarch-recon')
@@ -12,25 +12,26 @@ url='https://github.com/guelfoweb/knock'
 license=('GPL3')
 depends=('python2' 'python2-dnspython')
 makedepends=('git' 'python2-setuptools')
-source=('git+https://github.com/guelfoweb/knock.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/guelfoweb/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/knock"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/knock"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/knock"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/knock/README.md" README.rst \
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/README.md" README.rst \
     CHANGELOG.rst
 
   python2 setup.py install --root="$pkgdir" --optimize=1
 
-  mv "$pkgdir/usr/bin/knockpy" "$pkgdir/usr/bin/knock"
+  mv "$pkgdir/usr/bin/knockpy" "$pkgdir/usr/bin/$pkgname"
 }
+

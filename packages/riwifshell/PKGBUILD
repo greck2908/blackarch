@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='riwifshell'
+pkgname=riwifshell
 pkgver=38.40075d5
 pkgrel=2
 pkgdesc='Web backdoor - infector - explorer.'
@@ -11,32 +11,33 @@ url='https://github.com/graniet/riwifshell'
 license=('custom:unknown')
 depends=('python2')
 makedepends=('git')
-source=('git+https://github.com/graniet/riwifshell.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/graniet/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/riwifshell"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/riwifshell"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/riwifshell"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/riwifshell/" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/riwifshell"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/riwifshell" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/riwifshell
-exec python2 generate.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 generate.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/riwifshell"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

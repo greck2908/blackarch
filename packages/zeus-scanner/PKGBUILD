@@ -1,43 +1,45 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='zeus-scanner'
-pkgver=394.e5ac631
-pkgrel=1
+pkgname=zeus-scanner
+pkgver=414.21b8756
+pkgrel=3
 pkgdesc='Advanced dork searching utility.'
 groups=('blackarch' 'blackarch-recon')
 arch=('any')
 url='https://github.com/Ekultek/Zeus-Scanner'
 license=('GPL3')
-depends=('python2' 'python2-requests' 'python2-python-nmap' 'python2-selenium'
-         'python2-whichcraft' 'python2-pyvirtualdisplay')
+depends=('python' 'python-requests' 'python-python-nmap' 'python-selenium'
+         'python-whichcraft' 'python-pyvirtualdisplay' 'python-beautifulsoup4'
+         'python-lxml' 'python-psutil' 'nmap')
 makedepends=('git')
-source=('git+https://github.com/Ekultek/Zeus-Scanner.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/Ekultek/Zeus-Scanner.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/Zeus-Scanner"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/Zeus-Scanner"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/zeus-scanner"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/zeus-scanner/" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm *.md
 
-  cp -a * "$pkgdir/usr/share/zeus-scanner/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/zeus-scanner" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/zeus-scanner
-exec python2 zeus.py "\${@}"
+cd /usr/share/$pkgname
+exec python zeus.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/zeus-scanner"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

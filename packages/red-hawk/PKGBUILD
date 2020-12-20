@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='red-hawk'
-pkgver=22.56406d7
+pkgname=red-hawk
+pkgver=36.fa54e23
 pkgrel=1
 pkgdesc='All in one tool for Information Gathering, Vulnerability Scanning and Crawling.'
 groups=('blackarch' 'blackarch-recon' 'blackarch-scanner' 'blackarch-webapp')
@@ -11,33 +11,34 @@ url='https://github.com/Tuhinshubhra/RED_HAWK'
 license=('MIT')
 depends=('php')
 makedepends=('git')
-source=('git+https://github.com/Tuhinshubhra/RED_HAWK')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/Tuhinshubhra/RED_HAWK.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/RED_HAWK"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/RED_HAWK"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/red-hawk"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/red-hawk/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/red-hawk/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/red-hawk/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/red-hawk" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/red-hawk
-exec php rhawk.php "\${@}"
+cd /usr/share/$pkgname
+exec php rhawk.php "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/red-hawk"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

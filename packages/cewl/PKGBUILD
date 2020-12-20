@@ -1,49 +1,61 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='cewl'
-pkgver='5.3'
-pkgrel=2
+pkgname=cewl
+pkgver=106.d9dab11
+pkgrel=1
 groups=('blackarch' 'blackarch-automation' 'blackarch-cracker')
-pkgdesc='A custom word list generator'
+pkgdesc='A custom word list generator.'
 arch=('any')
-url="http://www.digininja.org/projects/cewl.php"
+url='http://www.digininja.org/projects/cewl.php'
 license=('CCPL')
-depends=('ruby' 'ruby-spider' 'ruby-mini_exiftool' 'ruby-nokogiri'
-         'ruby-http_configuration' 'ruby-rubyzip' 'ruby-zip' 'ruby-mime-types')
-source=("https://github.com/digininja/CeWL/archive/${pkgver}.tar.gz")
-install='cewl.install'
-sha1sums=('c9f5325dd360384cc4712e2ffbb428e7fa1f56be')
+depends=('ruby' 'ruby-bundler' 'libxslt')
+makedepends=('git')
+source=("$pkgname::git+https://github.com/digininja/CeWL.git")
+sha512sums=('SKIP')
+install="$pkgname.install"
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
 
 prepare() {
-  cd "$srcdir/CeWL-$pkgver"
+  cd $pkgname
 
   sed -i "s|require './cewl_lib'|require '/usr/share/cewl/cewl_lib'|g" cewl.rb
 }
 
 package() {
-  cd "$srcdir/CeWL-$pkgver"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/cewl"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README "$pkgdir/usr/share/doc/cewl/README"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
-  rm README
+  rm README.md
 
-  cp -a * "$pkgdir/usr/share/cewl"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/cewl" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-exec ruby /usr/share/cewl/cewl.rb "\${@}"
+cd /usr/share/$pkgname
+exec bundle exec $pkgname.rb "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/cewl"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 
   cat > "$pkgdir/usr/bin/cewl-fab" << EOF
 #!/bin/sh
-exec ruby /usr/share/cewl/fab.rb "\${@}"
+cd /usr/share/$pkgname
+exec bundle exec fab.rb "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/cewl-fab"
+  chmod +x "$pkgdir/usr/bin/cewl-fab"
+
+  rm "$pkgdir/usr/share/$pkgname/Gemfile.lock" &&
+    touch "$pkgdir/usr/share/$pkgname/Gemfile.lock"
 }
+

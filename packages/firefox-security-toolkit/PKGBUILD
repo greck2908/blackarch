@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='firefox-security-toolkit'
-pkgver=14.f79344c
+pkgname=firefox-security-toolkit
+pkgver=15.6b6d4f7
 pkgrel=1
 pkgdesc='A tool that transforms Firefox browsers into a penetration testing suite.'
 groups=('blackarch' 'blackarch-misc')
@@ -11,35 +11,34 @@ url='https://github.com/mazen160/Firefox-Security-Toolkit'
 license=('MIT')
 depends=('bash' 'wget' 'firefox')
 makedepends=('git')
-source=('git+https://github.com/mazen160/Firefox-Security-Toolkit')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/mazen160/Firefox-Security-Toolkit")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/Firefox-Security-Toolkit"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/Firefox-Security-Toolkit"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/firefox-security-toolkit"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/firefox-security-toolkit/" \
-    README.md CHANGELOG.txt
-  install -Dm644 LICENSE \
-    "$pkgdir/usr/share/licenses/firefox-security-toolkit/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG.txt
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md *.txt LICENSE
 
-  cp -a * "$pkgdir/usr/share/firefox-security-toolkit/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/firefox-security-toolkit" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/firefox-security-toolkit
-exec bash firefox_security_toolkit.sh "\${@}"
+cd /usr/share/$pkgname
+exec bash firefox_security_toolkit.sh "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/firefox-security-toolkit"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

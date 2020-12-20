@@ -1,31 +1,45 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='gobuster'
-pkgver='11'
+pkgname=gobuster
+pkgver=341.f278731
 pkgrel=1
+epoch=1
 pkgdesc='Directory/file & DNS busting tool written in Go.'
-arch=('i686' 'x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/OJ/gobuster'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
-license=("Apache2")
+license=('APACHE')
 depends=('glibc')
-makedepends=('git' 'go')
-source=('git+https://github.com/OJ/gobuster.git')
-sha1sums=('SKIP')
+makedepends=('git' 'go-pie')
+source=("git+https://github.com/OJ/$pkgname.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd $pkgname
+
+  git switch v3.1-working
+}
 
 build() {
-  cd "$srcdir/gobuster"
+  cd $pkgname
 
-  GOPATH="$srcdir" go get -d -t github.com/OJ/gobuster
+  GOPATH="$srcdir" go get -d -t .
 }
 
 package() {
-  cd "$srcdir/gobuster"
+  cd $pkgname
 
-  GOPATH="$srcdir" go build -v github.com/OJ/gobuster
+  GOPATH="$srcdir" go build -v .
 
-  install -Dm755 gobuster "$pkgdir/usr/bin/gobuster"
-  install -Dm644 -t "$pkgdir/usr/share/doc/gobuster" README.md THANKS
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/gobuster/LICENSE"
+  install -Dm 755 gobuster "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md THANKS
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='multiscanner'
-pkgver=403.7dc6ffe
-pkgrel=1
+pkgname=multiscanner
+pkgver=1559.86e0145
+pkgrel=2
 pkgdesc='Modular file scanning/analysis framework.'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-automation')
 arch=('any')
@@ -15,41 +15,42 @@ depends=('python2' 'python2-requests' 'python2-magic' 'python2-flask'
          'python2-sqlalchemy-utils' 'python2-pymongo' 'python2-pyclamd'
          'python2-elasticsearch')
 makedepends=('git')
-source=('git+https://github.com/mitre/multiscanner.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/mitre/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/multiscanner"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/multiscanner"
+  cd $pkgname
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/multiscanner"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/multiscanner"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/multiscanner/" *.md AUTHORS
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/multiscanner/LICENSE"
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  cp -a --no-preserve=ownership docs/* "$pkgdir/usr/share/doc/$pkgname/"
 
-  rm *.md AUTHORS LICENSE
+  cp -a --no-preserve=ownership multiscanner/* "$pkgdir/usr/share/$pkgname/"
 
-  cp -a * "$pkgdir/usr/share/multiscanner"
+  python2 setup.py install --root="$pkgdir" --prefix=/usr --optimize=1 \
+    --skip-build
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr --optimize=1
-
-  cat > "$pkgdir/usr/bin/multiscanner" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/multiscanner
-exec python2 multiscanner.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 ms.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/multiscanner"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

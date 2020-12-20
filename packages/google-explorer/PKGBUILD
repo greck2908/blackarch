@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='google-explorer'
-pkgver=111.4aa2b74
-pkgrel=1
+pkgname=google-explorer
+pkgver=140.0b21b57
+pkgrel=2
 pkgdesc='Google mass exploit robot - Make a google search, and parse the results for a especific exploit you define.'
 groups=('blackarch' 'blackarch-automation' 'blackarch-exploitation')
 arch=('any')
@@ -12,32 +12,33 @@ license=('custom:unknown')
 depends=('python' 'python-selenium' 'python-docopt' 'python-colorama'
          'python-requests' 'python-lxml' 'python-beautifulsoup4' 'chromium')
 makedepends=('git')
-source=('git+https://github.com/anarcoder/google_explorer.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/anarcoder/google_explorer.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/google_explorer"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/google_explorer"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/google-explorer"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/google-explorer/" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/google-explorer"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/google-explorer" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/google-explorer
-exec python google_explorer.py "\${@}"
+cd /usr/share/$pkgname
+exec python google_explorer.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/google-explorer"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

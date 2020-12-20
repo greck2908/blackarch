@@ -1,34 +1,29 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='dsfs'
-pkgver=32.e27d6cb
+pkgname=dsfs
+pkgver=36.8e9f8e9
 pkgrel=2
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 pkgdesc='A fully functional File inclusion vulnerability scanner (supporting GET and POST parameters) written in under 100 lines of code.'
 arch=('any')
 url='https://github.com/stamparm/DSFS'
 license=('custom:unknown')
-depends=('python2')
+depends=('python')
 makedepends=('git')
-source=('git+https://github.com/stamparm/DSFS.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/stamparm/DSFS.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/DSFS"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  cd "$srcdir/DSFS"
-
-  sed -i 's|bin/env python|bin/env python2|' dsfs.py
-}
-
 package() {
-  cd "$srcdir/DSFS"
+  cd $pkgname
 
-  install -Dm755 dsfs.py "$pkgdir/usr/bin/dsfs"
-  install -Dm644 -t "$pkgdir/usr/share/doc/dsfs/" README.md
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 }
+

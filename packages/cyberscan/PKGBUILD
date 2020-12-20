@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='cyberscan'
-pkgver=72.7da9ba4
+pkgname=cyberscan
+pkgver=75.ca85794
 pkgrel=1
 pkgdesc='A Network Pentesting Tool'
 groups=('blackarch' 'blackarch-networking' 'blackarch-scanner')
@@ -10,35 +10,36 @@ arch=('any')
 url='https://github.com/medbenali/CyberScan'
 license=('GPL3')
 depends=('python2' 'python2-pygeoip' 'python2-argparse' 'python2-asn1crypto'
-         'scapy')
+         'python2-scapy')
 makedepends=('git')
-source=('git+https://github.com/medbenali/CyberScan')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/medbenali/CyberScan.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/CyberScan"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/CyberScan"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/cyberscan"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/cyberscan/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/cyberscan/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/cyberscan"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/cyberscan" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/cyberscan
-exec python2 CyberScan.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 CyberScan.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/cyberscan"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

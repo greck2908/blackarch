@@ -1,27 +1,27 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='shellinabox'
-pkgver=428.98e6eeb
+pkgname=shellinabox
+pkgver=431.4f0ecc3
 pkgrel=1
 pkgdesc='Implements a web server that can export arbitrary command line tools to a web based terminal emulator.'
 groups=('blackarch' 'blackarch-backdoor' 'blackarch-webapp')
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/shellinabox/shellinabox'
 license=('GPL2')
 depends=('openssl' 'zlib')
 makedepends=('git' 'autoconf')
-source=('git+https://github.com/shellinabox/shellinabox.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/shellinabox/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/shellinabox"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/shellinabox"
+  cd $pkgname
 
   unset CPPFLAGS
   autoreconf -i
@@ -31,7 +31,8 @@ build() {
 }
 
 package() {
-  cd "$srcdir/shellinabox"
+  cd $pkgname
 
   make DESTDIR="$pkgdir" install
 }
+

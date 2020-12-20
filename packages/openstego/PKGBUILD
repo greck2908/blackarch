@@ -1,35 +1,36 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='openstego'
-pkgver='0.7.1'
+pkgname=openstego
+pkgver=0.7.4
 pkgrel=1
 groups=('blackarch' 'blackarch-crypto' 'blackarch-stego')
 pkgdesc='A tool implemented in Java for generic steganography, with support for password-based encryption of the data.'
 arch=('any')
-url='http://www.openstego.info/'
+url='https://www.openstego.com/'
 license=('GPL2')
 depends=('java-environment')
-source=("https://github.com/syvaidya/openstego/releases/download/openstego-$pkgver/openstego-${pkgver}.zip")
-sha1sums=('ce12877786aa9c42f86528a882a1cdfb308dd7a9')
+source=("https://github.com/syvaidya/$pkgname/releases/download/$pkgname-$pkgver/$pkgname-$pkgver.zip")
+sha512sums=('282e2fef8d47ffc424788abce0102a5adeeca16c0f5ff53e3a2904605d53c635d0619e643e66a2a75a2c2dc4427217c047f931f2a2c6dd9a65a7b6729abad49e')
 
 package() {
-  cd "$srcdir/openstego-$pkgver"
+  cd "$pkgname-$pkgver"
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/openstego"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README "$pkgdir/usr/share/doc/openstego/README"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/openstego/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm -rf README
 
-  cp -a * "$pkgdir/usr/share/openstego"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/openstego" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-exec java -Xmx512m -jar /usr/share/openstego/lib/openstego.jar "\$@"
+exec java -Xmx512m -jar /usr/share/$pkgname/lib/$pkgname.jar "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/openstego"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

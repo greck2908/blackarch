@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='doozer'
+pkgname=doozer
 pkgver=9.5cfc8f8
 pkgrel=3
 groups=('blackarch' 'blackarch-cracker')
@@ -11,54 +11,55 @@ url='https://github.com/CoalfireLabs/crackHOR'
 license=('GPL2')
 depends=('python2' 'python2-requests' 'python2-django' 'ophcrack' 'hashcat')
 makedepends=('git')
-source=('git+https://github.com/CoalfireLabs/Doozer.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/CoalfireLabs/Doozer.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/Doozer"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/Doozer"
+  cd $pkgname
 
   find . -type f -name '*.py' -exec sed -i 's|python$|python2|' {} +
 }
 
 package() {
-  cd "$srcdir/Doozer"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/doozer"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/doozer/README.md"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/doozer"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/doozer" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/doozer/doozer
-exec python2 doozer.py "\$@"
+cd /usr/share/$pkgname/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/doozer"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 
   cat > "$pkgdir/usr/bin/doozestop" << EOF
 #!/bin/sh
-cd /usr/share/doozer/doozer
+cd /usr/share/$pkgname/$pkgname
 exec python2 doozestop.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/doozestop"
+  chmod +x "$pkgdir/usr/bin/doozestop"
 
   cat > "$pkgdir/usr/bin/doozer-monitor" << EOF
 #!/bin/sh
-cd /usr/share/doozer/doozer
+cd /usr/share/$pkgname/$pkgname
 exec python2 monitor.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/doozer-monitor"
+  chmod +x "$pkgdir/usr/bin/doozer-monitor"
 }
+

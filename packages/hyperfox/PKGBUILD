@@ -1,43 +1,40 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='hyperfox'
-pkgver=65.b43d9cf
+pkgname=hyperfox
+pkgver=121.1a8c26f
 pkgrel=1
 groups=('blackarch' 'blackarch-networking' 'blackarch-proxy' 'blackarch-webapp')
 pkgdesc='A security tool for proxying and recording HTTP and HTTPs traffic.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
-url='https://hyperfox.org/'
+arch=('x86_64' 'aarch64')
+url='https://github.com/xiam/hyperfox'
 license=('custom:unknown')
-depends=('glibc' 'go')
-makedepends=('go' 'git')
-url="https://github.com/xiam/hyperfox"
-source=('git+https://github.com/xiam/hyperfox.git')
-sha1sums=('SKIP')
+depends=('glibc')
+makedepends=('git' 'go-pie')
+source=("git+https://github.com/xiam/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/hyperfox"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir"
+  cd $pkgname
 
-  mkdir -p src/$url && rm -rf src/$url && mv hyperfox src/$url && cd src/$url
-
-  GOPATH="$srcdir" go get -d -t github.com/xiam/hyperfox
+  GOPATH="$srcdir" go get -d -t .
 }
 
 package() {
-  cd "$srcdir"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  GOPATH="$srcdir" go build -v github.com/xiam/hyperfox
+  GOPATH="$srcdir" go build -v .
 
-  install -Dm755 "$srcdir/hyperfox" "$pkgdir/usr/bin/hyperfox"
-  install -Dm644 src/$url/README.md "$pkgdir/usr/share/doc/hyperfox/README.md"
-  install -Dm644 src/$url/LICENSE "$pkgdir/usr/share/licenses/hyperfox/LICENSE"
-
+  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

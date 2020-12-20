@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='panhunt'
-pkgver=47.500f304
+pkgname=panhunt
+pkgver=63.ec87e88
 pkgrel=1
 groups=('blackarch' 'blackarch-scanner')
 pkgdesc='Searches for credit card numbers (PANs) in directories.'
@@ -11,33 +11,34 @@ url='https://github.com/Dionach/PANhunt'
 license=('GPL3')
 depends=('python2' 'python2-colorama' 'python2-progressbar')
 makedepends=('git')
-source=('git+https://github.com/Dionach/PANhunt.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/Dionach/PANhunt.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/PANhunt"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/PANhunt"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/panhunt"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/panhunt" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/panhunt/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/panhunt"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/panhunt" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/panhunt
-exec python2 panhunt.py "\$@"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/panhunt"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

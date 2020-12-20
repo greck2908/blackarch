@@ -1,24 +1,23 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='sipsak'
-pkgver='5.0.1.1'
+pkgname=sipsak
+pkgver=0.9.7
 pkgrel=1
+epoch=1
 groups=('blackarch' 'blackarch-voip')
 pkgdesc='A small command line tool for developers and administrators of Session Initiation Protocol (SIP) applications.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
-url='http://sipsak.org'
+arch=('x86_64' 'aarch64')
+url='https://github.com/nils-ohlmeier/sipsak/releases'
 license=('GPL')
 depends=('gnutls' 'openssl' 'c-ares')
-source=("https://github.com/sipwise/sipsak/archive/mr${pkgver}.tar.gz")
-sha1sums=('fe8dda8f7106a5702d5c23c59c89e04c9ef814ea')
+source=("https://github.com/nils-ohlmeier/$pkgname/archive/$pkgver.tar.gz")
+sha512sums=('088da5b5b81e7ff89bdc920dc8fdfc559ba36d599de9ba5ca22c35f2bea24f0c7c76e10125baa8ae517c3f03b1b936adacde4e236be8a13797651adc624f14a7')
 
 build() {
-  cd "$srcdir/sipsak-mr$pkgver"
+  cd "$pkgname-$pkgver"
 
-  aclocal
-  autoconf
-  automake --add-missing
+  autoreconf --install
 
   ./configure --prefix=/usr
 
@@ -26,7 +25,8 @@ build() {
 }
 
 package() {
-  cd "$srcdir/sipsak-mr$pkgver"
+  cd "$pkgname-$pkgver"
 
   make DESTDIR=$pkgdir install
 }
+

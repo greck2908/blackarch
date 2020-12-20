@@ -1,31 +1,32 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='mando.me'
+pkgname=mando.me
 pkgver=9.8b34f1a
-pkgrel=2
+pkgrel=4
 pkgdesc='Web Command Injection Tool.'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-exploitation')
 arch=('any')
 url='https://github.com/z0noxz/mando.me'
 license=('custom:unknown')
-depends=('python')
+depends=('python' 'python-dateutil')
 makedepends=('git')
-source=('git+https://github.com/z0noxz/mando.me.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/z0noxz/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/mando.me"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/mando.me"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/mando.me"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm755 mando.me.py "$pkgdir/usr/bin/mando.me"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/mando.me/README.md"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 }
+

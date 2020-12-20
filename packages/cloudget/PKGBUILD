@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='cloudget'
-pkgver=53.807d08e
-pkgrel=3
+pkgname=cloudget
+pkgver=64.cba10b1
+pkgrel=1
 pkgdesc='Python script to bypass cloudflare from command line. Built upon cfscrape module.'
 groups=('blackarch' 'blackarch-webapp')
 arch=('any')
@@ -11,32 +11,33 @@ url='https://github.com/eudemonics/cloudget'
 license=('custom:unknown')
 depends=('python2' 'python2-cfscrape')
 makedepends=('git')
-source=('git+https://github.com/eudemonics/cloudget.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/eudemonics/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/cloudget"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/cloudget"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/cloudget"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/cloudget/README.md"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/cloudget"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/cloudget" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/cloudget
-exec python2 cloudget.py "\$@"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/cloudget"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -1,43 +1,44 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='sdnpwn'
-pkgver=38.0efdcfb
-pkgrel=1
+pkgname=sdnpwn
+pkgver=58.b1db5b9
+pkgrel=4
 pkgdesc='An SDN penetration testing toolkit.'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-networking')
 arch=('any')
 url='https://github.com/smythtech/sdnpwn'
 license=('custom:unknown')
 depends=('python' 'python-netifaces' 'python-scipy' 'python-tabulate'
-         'python-python-openflow' 'scapy3k' 'bridge-utils')
+         'python-python-openflow' 'python-scapy' 'bridge-utils')
 makedepends=('git')
-source=('git+https://github.com/smythtech/sdnpwn.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/smythtech/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/sdnpwn"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/sdnpwn"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/sdnpwn"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/sdnpwn/" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/sdnpwn/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/sdnpwn" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/sdnpwn
-exec python2 sdnpwn.py "\${@}"
+cd /usr/share/$pkgname
+exec python $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/sdnpwn"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

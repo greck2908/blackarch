@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='wsuspect-proxy'
+pkgname=wsuspect-proxy
 pkgver=24.89f9375
-pkgrel=1
+pkgrel=3
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-proxy')
 pkgdesc="A tool for MITM'ing insecure WSUS connections."
 arch=('any')
@@ -11,34 +11,34 @@ url='https://github.com/ctxis/wsuspect-proxy'
 license=('MIT')
 makedepends=('git')
 depends=('python' 'python-twisted' 'python-lxml')
-source=('git+https://github.com/ctxis/wsuspect-proxy.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/ctxis/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/wsuspect-proxy"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/wsuspect-proxy"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/wsuspect-proxy"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/wsuspect-proxy/README.md"
-  install -Dm644 LICENSE.txt \
-    "$pkgdir/usr/share/licenses/wsuspect-proxy/LICENSE.txt"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE.txt
 
-  cp -a * "$pkgdir/usr/share/wsuspect-proxy/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/wsuspect-proxy" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/wsuspect-proxy
+cd /usr/share/$pkgname
 python wsuspect_proxy.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/wsuspect-proxy"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -1,28 +1,19 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='cidr2range'
-pkgver='0.9'
-pkgrel=4
+pkgname=cidr2range
+pkgver=1.0
+pkgrel=1
 groups=('blackarch' 'blackarch-networking')
-pkgdesc='Script for listing the IP addresses contained in a CIDR netblock'
+pkgdesc='Script for listing the IP addresses contained in a CIDR netblock.'
 arch=('any')
 url='http://www.cpan.org/authors/id/R/RA/RAYNERLUC'
-license=('unknown')
+license=('custom:unknown')
 depends=('perl' 'perl-net-cidr')
-source=("http://www.cpan.org/authors/id/R/RA/RAYNERLUC/cidr2range-$pkgver.pl"
-        'zero_octet_fix.patch')
-sha1sums=('f48a1f030446fdfdfd9a5ac38226c0496ebc6978'
-          'f43962d54616725c2603b2cc8ead40af2fde3a60')
-
-prepare() {
-  cd "$srcdir"
-
-  patch --follow-symlinks -i "$srcdir/zero_octet_fix.patch" 
-}
+source=("http://www.cpan.org/authors/id/R/RA/RAYNERLUC/cidr2range/cidr2range-1.0.pl")
+sha512sums=('40100032c81f9ac6f0ca7d6cc05c27943e6c1ab9bdbb0b67b16451ded96f0f45d65ecc0cd335e960ba6f6695da11c171fff0e78d5f711b8398a6e2f2a84686a8')
 
 package() {
-  cd "$srcdir"
-
-  install -Dm755 cidr2range-$pkgver.pl "$pkgdir/usr/bin/cidr2range"
+  install -Dm 755 "$pkgname-$pkgver.pl" "$pkgdir/usr/bin/$pkgname"
 }
+

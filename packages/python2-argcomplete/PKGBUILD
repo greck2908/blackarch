@@ -1,26 +1,32 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python2-argcomplete'
-pkgver='1.9.3'
-pkgrel=1
+pkgname=python2-argcomplete
+_pkgname=argcomplete
+pkgver=1.10.0
+pkgrel=4
 pkgdesc='Bash tab completion for argparse.'
+url='https://pypi.org/project/argcomplete/#files'
 arch=('any')
-url='https://pypi.python.org/pypi/argcomplete/'
-license=('Apache2')
+license=('APACHE')
 depends=('python2')
 makedepends=('python2-setuptools')
-source=("https://pypi.python.org/packages/8b/54/4a431fe1dfac0d9ae9adc725d2fe543fad07fb7d87f15bd732ba63672bb4/argcomplete-${pkgver}.tar.gz")
-sha1sums=('eadd88dedfef30aebe1affbf8e7d5848dd768099')
+source=("https://files.pythonhosted.org/packages/9c/c5/4009a381ba46f8424832b6fa9a6d8c79b2089a0170beb434280d293a5b5c/$_pkgname-$pkgver.tar.gz")
+sha512sums=('59e9cb721ddffd85d9f6461a70d50f9ba0795e36044cd46fa5fe707fb1be28c12f4ef531d2844020efc156300861b2ca8b73f56a116dd54bda0e52cf68c0a411')
 
 build() {
-  cd "$srcdir/argcomplete-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/argcomplete-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+
+  for i in "$pkgdir/usr/bin/"* ; do
+    mv $i "${i}2"
+  done
 }
+

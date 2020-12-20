@@ -1,56 +1,63 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='sn1per'
-pkgver=212.f450b78
+pkgname=sn1per
+_pkgname=sniper
+pkgver=490.c606e34
 pkgrel=1
+epoch=1
 pkgdesc='Automated Pentest Recon Scanner.'
-groups=('blackarch' 'blackarch-recon' 'blackarch-automation' 'blackarch-scanner'
-        'blackarch-cracker')
+groups=('blackarch' 'blackarch-automation' 'blackarch-cracker'
+        'blackarch-recon' 'blackarch-scanner')
 url='https://github.com/1N3/Sn1per'
 license=('custom:unknown')
 arch=('any')
-depends=('whois' 'theharvester' 'dnsenum' 'curl' 'nmap' 'php' 'w3af' 'amap'
-         'wapiti' 'hydra' 'firefox' 'wpscan' 'sqlmap' 'arachni' 'golismero'
-         'nbtscan' 'enum4linux' 'cisco-torch' 'metasploit' 'nikto' 'bind-tools'
-         'smtp-user-enum' 'whatweb' 'python' 'sslscan' 'bash' 'testssl' 'sslyze'
-         'python2' 'dos2unix' 'xsstracer' 'ruby' 'cutycapt' 'postgresql'
-         'xprobe2' 'unzip' 'brutex' 'goohak')
+depends=('amap' 'arachni' 'bash' 'bind' 'brutex' 'cisco-torch' 'curl' 'jq'
+         'cutycapt' 'dnsenum' 'dos2unix' 'enum4linux' 'firefox' 'golismero'
+         'goohak' 'hydra' 'metasploit' 'nbtscan' 'nikto' 'nmap' 'php' 'nodejs'
+         'postgresql' 'python' 'python-colorama' 'python-dnspython' 'rpcbind'
+         'python-paramiko' 'python-requests' 'python-requests-file' 'dnsrecon'
+         'python-tldextract' 'python-urllib3' 'ruby' 'ruby-mechanize'
+         'ruby-net-http-persistent' 'ruby-rake' 'ruby-ruby-nmap' 'android-tools'
+         'ruby-text-table' 'smtp-user-enum' 'sqlmap' 'sslscan' 'sslyze'
+         'testssl.sh' 'theharvester' 'unzip' 'w3af' 'wapiti' 'whatweb'
+         'whois' 'wpscan' 'xprobe2' 'xsstracer' 'xdg-utils')
 makedepends=('git')
-source=('git+https://github.com/1N3/Sn1per.git')
-install='sn1per.install'
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/1N3/Sn1per.git")
+sha512sums=('SKIP')
+install="$pkgname.install"
 
 pkgver() {
-  cd "$srcdir/Sn1per"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/Sn1per"
+  cd $pkgname
 
-  sed -i '/apt-get install/d' install.sh
+  sed -i '/apt-get/d' install.sh
+  sed -i '/msfdb/d' install.sh
 }
 
 package() {
-  cd "$srcdir/Sn1per"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/sniper"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$_pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/sniper/" README.md CHANGELOG.md \
-    TODO.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG.md
 
   rm *.md
 
-  cp -a * "$pkgdir/usr/share/sniper"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$_pkgname/"
 
-  cat > "$pkgdir/usr/bin/sn1per" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/sniper
-exec bash ./sniper "\${@}"
+cd /usr/share/$_pkgname
+exec bash ./$_pkgname "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/sn1per"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

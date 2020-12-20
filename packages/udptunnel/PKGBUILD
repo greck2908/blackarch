@@ -1,26 +1,27 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='udptunnel'
-pkgver='19'
+pkgname=udptunnel
+pkgver=19
 pkgrel=4
 epoch=2
 groups=('blackarch' 'blackarch-networking' 'blackarch-tunnel')
 pkgdesc="Tunnels TCP over UDP packets."
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='http://code.google.com/p/udptunnel/'
 license=('GPL3')
-source=("https://udptunnel.googlecode.com/files/udptunnel-r${pkgver}.tar.gz")
-sha1sums=('51edec3b63b659229bcf92f6157568d3b074ede0')
+source=("https://udptunnel.googlecode.com/files/$pkgname-r$pkgver.tar.gz")
+sha512sums=('51edec3b63b659229bcf92f6157568d3b074ede0')
 
 build() {
-  cd "$srcdir/udptunnel"
+  cd $pkgname
 
   make
 }
 
 package() {
-  cd "$srcdir/udptunnel"
+  cd $pkgname
 
-  install -Dm755 udptunnel "$pkgdir/usr/bin/udptunnel"
+  install -Dm 755 udptunnel "$pkgdir/usr/bin/$pkgname"
 }
+

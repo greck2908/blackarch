@@ -1,43 +1,44 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='kickthemout'
-pkgver=158.a2e0432
-pkgrel=1
+pkgname=kickthemout
+pkgver=212.861aea2
+pkgrel=2
 pkgdesc='Kick devices off your network by performing an ARP Spoof attack.'
 groups=('blackarch' 'blackarch-networking')
 arch=('any')
 url='https://github.com/k4m4/kickthemout'
 license=('MIT')
-depends=('python2' 'scapy')
+depends=('python' 'python-scapy' 'kamene' 'python-python-nmap' 'nmap')
 makedepends=('git')
-source=('git+https://github.com/k4m4/kickthemout.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/k4m4/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/kickthemout"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/kickthemout"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/kickthemout"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/kickthemout/" README.rst
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/kickthemout/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
-  rm README.rst LICENSE
+  rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/kickthemout"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/kickthemout" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/kickthemout
-exec python2 kickthemout.py "\${@}"
+cd /usr/share/$pkgname
+exec python $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/kickthemout"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

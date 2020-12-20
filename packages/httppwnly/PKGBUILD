@@ -1,43 +1,45 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='httppwnly'
+pkgname=httppwnly
 pkgver=47.528a664
-pkgrel=1
+pkgrel=3
 pkgdesc='"Repeater" style XSS post-exploitation tool for mass browser control.'
 groups=('blackarch' 'blackarch-webapp')
 arch=('any')
 url='https://github.com/Danladi/HttpPwnly'
 license=('custom:unknown')
 depends=('python2' 'python2-flask' 'python2-pysqlite' 'python2-flask-sqlalchemy'
-         'python2-flask-cors')
+         'python2-flask-cors' 'python2-flask-bcrypt' 'python2-flask-socketio'
+         'python2-python-socketio' 'python2-flask-login')
 makedepends=('git')
-source=('git+https://github.com/Danladi/HttpPwnly.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/Danladi/HttpPwnly.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/HttpPwnly"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/HttpPwnly"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/httppwnly"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/httppwnly/README.md"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm *.md
 
-  cp -a * "$pkgdir/usr/share/httppwnly"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/httppwnly" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/httppwnly/
-exec python2 httppwnly.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/httppwnly"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

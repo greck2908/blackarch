@@ -1,26 +1,30 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python2-pyftpdlib'
-pkgver='1.5.3'
-pkgrel=1
+pkgname=python2-pyftpdlib
+_pkgname=pyftpdlib
+pkgver=1.5.5
+pkgrel=2
 pkgdesc='Very fast asynchronous FTP server library.'
+url='https://pypi.org/project/pyftpdlib/#files'
 arch=('any')
-url='https://pypi.python.org/pypi/pyftpdlib/'
 license=('MIT')
 depends=('python2')
 makedepends=('python2-setuptools')
-source=("https://pypi.python.org/packages/c5/fb/74f6425fbb7f2a87969e1aa01bb9684601de431a3488b95f64509bf985ef/pyftpdlib-${pkgver}.tar.gz")
-sha1sums=('8218c561581221f58e6f92cc3bd2865c32b42ab1')
+source=("https://files.pythonhosted.org/packages/27/64/06a574350c79873e908fa9f48b617e7961de50fc468acc0a05d76771bce9/$_pkgname-$pkgver.tar.gz")
+sha512sums=('27427154f893812f689adf3a9ceb4ec2d8f0ea7a4bf7b08671dc146c95f09ddd596a27c85e009d8d6647277def48c0bf0a8b76fb3fba5818eda3dfdc6c10795e')
 
 build() {
-  cd "$srcdir/pyftpdlib-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/pyftpdlib-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+
+  mv "$pkgdir/usr/bin/ftpbench" "$pkgdir/usr/bin/ftpbench2"
 }
+

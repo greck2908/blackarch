@@ -1,21 +1,21 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='middler'
-pkgver='1.0'
-pkgrel=5
+pkgname=middler
+pkgver=1.0
+pkgrel=6
 pkgdesc='A Man in the Middle tool to demonstrate protocol middling attacks.'
 arch=('any')
 url='http://code.google.com/p/middler/'
 license=('GPL')
-depends=('libpcap' 'python2' 'scapy' 'libdnet')
+depends=('libpcap' 'python2' 'python2-scapy' 'libdnet')
 makedepends=('python2')
 groups=('blackarch' 'blackarch-networking')
-source=("http://middler.googlecode.com/files/middler-${pkgver}.tgz")
-sha1sums=('8940d56a9fa229b7986717b9a63ae63b1d0e21d8')
+source=("http://middler.googlecode.com/files/$pkgname-$pkgver.tgz")
+sha512sums=('8940d56a9fa229b7986717b9a63ae63b1d0e21d8')
 
 prepare() {
-  cd "$srcdir/TheMiddler"
+  cd TheMiddler
 
   sed -i 's:middlerlib:libmiddler:' setup.py
   sed -i 's:middlerlib.plugins:libmiddler.plugins:' setup.py
@@ -25,16 +25,17 @@ prepare() {
 package() {
   cd "$srcdir/TheMiddler"
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/middler"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  cp -r * "$pkgdir/usr/share/middler"
+  cp -r * "$pkgdir/usr/share/$pkgname"
 
-  cat > "$pkgdir/usr/bin/middler" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/middler/
-exec python2 middler.py \$@
+cd /usr/share/$pkgname/
+exec python2 $pkgname.py \$@
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/middler"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='habu'
-pkgver=62.6fc3715
+pkgname=habu
+pkgver=352.cda99c8
 pkgrel=1
 pkgdesc='Python Network Hacking Toolkit.'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-spoof' 'blackarch-dos'
@@ -10,30 +10,31 @@ groups=('blackarch' 'blackarch-scanner' 'blackarch-spoof' 'blackarch-dos'
 arch=('any')
 url='https://github.com/portantier/habu'
 license=('custom:unknown')
-depends=('python' 'python-ipaddress' 'python-requests' 'python-argparse'
-         'python-requests-cache' 'python-click' 'python-delegator.py'
-         'python-beautifulsoup4' 'scapy3k')
+depends=('python' 'python-requests' 'python-argparse' 'python-requests-cache'
+         'python-click' 'python-delegator.py' 'python-beautifulsoup4'
+         'python-scapy')
 makedepends=('git')
-source=('git+https://github.com/portantier/habu.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/portantier/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/habu"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/habu"
+  cd $pkgname
 
   python setup.py build
 }
 
 package() {
-  cd "$srcdir/habu"
+  cd $pkgname
 
-  python setup.py install --root="$pkgdir"
+  python setup.py install --root="$pkgdir" --skip-build
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/habu/" README.rst todo.rst
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/habu/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.rst todo.rst
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

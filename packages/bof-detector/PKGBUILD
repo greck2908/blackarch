@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='bof-detector'
+pkgname=bof-detector
 pkgver=19.e08367d
 pkgrel=2
 pkgdesc='A simple detector of BOF vulnerabilities by source-code-level check.'
@@ -11,32 +11,33 @@ url='https://github.com/st9140927/BOF_Detector'
 license=('custom:unknown')
 depends=('python2' 'python2-lxml')
 makedepends=('git')
-source=('git+https://github.com/st9140927/BOF_Detector.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/st9140927/BOF_Detector.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/BOF_Detector"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/BOF_Detector"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/bof-detector"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/bof-detector/README.md"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/bof-detector"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/bof-detector" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/bof-detector/execution/BOF_analyzer
-exec python2 main.py "\${@}"
+cd /usr/share/$pkgname/execution/BOF_analyzer
+exec python2 main.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/bof-detector"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

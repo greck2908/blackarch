@@ -1,26 +1,28 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python2-intervaltree'
-pkgver='2.1.0'
+pkgname=python2-intervaltree
+_pkgname=intervaltree
+pkgver=3.1.0
 pkgrel=1
-pkgdesc='Editable interval tree data structure for Python 2 and 3.'
+pkgdesc='Editable interval tree data structure for Python 2 and 3'
+url='https://pypi.org/project/intervaltree/'
 arch=('any')
-url='https://pypi.python.org/pypi/intervaltree/'
-license=('MIT')
-depends=('python2')
+license=('Apache')
+depends=('python2-sortedcontainers')
 makedepends=('python2-setuptools')
-source=("https://pypi.python.org/packages/ca/c1/450d109b70fa58ca9d77972b02f69222412f9175ccf99fdeaf167be9583c/intervaltree-${pkgver}.tar.gz")
-sha1sums=('40db027009fc3f8d38ec91e0cd9d8fd7f793dc0f')
+source=("https://files.pythonhosted.org/packages/50/fb/396d568039d21344639db96d940d40eb62befe704ef849b27949ded5c3bb/$_pkgname-$pkgver.tar.gz")
+sha512sums=('adb49726912ad6e9cf6c0985b4fb94df91b4ef54aa2eb327186d7f15bc992745d81654d49f1dd2ce95f7173683ba2a072787ef1e8b389cd9b7e23b9ae743906a')
 
 build() {
-  cd "$srcdir/intervaltree-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/intervaltree-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 }
+

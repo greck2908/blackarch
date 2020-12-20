@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='nosqlattack'
-pkgver=91.4c55415
+pkgname=nosqlattack
+pkgver=98.a5b0329
 pkgrel=1
 pkgdesc='Python tool to automate exploit MongoDB server IP on Internet anddisclose the database data by MongoDB default configuration weaknesses and injection attacks.'
 groups=('blackarch' 'blackarch-automation' 'blackarch-scanner')
@@ -10,43 +10,36 @@ arch=('any')
 url='https://github.com/youngyangyang04/NoSQLAttack'
 license=('GPL3')
 depends=('python2' 'python2-httplib2' 'python2-pymongo' 'python2-requests'
-         'python2-ipcalc' 'shodan' 'mongodb')
+         'python2-ipcalc' 'python2-shodan' 'mongodb')
 makedepends=('git' 'python2-setuptools')
-source=('git+https://github.com/youngyangyang04/NoSQLAttack.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/youngyangyang04/NoSQLAttack.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/NoSQLAttack"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-build() {
-  cd "$srcdir/NoSQLAttack"
-
-#  python2 setup.py build
-}
-
 package() {
-  cd "$srcdir/NoSQLAttack"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/nosqlattack"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-#  python2 setup.py install --root="$pkgdir" --prefix=/usr --optimize=1
-
-  install -Dm644 -t "$pkgdir/usr/share/doc/nosqlattack/" README.md
-  install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/nosqlattack/LICENSE.md"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
 
   rm *.md
 
-  cp -a * "$pkgdir/usr/share/nosqlattack"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/nosqlattack" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/nosqlattack
-exec python2 main.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 main.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/nosqlattack"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -1,41 +1,51 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='rr'
-pkgver='5.0.0'
+pkgname=rr
+pkgver=5434.e673bb03
 pkgrel=1
 groups=('blackarch' 'blackarch-debugger' 'blackarch-misc')
 pkgdesc='A Record and Replay Framework.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/mozilla/rr'
 license=('custom')
-depends=('libpfm4' 'zlib' 'python2-pexpect' 'man-pages')
-makedepends=('cmake' 'gdb')
-source=("https://github.com/mozilla/rr/archive/${pkgver}.tar.gz")
-sha1sums=('80b641b18f2cbb7b0af51e21127eb6e3a55185fa')
+depends=('libpfm4' 'zlib' 'python-pexpect' 'man-pages' 'libpfm4' 'gcc-libs'
+         'gcc-libs' 'bash' 'lib32-zlib' 'python2' 'gcc' 'libpcap' 'libcap-ng'
+         'libcap' 'capnproto')
+makedepends=('git' 'cmake' 'gdb')
+source=("git+https://github.com/mozilla/$pkgname.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
 
 build(){
-  cd "$srcdir/rr-$pkgver"
+  cd $pkgname
 
   export CFLAGS="$CFLAGS -fPIC"
 
-  mkdir build
+  mkdir -p build
 
   cd build
 
   cmake -Ddisable32bit=ON -DCMAKE_VERBOSE_MAKEFILE=ON \
-    -DCMAKE_INSTALL_PREFIX=/usr ..
+    -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr \
+    -DPYTHON_EXECUTABLE=/usr/bin/python3 ..
 
   make
 }
 
 
 package() {
-  cd "$srcdir/rr-$pkgver"
+  cd $pkgname
 
   cd build
 
-  make DESTDIR=$pkgdir install
+  make DESTDIR="$pkgdir" install
 
-  install -Dm644 ../LICENSE "$pkgdir/usr/share/licenses/rr/LICENSE"
+  install -Dm 644 ../LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

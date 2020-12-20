@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='vsvbp'
+pkgname=vsvbp
 pkgver=6.241a7ab
-pkgrel=3
+pkgrel=4
 pkgdesc='Black box tool for Vulnerability detection in web applications.'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 arch=('any')
@@ -17,33 +17,40 @@ depends=('python2' 'python2-lxml' 'python2-tldextract' 'python2-mechanize'
          'python2-flask-babel' 'python2-guess-language' 'python2-flipflop'
          'python2-coverage' 'python2-beautifulsoup3')
 makedepends=('git')
-source=('git+https://github.com/varunjammula/VSVBP.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/varunjammula/VSVBP.git")
+sha512sums=('SKIP')
 
 pkgver() {
-	cd "$srcdir/VSVBP"
+	cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
+prepare() {
+  cd $pkgname
+
+  sed -i 's|from flask.ext.wtf|from flask_wtf|g' app/forms.py
+}
+
 package() {
-	cd "$srcdir/VSVBP"
+	cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/vsvbp"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/vsvbp" README.md "Help Files/"*
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/vsvbp/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md "Help Files/"*
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/vsvbp"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/vsvbp" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/vsvbp
+cd /usr/share/$pkgname
 exec python2 run.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/vsvbp"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

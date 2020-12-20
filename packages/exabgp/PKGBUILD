@@ -1,44 +1,46 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='exabgp'
-pkgver=4081.5fba944f
+pkgname=exabgp
+pkgver=4643.d2c7c074
 pkgrel=1
 groups=('blackarch' 'blackarch-networking' 'blackarch-defensive')
 pkgdesc='The BGP swiss army knife of networking.'
 arch=('any')
 url='https://github.com/Exa-Networks/exabgp'
 license=('custom:unknown')
-depends=('python2' 'python2-ipaddr' 'python2-nose' 'python2-psutil')
-makedepends=('git' 'python2-setuptools')
+depends=('python' 'python-ipaddr' 'python-nose' 'python-psutil')
+makedepends=('git' 'python-setuptools')
 backup=('etc/exabgp.conf')
-source=('git+https://github.com/Exa-Networks/exabgp.git'
-        'exabgp.service')
-sha1sums=('SKIP'
-          '2f12eaf9be33e4a5b19ad96aeba97d2b4b67d58b')
+source=("git+https://github.com/Exa-Networks/$pkgname.git"
+        "$pkgname.service")
+sha512sums=('SKIP'
+            '225726cf424d9c2a23a2c0e9d3c7ed8c5cf03993f9518efd8e45079822b2d8cbc4d6fd18b49794beee522530478b57e5e3b268b3abd92442680cdd695504360d')
 
 pkgver() {
-  cd "$srcdir/exabgp"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/exabgp"
+  cd $pkgname
 
-  python2 setup.py build
+  python setup.py build
 }
 
 package() {
-  cd "$srcdir/exabgp"
+  cd $pkgname
 
-  python2 setup.py install --root="$pkgdir" --optimize=1
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
-  #mv "$pkgdir/usr/etc" "$pkgdir/etc"
-
-  install -Dm644 "$srcdir/exabgp.service" \
-    "$pkgdir/usr/lib/systemd/system/exabgp.service"
-  install -Dm644 /dev/null "$pkgdir/etc/exabgp.conf"
-  install -Dm644 -t "$pkgdir/usr/share/doc/exabgp" CHANGELOG PEP8 README.md
-  install -Dm644 COPYRIGHT "$pkgdir/usr/share/licenses/exabgp/COPYRIGHT"
+  install -Dm 644 "$srcdir/$pkgname.service" \
+    "$pkgdir/usr/lib/systemd/system/$pkgname.service"
+  install -Dm 644 /dev/null "$pkgdir/etc/$pkgname.conf"
+  install -Dm 644 "doc/man/$pkgname.1" "$pkgdir/usr/share/man/man1/$pkgname.1"
+  install -Dm 644 "doc/man/$pkgname.conf.5" \
+    "$pkgdir/usr/share/man/man5/$pkgname.conf.5"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" *.md *.rst PEP8
+  install -Dm 644 LICENCE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

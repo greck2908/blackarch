@@ -1,38 +1,39 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='jwt-cracker'
-pkgver=17.906d670
+pkgname=jwt-cracker
+pkgver=21.b6ed04f
 pkgrel=1
 pkgdesc='JWT brute force cracker written in C.'
 groups=('blackarch' 'blackarch-cracker')
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/brendan-rius/c-jwt-cracker'
 license=('MIT')
 depends=('openssl')
 makedepends=('git')
-source=('git+https://github.com/brendan-rius/c-jwt-cracker.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/brendan-rius/c-jwt-cracker.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/c-jwt-cracker"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/c-jwt-cracker"
+  cd $pkgname
 
   make
 }
 
 package() {
-  cd "$srcdir/c-jwt-cracker"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/jwt-cracker"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm755 jwtcrack "$pkgdir/usr/bin/jwt-cracker"
-  install -Dm644 -t "$pkgdir/usr/share/doc/jwt-cracker/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/jwt-cracker/LICENSE"
+  install -Dm 755 jwtcrack "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

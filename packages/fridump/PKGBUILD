@@ -1,42 +1,43 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='fridump'
-pkgver=14.4e7d9a9
-pkgrel=1
+pkgname=fridump
+pkgver=23.3e64ee0
+pkgrel=2
 pkgdesc='A universal memory dumper using Frida.'
 groups=('blackarch' 'blackarch-forensic')
 arch=('any')
 url='https://github.com/Nightbringer21/fridump'
 license=('custom:unknown')
-depends=('python2' 'frida')
+depends=('python2' 'python2-frida')
 makedepends=('git')
-source=('git+https://github.com/Nightbringer21/fridump.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/Nightbringer21/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/fridump"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/fridump"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/fridump"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/fridump/" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/fridump/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/fridump" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/fridump
-exec python2 fridump.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/fridump"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

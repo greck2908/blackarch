@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='maltrail'
-pkgver=1442.8be811c
+pkgname=maltrail
+pkgver=47052.9f6fd4b0ae
 pkgrel=1
 pkgdesc='Malicious traffic detection system.'
 groups=('blackarch' 'blackarch-defensive' 'blackarch-networking'
@@ -12,41 +12,42 @@ url='https://github.com/stamparm/maltrail'
 license=('MIT')
 depends=('python2' 'python2-pcapy' 'python2-pysqlite')
 makedepends=('git')
-source=('git+https://github.com/stamparm/maltrail.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/stamparm/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/maltrail"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/maltrail"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/maltrail"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/maltrail/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/maltrail/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/maltrail/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
   cat > "$pkgdir/usr/bin/maltrail-sensor" << EOF
 #!/bin/sh
-cd /usr/share/maltrail
-exec python2 sensor.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 sensor.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/maltrail-sensor"
+  chmod +x "$pkgdir/usr/bin/maltrail-sensor"
 
   cat > "$pkgdir/usr/bin/maltrail-server" << EOF
 #!/bin/sh
-cd /usr/share/maltrail
-exec python2 server.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 server.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/maltrail-server"
+  chmod +x "$pkgdir/usr/bin/maltrail-server"
 }
+

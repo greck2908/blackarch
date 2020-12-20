@@ -1,20 +1,20 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='tcpjunk'
-pkgver='2.9.03'
+pkgname=tcpjunk
+pkgver=2.9.03
 pkgrel=6
 pkgdesc='A general tcp protocols testing and hacking utility.'
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-fuzzer')
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='http://code.google.com/p/tcpjunk'
 license=('GPL2')
-source=("http://tcpjunk.googlecode.com/files/tcpjunk-${pkgver}.tar.gz")
+source=("http://tcpjunk.googlecode.com/files/$pkgname-$pkgver.tar.gz")
 depends=('gtksourceview2')
-sha1sums=('1bd3f80abe95dfe728f135e3d1a22ef4a08f2a28')
+sha512sums=('1bd3f80abe95dfe728f135e3d1a22ef4a08f2a28')
 
 build() {
-  cd "$srcdir/tcpjunk-$pkgver"
+  cd "$pkgname-$pkgver"
 
   ./configure --prefix=/usr --docdir=/usr/share/doc
 
@@ -22,13 +22,14 @@ build() {
 }
 
 package() {
-  cd "$srcdir/tcpjunk-$pkgver"
+  cd "$pkgname-$pkgver"
 
-  mkdir -p "$pkgdir/usr/share/doc"
+  install -dm 755 "$pkgdir/usr/share/doc"
 
   make DESTDIR="$pkgdir" install
 
-  mv "$pkgdir/usr/doc/tcpjunk" "$pkgdir/usr/share/doc/tcpjunk"
+  mv "$pkgdir/usr/doc/$pkgname" "$pkgdir/usr/share/doc/$pkgname"
 
   rm -rf "$pkgdir/usr/doc"
 }
+

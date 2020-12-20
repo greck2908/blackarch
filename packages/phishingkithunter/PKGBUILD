@@ -1,43 +1,44 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='phishingkithunter'
-pkgver=15.55f54c2
-pkgrel=1
+pkgname=phishingkithunter
+pkgver=20.ac9bd1e
+pkgrel=2
 pkgdesc="Find phishing kits which use your brand/organization's files and image'."
 groups=('blackarch' 'blackarch-social' 'blackarch-defensive')
 arch=('any')
 url='https://github.com/t4d/PhishingKitHunter'
-license=('GAGPL3')
-depends=('python' 'python-tqdm' 'python-whois' 'python-socksipy-branch')
+license=('AGPL3')
+depends=('python' 'python-tqdm' 'python-python-whois' 'python-pysocks')
 makedepends=('git')
-source=('git+https://github.com/t4d/PhishingKitHunter')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/t4d/PhishingKitHunter.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/PhishingKitHunter"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/PhishingKitHunter"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/phishingkithunter"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/phishingkithunter/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/phishingkithunter/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/phishingkithunter/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/phishingkithunter" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/phishingkithunter
-exec python PhishingKitHunter.py "\${@}"
+cd /usr/share/$pkgname
+exec python PhishingKitHunter.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/phishingkithunter"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

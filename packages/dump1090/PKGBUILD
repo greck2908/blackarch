@@ -1,43 +1,43 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='dump1090'
+pkgname=dump1090
 pkgver=386.bff92c4
 pkgrel=3
 pkgdesc='A simple Mode S decoder for RTLSDR devices.'
 groups=('blackarch' 'blackarch-networking' 'blackarch-misc')
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/MalcolmRobb/dump1090'
 license=('custom:BSD')
 depends=('rtl-sdr')
 makedepends=('git')
-source=('git+https://github.com/MalcolmRobb/dump1090.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/MalcolmRobb/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/dump1090"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/dump1090"
+  cd $pkgname
 
-  sed -i 's#./public_html#/usr/share/dump1090/public_html#g' dump1090.h
+  sed -i 's#./public_html#/usr/share/dump1090/public_html#g' "$pkgname.h"
 
   make
 }
 
 package() {
-  cd "$srcdir/dump1090"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/share/dump1090"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm755 dump1090 "$pkgdir/usr/bin/dump1090"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/dump1090/README.md"
-  install -m644 TODO "$pkgdir/usr/share/doc/dump1090/TODO"
+  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md TODO
 
   rm README.md TODO
 
-  cp -a public_html testfiles tools "$pkgdir/usr/share/dump1090/"
+  cp -a public_html testfiles tools "$pkgdir/usr/share/$pkgname/"
 }
+

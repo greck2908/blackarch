@@ -1,42 +1,43 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='shelling'
-pkgver=95.de16f5a
+pkgname=shelling
+pkgver=227.0a6c135
 pkgrel=1
 pkgdesc='An offensive approach to the anatomy of improperly written OS command injection sanitisers.'
 groups=('blackarch' 'blackarch-misc')
 arch=('any')
 url='https://github.com/ewilded/shelling'
 license=('custom:unknown')
-depends=('perl')
+depends=('java-environment')
 makedepends=('git')
-source=('git+https://github.com/ewilded/shelling')
-sha1sums=('SKIP')
+source=("git+https://github.com/ewilded/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/shelling"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/shelling"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/shelling"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/shelling/README.md"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/shelling"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/shelling" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/shelling
-exec perl shelling.pl "\${@}"
+cd /usr/share/$pkgname
+exec java -jar SHELLING.jar "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/shelling"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -1,53 +1,52 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='findsploit'
-pkgver=56.9549ab2
+pkgname=findsploit
+pkgver=84.1107a48
 pkgrel=1
 pkgdesc='Find exploits in local and online databases instantly.'
-groups=('blackarch' 'blackarch-misc')
+groups=('blackarch' 'blackarch-automation' 'blackarch-exploitation')
 arch=('any')
 url='https://github.com/1N3/findsploit'
 license=('custom:unknown')
-depends=('bash' 'metasploit' 'firefox')
+depends=('bash' 'metasploit' 'firefox' 'exploitdb')
 makedepends=('git')
-source=('git+https://github.com/1N3/Findsploit.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/1N3/Findsploit.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/Findsploit"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/Findsploit"
+  cd $pkgname
 
-  sed -i 's/iceweasel/firefox/' findsploit
   sed -i 's|/pentest/|/usr/share/|' copysploit
 }
 
 package() {
-  cd "$srcdir/Findsploit"
+  cd $pkgname
 
-  local tools="compilesploit copysploit findsploit"
+  _tools="compilesploit copysploit findsploit"
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/findsploit"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/findsploit/" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/findsploit/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  for t in ${tools}
-  do
-    cat > "$pkgdir/usr/bin/${t}" << EOF
+  for t in $_tools ; do
+    cat > "$pkgdir/usr/bin/$t" << EOF
 #!/bin/sh
-cd /usr/share/findsploit
-exec bash ${t} "\${@}"
+cd /usr/share/$pkgname
+exec bash $t "\$@"
 EOF
-    chmod a+x "$pkgdir/usr/bin/${t}"
+    chmod +x "$pkgdir/usr/bin/$t"
   done
 }
+

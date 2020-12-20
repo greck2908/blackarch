@@ -1,29 +1,30 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='malboxes'
-pkgver=314.228e02a
-pkgrel=1
+pkgname=malboxes
+pkgver=446.32d358f
+pkgrel=2
 pkgdesc="Builds malware analysis Windows VMs so that you don't have to."
 groups=('blackarch-malware')
 arch=('any')
-source='https://github.com/GoSecure/malboxes'
+url='https://github.com/GoSecure/malboxes'
 license=('GPL')
-depends=('python' 'packer-io' 'virtualbox' 'vagrant' 'python-jsmin')
+depends=('python' 'packer' 'virtualbox' 'vagrant' 'python-jsmin' 'python-jinja')
 makedepends=('python-pip' 'git')
 options=(!emptydirs)
-source=('git+https://github.com/GoSecure/malboxes.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/GoSecure/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/malboxes"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/malboxes"
+  cd $pkgname
 
   PIP_CONFIG_FILE=/dev/null pip3 install --isolated --root="$pkgdir" \
     --ignore-installed --no-deps ./
 }
+

@@ -1,39 +1,40 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='ghost-phisher'
-pkgver='1.64'
-pkgrel=2
+pkgname=ghost-phisher
+pkgver=1.64
+pkgrel=3
 groups=('blackarch' 'blackarch-scanner')
 pkgdesc='GUI suite for phishing and penetration attacks.'
 url='http://code.google.com/p/ghost-phisher'
 arch=('any')
 license=('GPL3')
-source=('svn+http://ghost-phisher.googlecode.com/svn/Ghost-Phisher/')
-depends=('aircrack-ng' 'python2-pyqt4' 'scapy' 'xterm' 'python2')
+depends=('aircrack-ng' 'python2-pyqt4' 'python2-scapy' 'xterm' 'python2')
 optdepends=('metasploit')
-sha1sums=('SKIP')
+source=("$pkgname::svn+http://ghost-phisher.googlecode.com/svn/Ghost-Phisher/")
+sha512sums=('SKIP')
 
 prepare() {
-  cd "$srcdir/Ghost-Phisher"
+  cd $pkgname
 
   sed -i 's/python/python2/' *.py
 }
 
 package() {
-  cd "$srcdir/Ghost-Phisher"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/ghostphisher"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/ghostphisher"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
 
-  chmod +x "$pkgdir/usr/share/ghostphisher/ghost.py"
+  chmod +x "$pkgdir/usr/share/$pkgname/ghost.py"
 
-cat > "$pkgdir/usr/bin/ghostphisher" << EOF
+cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-exec /usr/share/ghostphisher/ghost.py
+exec /usr/share/$pkgname/ghost.py
 EOF
 
-  chmod +x "$pkgdir/usr/bin/ghostphisher"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -1,50 +1,51 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='crawlic'
+pkgname=crawlic
 pkgver=51.739fe2b
 pkgrel=2
 groups=('blackarch' 'blackarch-webapp' 'blackarch-recon')
 pkgdesc='Web recon tool (find temporary files, parse robots.txt, search folders, google dorks and search domains hosted on same server).'
 arch=('any')
 url='https://github.com/Ganapati/Crawlic'
-license=('Beerware')
+license=('custom:unknown')
 depends=('python2' 'python2-requests' 'python2-simplejson')
 makedepends=('git')
-source=('git+https://github.com/Ganapati/Crawlic.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/Ganapati/Crawlic.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/Crawlic"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/Crawlic"
+  cd $pkgname
 
   sed -i 's|path = os.path.dirname(__file__)|path = "/usr/share/crawlic"|' \
     crawlic.py
 }
 
 package() {
-  cd "$srcdir/Crawlic"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/crawlic"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/crawlic/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/crawlic/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/crawlic"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/crawlic" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/crawlic
-exec python2 crawlic.py "\$@"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/crawlic"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

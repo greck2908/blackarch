@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='harness'
+pkgname=harness
 pkgver=19.ed2a6aa
-pkgrel=1
+pkgrel=2
 pkgdesc='Interactive remote PowerShell Payload.'
 groups=('blackarch' 'blackarch-backdoor' 'blackarch-windows')
 arch=('any')
@@ -11,33 +11,40 @@ url='https://github.com/Rich5/Harness'
 license=('MIT')
 depends=('python')
 makedepends=('git')
-source=('git+https://github.com/Rich5/Harness.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/Rich5/Harness.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/Harness"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
+prepare() {
+  cd $pkgname
+
+  touch "$pkgname/core/__init__.py"
+}
+
 package() {
-  cd "$srcdir/Harness"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/harness"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/harness/" README.md changelog
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/harness/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md changelog
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE changelog
 
-  cp -a * "$pkgdir/usr/share/harness/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/harness" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/harness
-exec python3 harness.py "\${@}"
+cd /usr/share/$pkgname
+exec python $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/harness"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

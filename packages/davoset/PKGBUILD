@@ -1,47 +1,45 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='davoset'
-pkgver='1.3.5'
-pkgrel=1
+pkgname=davoset
+pkgver=1.3.7
+pkgrel=2
 pkgdesc='A tool for using Abuse of Functionality and XML External Entities vulnerabilities on some websites to attack other websites.'
 arch=('any')
 url='http://websecurity.com.ua/davoset/'
 license=('custom:unknown')
 groups=('blackarch' 'blackarch-dos')
-depends=('perl')
+depends=('perl' 'perl-io-socket-socks')
 makedepends=('unrar' 'dos2unix')
 options=('!emptydirs')
-noextract=("davoset-${pkgver}.rar")
-install='davoset.install'
-source=("davoset-${pkgver}.rar::http://websecurity.com.ua/uploads/2017/DAVOSET_v.${pkgver}.rar")
-sha1sums=('4ce6e7c462bf60c3ffd492bfc6d5eb180542aa6d')
+source=("$pkgname.rar::http://websecurity.com.ua/uploads/2018/DAVOSET_v.$pkgver.rar")
+sha512sums=('d3bb303e8692b4ea40ad831686893be6ca5d42e9b90874faaac6ed09e5262c08994aa02f963d22d9188df9547210f5f190736f3cca5d8f862a217c1bc62f2a68')
+install="$pkgname.install"
+noextract=("$pkgname.rar")
 
 prepare() {
-  cd "$srcdir"
+  unrar e -ad -o+ "$pkgname.rar"
 
-  # bsdtar cannot handle this archive
-  unrar e -ad -o+ davoset-$pkgver.rar
-
-  cd davoset-$pkgver
+  cd $pkgname
 
   dos2unix -- *
 }
 
 package() {
-  cd "$srcdir/davoset-$pkgver"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/davoset"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -m755 davoset.pl "$pkgdir/usr/share/davoset"
-  install -m644 *.txt "$pkgdir/usr/share/davoset"
+  install -m 755 "$pkgname.pl" "$pkgdir/usr/share/$pkgname"
+  install -m 644 *.txt "$pkgdir/usr/share/$pkgname"
 
-  cat > "$pkgdir/usr/bin/davoset" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/davoset
-exec ./davoset.pl "\${@}"
+cd /usr/share/$pkgname
+exec ./$pkgname.pl "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/davoset"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

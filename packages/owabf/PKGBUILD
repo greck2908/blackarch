@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='owabf'
-pkgver='1.3'
+pkgname=owabf
+pkgver=1.3
 pkgrel=5
 groups=('blackarch' 'blackarch-cracker')
 pkgdesc='Outlook Web Access bruteforcer tool.'
@@ -11,18 +11,14 @@ url='http://netsec.rs/70/tools.html'
 license=('custom:unknown')
 depends=('python2')
 source=('http://netsec.rs/UserFiles/File/owabf.zip')
-sha1sums=('8c4612170b36eacf81c7098f686b3f0fb22ade45')
+sha512sums=('8c4612170b36eacf81c7098f686b3f0fb22ade45')
 
 prepare() {
-  cd "$srcdir"
-
-  sed -i 's/.$//' owabf.py
-
-  sed -i '1i\#!/usr/bin/env python2' owabf.py
+  sed -i 's/.$//' "$pkgname.py"
+  sed -i '1i\#!/usr/bin/env python2' "$pkgname.py"
 }
 
 package() {
-  cd "$srcdir"
-
-  install -Dm755 owabf.py "$pkgdir/usr/bin/owabf"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
 }
+

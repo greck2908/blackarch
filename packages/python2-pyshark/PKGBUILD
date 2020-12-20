@@ -1,21 +1,29 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python2-pyshark'
-pkgver='0.3.7.11'
+pkgname=python2-pyshark
+_pkgname=pyshark
+pkgver=0.3.8
 pkgrel=1
-pkgdesc='Python wrapper for tshark, allowing python packet parsing using wireshark dissectors.'
-url='https://github.com/KimiNewt/pyshark'
+epoch=1
+pkgdesc='python2 wrapper for tshark, allowing python2 packet parsing using wireshark dissectors.'
 arch=('any')
+url='https://pypi.org/project/pyshark/#files'
 license=('MIT')
-depends=('wireshark-cli' 'pypy' 'python2-lxml' 'python2-trollius'
-         'python2-logbook')
-makedepends=('python2-setuptools' 'python2-mock')
-source=("https://pypi.python.org/packages/0d/8a/d375e554846554f56eacff4de3d878abf0125791f566b1eba5e16c828e54/pyshark-${pkgver}.tar.gz")
-sha1sums=('35731c5273d898291f3a969201ac7802a549d679')
+depends=('python2' 'python2-lxml' 'python2-logbook')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/4e/ca/c69b427f6268e04657f8b850f398863bf499c867719ce283e4e0fb69706a/$_pkgname-$pkgver.tar.gz")
+sha512sums=('dd4c9c28699e7175aba39461f16d7e41e76b5d5d1df2641b21496eaac4653516afbc2e23610a15d5a079e8377e71f9928481b170a47c5041e9fdc65ea81012db')
+
+build() {
+  cd "$_pkgname-$pkgver"
+
+  python2 setup.py build
+}
 
 package() {
-  cd "$srcdir/pyshark-${pkgver}/src"
+  cd "$_pkgname-$pkgver"
 
-  python2 setup.py install --root="$pkgdir" --optimize=1 --prefix=/usr
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 }
+

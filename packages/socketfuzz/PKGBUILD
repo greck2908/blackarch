@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='socketfuzz'
+pkgname=socketfuzz
 pkgver=26.089add2
 pkgrel=1
 pkgdesc='Simple socket fuzzer.'
@@ -11,25 +11,26 @@ url='https://github.com/landw1re/socketfuzz'
 license=('MIT')
 depends=('python2')
 makedepends=('git')
-source=('git+https://github.com/landw1re/socketfuzz.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/landw1re/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/socketfuzz"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/socketfuzz"
+  cd $pkgname
 
-  sed -i 's|env python|env python2|' socketfuzz.py
+  sed -i 's|env python|env python2|' "$pkgname.py"
 }
 
 package() {
-  cd "$srcdir/socketfuzz"
+  cd $pkgname
 
-  install -Dm755 socketfuzz.py "$pkgdir/usr/bin/socketfuzz"
-  install -Dm644 -t "$pkgdir/usr/share/doc/socketfuzz/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/socketfuzz/LICENSE"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='shocker'
-pkgver=60.239286f
-pkgrel=2
+pkgname=shocker
+pkgver=63.0380a73
+pkgrel=1
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-scanner')
 pkgdesc='A tool to find and exploit servers vulnerable to Shellshock.'
 arch=('any')
@@ -11,37 +11,38 @@ url='https://github.com/nccgroup/shocker'
 license=('GPL3')
 depends=('python2')
 makedepends=('git')
-source=('git+https://github.com/nccgroup/shocker.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/nccgroup/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/shocker"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/shocker"
+  cd $pkgname
 
-  sed -i 's|/usr/bin/python|/usr/bin/python2|' shocker.py
+  sed -i 's|/usr/bin/python|/usr/bin/python2|' "$pkgname.py"
 }
 
 package() {
-  cd "$srcdir/shocker"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  install -Dm644 -t "$pkgdir/usr/share/shocker" shocker.py shocker-cgi_list \
+  install -Dm 644 -t "$pkgdir/usr/share/$pkgname" shocker.py shocker-cgi_list \
     shocker-target_list
-  install -Dm755 shocker.py "$pkgdir/usr/bin/shocker"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/shocker/README.md"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/shocker/LICENSE"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
-  cat > "$pkgdir/usr/bin/shocker" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/shocker
-exec python2 shocker.py "\$@"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/shocker"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

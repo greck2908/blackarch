@@ -1,35 +1,36 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='sickle'
-pkgver=27.603457a
-pkgrel=1
+pkgname=sickle
+pkgver=73.e14c0bb
+pkgrel=2
 pkgdesc='A shellcode development tool, created to speed up the various steps needed to create functioning shellcode.'
 groups=('blackarch' 'blackarch-exploitation')
 arch=('any')
 url='https://github.com/wetw0rk/Sickle'
 license=('MIT')
-depends=('python2')
-makedepends=('git')
-source=('git+https://github.com/wetw0rk/Sickle.git')
-sha1sums=('SKIP')
+depends=('python' 'python-capstone')
+makedepends=('git' 'python-setuptools')
+source=("$pkgname::git+https://github.com/wetw0rk/Sickle.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/Sickle"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-package() {
-  cd "$srcdir/Sickle"
+build() {
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/share/sickle"
-
-  install -Dm755 sickle.py "$pkgdir/usr/bin/sickle"
-  install -Dm644 -t "$pkgdir/usr/share/doc/sickle/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/sickle/LICENSE"
-
-  rm sickle.py LICENSE README.md
-
-  cp -a * "$pkgdir/usr/share/sickle"
+  python setup.py build
 }
+
+package() {
+  cd $pkgname
+
+  python setup.py install --root="$pkgdir" --prefix=/usr --skip-build
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+}
+

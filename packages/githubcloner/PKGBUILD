@@ -1,44 +1,44 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='githubcloner'
-pkgver=6.3069b88
-pkgrel=1
+pkgname=githubcloner
+pkgver=34.26d03ae
+pkgrel=2
 pkgdesc='A script that clones Github repositories of users and organizations automatically.'
 groups=('blackarch' 'blackarch-misc' 'blackarch-automation')
 arch=('any')
 url='https://github.com/mazen160/GithubCloner'
 license=('MIT')
-depends=('python' 'python-argparse' 'python-requests')
+depends=('python' 'python-argparse' 'python-requests' 'python-gitpython')
 makedepends=('git')
-source=('git+https://github.com/mazen160/GithubCloner')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/mazen160/GithubCloner.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/GithubCloner"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/GithubCloner"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/githubcloner"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/githubcloner/" README.md
-  install -Dm644 LICENSE.txt \
-    "$pkgdir/usr/share/licenses/githubcloner/LICENSE.txt"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE.txt
 
-  cp -a * "$pkgdir/usr/share/githubcloner/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/githubcloner" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/githubcloner
-exec python githubcloner.py "\${@}"
+cd /usr/share/$pkgname
+exec python $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/githubcloner"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

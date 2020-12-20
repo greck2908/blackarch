@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='androidpincrack'
+pkgname=androidpincrack
 pkgver=2.ddaf307
 pkgrel=2
 groups=('blackarch' 'blackarch-mobile' 'blackarch-cracker')
@@ -11,24 +11,25 @@ url='https://github.com/PentesterES/AndroidPINCrack'
 license=('MIT')
 makedepends=('git')
 depends=('python2')
-source=('git+https://github.com/PentesterES/AndroidPINCrack.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/PentesterES/AndroidPINCrack.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/AndroidPINCrack"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/AndroidPINCrack"
+  cd $pkgname
 
-  sed -i 's|bin/python|bin/python2|' AndroidPINCrack.py
+  sed -i 's|bin/python|bin/python2|' "$pkgname.py"
 }
 
 package() {
-  cd "$srcdir/AndroidPINCrack"
+  cd $pkgname
 
-  install -Dm755 AndroidPINCrack.py "$pkgdir/usr/bin/androidpincrack"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/androidpincrack/README.md"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 }
+

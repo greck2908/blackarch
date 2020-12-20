@@ -1,26 +1,26 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='trinity'
-pkgver=5090.00a1a514
+pkgname=trinity
+pkgver=5162.4d2343bd
 pkgrel=1
 pkgdesc='A Linux System call fuzzer.'
 groups=('blackarch' 'blackarch-fuzzer')
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='http://codemonkey.org.uk/projects/trinity/'
 license=('GPL')
 makedepends=('git')
-source=('git+https://github.com/kernelslacker/trinity.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/kernelslacker/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/trinity"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/trinity"
+  cd $pkgname
 
   ./configure
 
@@ -28,18 +28,19 @@ build() {
 }
 
 package() {
-  cd "$srcdir/trinity"
+  cd $pkgname
 
-  install -Dm644 README "$pkgdir/usr/share/doc/trinity/README"
+  install -Dm 644 README "$pkgdir/usr/share/doc/$pkgname/README"
 
   cd Documentation
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/trinity" HACKING.txt Known-bugs.txt \
-    TODO pro-tips.txt
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" HACKING.txt TODO \
+    Known-bugs.txt pro-tips.txt
 
   cd ..
 
-  install -Dm644 COPYING "$pkgdir/usr/share/licenses/trinity/COPYING"
+  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
 
   make DESTDIR="$pkgdir/usr" install
 }
+

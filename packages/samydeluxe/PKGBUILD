@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='samydeluxe'
+pkgname=samydeluxe
 pkgver=2.2ed1bac
 pkgrel=6
 epoch=1
@@ -11,21 +11,20 @@ url='http://github.com/jensp/samydeluxe'
 groups=('blackarch' 'blackarch-cracker')
 makedepends=('git')
 depends=('bash' 'samdump2')
-sha1sums=('SKIP')
-source=('git+https://github.com/jensp/samydeluxe.git')
+source=("git+https://github.com/jensp/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/samydeluxe"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir"
+  rm -rf "$srcdir/$pkgname-build"
+  cp -r "$srcdir/$pkgname" "$srcdir/$pkgname-build"
+  cd "$srcdir/$pkgname-build"
 
-  rm -rf "$srcdir/samydeluxe-build"
-  cp -r "$srcdir/samydeluxe" "$srcdir/samydeluxe-build"
-  cd "$srcdir/samydeluxe-build"
-
-  install -Dm755 "samydeluxe" "$pkgdir/usr/bin/samydeluxe"
+  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -20,6 +20,7 @@ tags
 .MTREE
 .PKGINFO
 
+.vim.session
 *.part
 *.7z
 *.asc
@@ -35,6 +36,7 @@ tags
 *.iso
 *.jar
 *.lzma
+!*.lzma/
 *.pdf
 *.rar
 *.rpm
@@ -51,6 +53,8 @@ tags
 *.jpg
 *.png
 *.exe
+*.zst
+*.log
 /scripts/arm-qemu/armv6/
 /scripts/arm-qemu/armv7/
 !/scripts/arm-qemu/armv6/init.sh
@@ -61,3 +65,16 @@ tags
 /tmp/
 scripts/images/docker/output
 !/packages/python2-fullcontact.py
+blackarch-mirrorlist
+!/packages/tor-browser-en/tor-browser-en.png
+!/packages/tor-browser-en/tor-browser-en.sh
+!/packages/tor-browser-en/tor-browser-en.desktop
+!/packages/owtf/BIG-IP_cookie_decoder.py
+!/packages/skipfish/skipfish-bin.tar.xz
+!/packages/python-github3.py
+!/packages/pygtk/pygtk-2.24.0-patched.tar.xz
+!/packages/pygtk/pygtk-2.24.0-patched-arm.tar.xz
+!/bluez-hciconfig/*.c
+!/bluez-hciconfig/*.h
+!/bluez-hciconfig/*.txt
+!/bluez-hciconfig/*.1

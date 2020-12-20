@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='cisco-snmp-enumeration'
+pkgname=cisco-snmp-enumeration
 pkgver=10.ad06f57
 pkgrel=3
 groups=('blackarch' 'blackarch-automation' 'blackarch-networking'
@@ -12,27 +12,26 @@ url='https://github.com/nccgroup/cisco-snmp-enumeration'
 license=('GPL3')
 depends=('bash' 'metasploit' 'net-snmp' 'john' 'screen')
 makedepends=('git')
-source=('git+https://github.com/nccgroup/cisco-SNMP-enumeration.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/nccgroup/cisco-SNMP-enumeration.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/cisco-SNMP-enumeration"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/cisco-SNMP-enumeration"
+  cd $pkgname
 
   sed -i 's|metasploit-framework|metasploit|' cisc0wn.sh
 }
 
 package() {
-  cd "$srcdir/cisco-SNMP-enumeration"
+  cd $pkgname
 
-  install -Dm755 cisc0wn.sh "$pkgdir/usr/bin/cisco-snmp-enumeration"
-  install -Dm644 README.md \
-    "$pkgdir/usr/share/doc/cisco-snmp-enumeration/README.md"
-  install -Dm644 LICENSE \
-    "$pkgdir/usr/share/licenses/cisco-snmp-enumeration/LICENSE"
+  install -Dm 755 cisc0wn.sh "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

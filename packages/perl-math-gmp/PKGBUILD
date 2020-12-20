@@ -1,29 +1,31 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='perl-math-gmp'
-pkgver='2.15'
-pkgrel=1
+pkgname=perl-math-gmp
+_pkgname=Math-GMP
+pkgver=2.20
+pkgrel=2
 pkgdesc='High speed arbitrary size integer math.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
-url="http://search.cpan.org/~turnstep/Math-GMP-${pkgver}/"
+arch=('x86_64' 'aarch64')
+url='https://metacpan.org/pod/Math::GMP'
 license=('GPL' 'PerlArtistic')
-depends=('perl' 'gmp' 'perl-devel-checklib')
+depends=('perl' 'gmp' 'perl-devel-checklib' 'perl-alien-base-modulebuild'
+         'perl-alien-gmp')
 options=(!emptydirs)
-source=("http://search.cpan.org/CPAN/authors/id/S/SH/SHLOMIF/Math-GMP-${pkgver}.tar.gz")
-sha1sums=('76d194b0c4ea0eb0a93e852472a5087c1ba8957c')
+source=("http://search.cpan.org/CPAN/authors/id/S/SH/SHLOMIF/$_pkgname-$pkgver.tar.gz")
+sha512sums=('e76a4f2ed9f700029a0b075fcdaecf6fb3792ecfef23fb75f014572b6471be9265b80551c741cda9fe3f323a351a23fb9e5edca2e05300b97509b225aa721b04')
 
 build() {
-  cd "$srcdir/Math-GMP-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  # Install module in vendor directories.
   PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
 
   make
 }
 
 package() {
-  cd "$srcdir/Math-GMP-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  make install DESTDIR="$pkgdir/"
+  make install DESTDIR="$pkgdir"
 }
+

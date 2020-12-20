@@ -1,39 +1,40 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='skyjack'
+pkgname=skyjack
 pkgver=16.24e3878
-pkgrel=1
+pkgrel=2
 groups=('blackarch' 'blackarch-drone')
 pkgdesc='Takes over Parrot drones, deauthenticating their true owner and taking over control, turning them into zombie drones under your own control.'
 arch=('any')
 url='https://github.com/samyk/skyjack'
 license=('GPL')
-depends=('node-ar-drone')
+depends=('node-ar-drone' 'net-tools')
 makedepends=('git')
 optdepends=('aircrack-ng: putting wireless card in monitor mode')
-source=('git+https://github.com/samyk/skyjack')
-sha1sums=('SKIP')
+source=("git+https://github.com/samyk/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/skyjack"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/skyjack"
+  cd $pkgname
 
-  sed -i 's|drone_control|/usr/share/skyjack|' skyjack.pl
+  sed -i 's|drone_control|/usr/share/skyjack|' "$pkgname.pl"
 }
 
 package() {
-  cd "$srcdir/skyjack"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/share/skyjack"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm755 skyjack.pl "$pkgdir/usr/bin/skyjack"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/skyjack/README.md"
+  install -Dm 755 "$pkgname.pl" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
-  cp -a drone_control/* "$pkgdir/usr/share/skyjack"
+  cp -a drone_control/* "$pkgdir/usr/share/$pkgname"
 }
+

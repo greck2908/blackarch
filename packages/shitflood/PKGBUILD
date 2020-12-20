@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='shitflood'
+pkgname=shitflood
 pkgver=14.e74fc42
 pkgrel=2
 groups=('blackarch' 'blackarch-dos')
@@ -11,40 +11,39 @@ url='https://github.com/acidvegas/shitflood'
 license=('custom:unknown')
 depends=('python2')
 makedepends=('git')
-source=('git+https://github.com/acidvegas/shitflood.git'
-        'shitflood.py.patch')
-sha1sums=('SKIP'
-          '13c3e39e12d319fc498b4baed8edfd65e96d7b5e')
+source=("git+https://github.com/acidvegas/$pkgname.git"
+        "$pkgname.py.patch")
+sha512sums=('SKIP'
+            '703c894f3f20eb5a276ec8df7b43e2a17d7ae616e0a8e58f2cb214991cd49b242a6f5ae60320bb498fa18f8ff076af882d917bf07018f567dc3f6081b5dac0fd')
 
 pkgver() {
-  cd "$srcdir/shitflood"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir"
-
-  patch -p1 < shitflood.py.patch
+  patch -p1 < "$pkgname.py.patch"
 }
 
 package() {
-  cd "$srcdir/shitflood"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/shitflood"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/shitflood/" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/shitflood"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/shitflood" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/shitflood
-exec python2 shitflood.py "\$@"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/shitflood"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

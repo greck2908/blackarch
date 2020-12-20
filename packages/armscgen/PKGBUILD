@@ -1,55 +1,60 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='armscgen'
+pkgname=armscgen
 pkgver=98.c51b7d6
-pkgrel=1
+pkgrel=3
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-automation')
 pkgdesc='ARM Shellcode Generator (Mostly Thumb Mode).'
 arch=('any')
 url='https://github.com/alexpark07/ARMSCGen'
 license=('GPL' 'GPL2' 'MIT')
-depends=('python2' 'capstone' 'python2-keystone' 'unicorn' 'python2-unicorn')
+depends=('python2' 'python2-capstone' 'python2-keystone' 'unicorn'
+         'python2-unicorn')
 makedepends=('git' 'python2-setuptools')
-source=('git+https://github.com/alexpark07/ARMSCGen.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/alexpark07/ARMSCGen.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/ARMSCGen"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/ARMSCGen"
+  cd $pkgname
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/ARMSCGen"
+  cd $pkgname
+
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
   python2 setup.py install --root="$pkgdir"
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/armscgen"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/armscgen" README.md \
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md \
     shellcodes_lists.md requirements.txt
-  cp -a docs/* "$pkgdir/usr/share/doc/armscgen/"
+  cp -a docs/* "$pkgdir/usr/share/doc/$pkgname/"
 
-  install -Dm644 -t "$pkgdir/usr/share/licenses/armscgen" LICENSE \
+  install -Dm 644 -t "$pkgdir/usr/share/licenses/$pkgname" LICENSE \
     LICENSE-ARMSCGen.txt
 
   rm -rf docs shellcodes_lists.md requirements.txt README.md LICENSE \
     LICENSE-ARMSCGen.txt
 
-  cp -a * "$pkgdir/usr/share/armscgen/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/armscgen" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/armscgen
-exec python2 scgen.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 scgen.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/armscgen"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
+
+  rm -rf "$pkgdir/usr/LICENSE-ARMSCGen.txt"
 }
+

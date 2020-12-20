@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='bindead'
+pkgname=bindead
 pkgver=4504.67019b97b
 pkgrel=2
 pkgdesc='A static analysis tool for binaries'
@@ -12,17 +12,17 @@ url='https://bitbucket.org/mihaila/bindead'
 license=('GPL3')
 depends=('bash' 'java-runtime')
 makedepends=('git' 'java-environment' 'maven')
-source=('git+https://bitbucket.org/mihaila/bindead')
-sha1sums=('SKIP')
+source=("git+https://bitbucket.org/mihaila/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/bindead"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/bindead"
+  cd $pkgname
 
   unset _JAVA_OPTIONS
 
@@ -32,19 +32,17 @@ build() {
 }
 
 package() {
-  cd "$srcdir/bindead"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  install -Dm644 bindead.jar "$pkgdir/usr/share/bindead/bindead.jar"
-  #install -Dm644 -t "$pkgdir/usr/share/doc/bindead/" README.md Changelog.md \
-  #  AUTHORS.txt
+  install -Dm 644 "$pkgname.jar" "$pkgdir/usr/share/$pkgname/$pkgname.jar"
 
-  cat > "$pkgdir/usr/bin/bindead" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-java -jar /usr/share/bindead/bindead.jar "\$@"
+java -jar /usr/share/$pkgname/$pkgname.jar "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/bindead"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
 

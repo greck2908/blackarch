@@ -1,46 +1,45 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='yasuo'
+pkgname=yasuo
 pkgver=121.994dcb1
-pkgrel=1
+pkgrel=7
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 pkgdesc='A ruby script that scans for vulnerable & exploitable 3rd-party web applications on a network.'
 arch=('any')
 url='https://github.com/0xsauby/yasuo'
-depends=('ruby' 'ruby-mechanize' 'ruby-colorize' 'ruby-net-http-persistent'
-         'ruby-ruby-nmap' 'ruby-text-table' 'ruby-connection_pool'
-         'ruby-rprogram' 'ruby-net-http-digest_auth' 'ruby-ntlm-http'
-         'ruby-webrobots' 'ruby-http-cookie' 'ruby-domain_name')
+depends=('ruby' 'ruby-bundler' 'ruby-pkg-config' 'libxslt')
 makedepends=('git')
 license=('GPL3')
-source=('git+https://github.com/0xsauby/yasuo.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/0xsauby/$pkgname.git")
+sha512sums=('SKIP')
+install="$pkgname.install"
 
 pkgver() {
-  cd "$srcdir/yasuo"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/yasuo"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/yasuo"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/yasuo/README.md"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/yasuo/LICENSE"
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/yasuo"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/yasuo" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/yasuo
-ruby yasuo.rb "\$@"
+cd /usr/share/$pkgname
+exec bundle exec ./$pkgname.rb "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/yasuo"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

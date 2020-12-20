@@ -1,44 +1,54 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='eyewitness'
-pkgver=677.4005a20
+pkgname=eyewitness
+pkgver=884.7102a86
 pkgrel=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-recon' 'blackarch-misc')
 pkgdesc='Designed to take screenshots of websites, provide some server header info, and identify default credentials if possible.'
 arch=('any')
 url='https://github.com/ChrisTruncer/EyeWitness'
 license=('GPL3')
-depends=('python2' 'python2-pyqt4' 'python2-netaddr' 'ghost-py' 'python2-rdpy'
-         'python2-selenium' 'python2-rsa' 'xorg-server-xvfb'
-         'python2-pyvirtualdisplay' 'python2-easyprocess')
+depends=('python' 'python-pyqt4' 'python-netaddr' 'ghost-py' 'python-rdpy'
+         'python-selenium' 'python-rsa' 'xorg-server-xvfb'
+         'python-beautifulsoup4' 'python-pyvirtualdisplay'
+         'python-fuzzywuzzy' 'python-pillow' 'geckodriver' 'firefox'
+         'python-easyprocess' 'python-pytesseract')
 makedepends=('git')
-source=('git+https://github.com/ChrisTruncer/EyeWitness.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/FortyNorthSecurity/EyeWitness.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/EyeWitness"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
+prepare() {
+  cd $pkgname
+
+  grep -iRl 'python' * | xargs sed -i 's|python$|python|'
+}
+
 package() {
-  cd "$srcdir/EyeWitness"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/eyewitness"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/eyewitness/" README.md CHANGELOG
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/eyewitness/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md CHANGELOG LICENSE
 
-  cp -a * "$pkgdir/usr/share/eyewitness"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/eyewitness" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/eyewitness/
-exec python2 EyeWitness.py "\$@"
+cd /usr/share/$pkgname/Python
+exec python EyeWitness.py "\$@"
 EOF
-  chmod +x "$pkgdir/usr/bin/eyewitness"
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

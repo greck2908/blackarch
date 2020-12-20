@@ -1,20 +1,21 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='libdaq'
-pkgver='2.0.6'
-pkgrel=2
+pkgname=libdaq
+_pkgname=daq
+pkgver=2.0.7
+pkgrel=1
 pkgdesc='Data Acquisition library for packet I/O.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='http://www.snort.org/'
 license=('GPL')
 depends=('libpcap')
 makedepends=('ca-certificates')
-source=("https://www.snort.org/downloads/snort/daq-${pkgver}.tar.gz")
-sha1sums=('66cfc59f329a2a9924f2ff81f28d448b6bd6c5b7')
+source=("https://www.snort.org/downloads/snort/$_pkgname-$pkgver.tar.gz")
+sha512sums=('9bedddbc2d952526ab4e1d65f4507eb914507f8b3b5702ecf7137f8a210c690703469162a117a76cb8376a5639db46bd767fc48789ba7294a0bad26d4cd0ede2')
 
 build() {
-  cd "$srcdir/daq-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   ./configure --prefix=/usr
 
@@ -22,7 +23,8 @@ build() {
 }
 
 package() {
-  cd "$srcdir/daq-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   make DESTDIR="$pkgdir" install
 }
+

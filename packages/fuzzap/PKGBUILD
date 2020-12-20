@@ -1,48 +1,48 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='fuzzap'
+pkgname=fuzzap
 pkgver=17.057002b
-pkgrel=2
+pkgrel=3
 groups=('blackarch' 'blackarch-wireless')
 pkgdesc='A python script for obfuscating wireless networks.'
 arch=('any')
 url='https://github.com/lostincynicism/FuzzAP'
 license=('custom')
-depends=('python2' 'scapy')
+depends=('python2' 'python2-scapy')
 makedepends=('git')
-source=('git+https://github.com/lostincynicism/FuzzAP.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/lostincynicism/FuzzAP.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/FuzzAP"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/FuzzAP"
+  cd $pkgname
 
   sed -i 's|python$|python2|' *.py
 }
 
 package() {
-  cd "$srcdir/FuzzAP"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/fuzzap"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm755 fuzzap.py "$pkgdir/usr/share/fuzzap/fuzzap.py"
-  install -Dm644 common.txt "$pkgdir/usr/share/fuzzap/common.txt"
-  install -m644 ssid.txt "$pkgdir/usr/share/fuzzap/ssid.txt"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/fuzzap/README.md"
-  install -Dm644 COPYING "$pkgdir/usr/share/licenses/fuzzap/COPYING"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/share/$pkgname/$pkgname.py"
+  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" common.txt ssid.txt
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
 
-  cat > "$pkgdir/usr/bin/fuzzap" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/fuzzap
-exec python2 fuzzap.py "\$@"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/fuzzap"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

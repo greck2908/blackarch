@@ -1,39 +1,39 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='chisel'
-pkgver='1.2.3'
+pkgname=chisel
+pkgver=152.2092107
 pkgrel=1
 pkgdesc='A fast TCP tunnel over HTTP.'
-groups=('blackarch' 'blackarch-tunnel')
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+groups=('blackarch' 'blackarch-tunnel' 'blackarch-proxy')
+arch=('x86_64' 'aarch64')
 url='https://github.com/jpillora/chisel'
 license=('MIT')
-makedepends=('go' 'git')
-source=("https://github.com/jpillora/chisel/archive/${pkgver}.tar.gz")
-sha1sums=('77309a7e606387e3bb6bd818fc4cfbed17a213a3')
+makedepends=('git' 'go-pie')
+source=("git+https://github.com/jpillora/$pkgname.git")
+sha512sums=('SKIP')
 _url='github.com/jpillora/chisel'
 
-prepare() {
-  cd "$srcdir"
+pkgver() {
+  cd $pkgname
 
-  export GOPATH="$srcdir"
-
-  go get -d -u github.com/jpillora/chisel
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/chisel-$pkgver"
+  cd $pkgname
 
   export GOPATH="$srcdir"
 
-  go build
+  go get -d -u $_url
+  go build -ldflags "-X github.com/jpillora/chisel/share.BuildVersion=$(git describe --abbrev=0 --tags)"
 }
 
 package() {
-  cd "$srcdir/chisel-$pkgver"
+  cd $pkgname
 
-  install -Dm755 "chisel-$pkgver" "$pkgdir/usr/bin/chisel"
-  install -Dm644 example/users.json \
-    "$pkgdir/usr/share/doc/chisel/examples/users.json"
+  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 example/users.json \
+  "$pkgdir/usr/share/doc/$pkgname/examples/users.json"
 }
+

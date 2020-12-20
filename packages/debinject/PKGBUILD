@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='debinject'
-pkgver=39.7781ebc
+pkgname=debinject
+pkgver=40.88b7824
 pkgrel=1
 pkgdesc='Inject malicious code into *.debs.'
 groups=('blackarch' 'blackarch-backdoor')
@@ -11,33 +11,34 @@ url='https://github.com/UndeadSec/Debinject'
 license=('BSD3')
 depends=('python2')
 makedepends=('git')
-source=('git+https://github.com/UndeadSec/Debinject.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/UndeadSec/Debinject.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/Debinject"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/Debinject"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/debinject"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/debinject/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/debinject/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/debinject/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/debinject" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/debinject
-exec python2 debinject.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/debinject"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

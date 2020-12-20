@@ -1,44 +1,46 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='massexpconsole'
-pkgver=169.d5af571
+pkgname=massexpconsole
+pkgver=410.d9cef9e
 pkgrel=1
 pkgdesc='A collection of tools and exploits with a cli ui for mass exploitation.'
 groups=('blackarch' 'blackarch-automation' 'blackarch-exploitation')
 arch=('any')
 url='https://github.com/jm33-m0/massExpConsole'
 license=('GPL3')
-depends=('python2' 'python2-requests' 'python2-beautifulsoup4'
-         'python2-pyopenssl' 'python2-html5lib' 'python2-docopt')
+depends=('python' 'python-requests' 'python-beautifulsoup4' 'python-psutil'
+         'python-pyopenssl' 'python-html5lib' 'python-docopt' 'python-tqdm'
+         'python-prompt_toolkit')
 makedepends=('git')
-source=('git+https://github.com/jm33-m0/massExpConsole')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/jm33-m0/massExpConsole.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/massExpConsole"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/massExpConsole"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/massexpconsole"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/massexpconsole/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/massexpconsole/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/massexpconsole/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/massexpconsole" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/massexpconsole
-exec python2 mec.py "\${@}"
+cd /usr/share/$pkgname
+exec python mec.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/massexpconsole"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

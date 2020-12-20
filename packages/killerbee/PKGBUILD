@@ -1,37 +1,38 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='killerbee'
-pkgrel=2
-pkgver=99
+pkgname=killerbee
+pkgver=313.9bfe694
+pkgrel=1
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-wireless')
 pkgdesc='Framework and tools for exploiting ZigBee and IEEE 802.15.4 networks.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
-url='https://code.google.com/p/killerbee/'
+arch=('x86_64' 'aarch64')
+url='https://github.com/riverloopsec/killerbee'
 license=('BSD')
-depends=('python2' 'python2-crypto' 'python2-pyusb' 'pygtk' 'python2-cairo'
-         'python2-pyserial')
-makedepends=('subversion')
+depends=('python2' 'python2-pycryptodome' 'python2-pyusb' 'pygtk' 'python2-cairo'
+         'python2-pyserial' 'python2-scapy' 'python2-rangeparser')
+makedepends=('git' 'python2-setuptools')
 conflicts=('killerbee-svn')
 provides=('killerbee-svn')
 options=(!emptydirs)
-source=('svn+http://killerbee.googlecode.com/svn/trunk/')
-sha1sums=('SKIP')
+source=("git+https://github.com/riverloopsec/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/trunk"
+  cd $pkgname
 
-  svnversion | tr -d [A-z]
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  cd "$srcdir/trunk/killerbee"
+build() {
+  cd $pkgname
 
-  sed -i 's|#!/usr/bin/env python|#!/usr/bin/env python2|' tools/*
+  python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/trunk/killerbee"
+  cd $pkgname
 
-  python2 setup.py install --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 }
+

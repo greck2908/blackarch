@@ -1,42 +1,44 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='ropeme'
-pkgver='1.0'
-pkgrel=6
+pkgname=ropeme
+pkgver=4.9b3a8fd
+pkgrel=2
 groups=('blackarch' 'blackarch-exploitation')
 pkgdesc='A set of python scripts to generate ROP gadgets and payload.'
 arch=('any')
 url='http://www.vnsecurity.net/2010/08/ropeme-rop-exploit-made-easy/'
 license=('GPL')
-depends=('python2' 'distorm')
-source=('https://github.com/packz/ropeme/archive/master.zip')
-sha1sums=('b8502367775a0cc6633342630ffd151c34c7fb77')
+depends=('python2' 'python2-distorm')
+makedepends=('git')
+source=("git+https://github.com/packz/$pkgname.git")
+sha512sums=('SKIP')
 
-prepare(){
-  cd "$srcdir/ropeme-master"
+pkgver() {
+  cd $pkgname
 
-  find "$srcdir/" -name "*.py" -exec sed -i \
-    's/import distorm/import distorm3 as distorm/' {} \;
-  find "$srcdir/" -name "*.py" -exec sed -i '1s|env python|env python2|' {} \;
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/ropeme-master"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin/"
-  mkdir -p "$pkgdir/usr/share/ropeme"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/ropeme"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
 
-  chmod +x "$pkgdir/usr/share/ropeme/exploit.py"
-  chmod +x "$pkgdir/usr/share/ropeme/ropeme/readelf.py"
-  chmod +x "$pkgdir/usr/share/ropeme/ropeme/search-gadgets.py"
-  chmod +x "$pkgdir/usr/share/ropeme/ropeme/ropshell.py"
+  chmod +x "$pkgdir/usr/share/$pkgname/exploit.py"
+  chmod +x "$pkgdir/usr/share/$pkgname/$pkgname/readelf.py"
+  chmod +x "$pkgdir/usr/share/$pkgname/$pkgname/search-gadgets.py"
+  chmod +x "$pkgdir/usr/share/$pkgname/$pkgname/ropshell.py"
 
-  ln -s "/usr/share/ropeme/ropeme/ropshell.py" "$pkgdir/usr/bin/ropeme-ropshell"
-  ln -s "/usr/share/ropeme/ropeme/readelf.py" "$pkgdir/usr/bin/ropeme-readelf"
-  ln -s "/usr/share/ropeme/ropeme/search-gadgets.py" \
+  ln -s "/usr/share/$pkgname/$pkgname/ropshell.py" \
+    "$pkgdir/usr/bin/ropeme-ropshell"
+  ln -s "/usr/share/$pkgname/$pkgname/readelf.py" \
+    "$pkgdir/usr/bin/ropeme-readelf"
+  ln -s "/usr/share/$pkgname/$pkgname/search-gadgets.py" \
     "$pkgdir/usr/bin/ropeme-search-gadgets"
-  ln -s "/usr/share/ropeme/exploit.py" "$pkgdir/usr/bin/ropeme-exploit"
+  ln -s "/usr/share/$pkgname/exploit.py" "$pkgdir/usr/bin/ropeme-exploit"
 }
+

@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='vlan-hopping'
+pkgname=vlan-hopping
 pkgver=21.a37ba4e
-pkgrel=2
+pkgrel=3
 groups=('blackarch' 'blackarch-automation' 'blackarch-networking'
         'blackarch-recon')
 pkgdesc='Easy 802.1Q VLAN Hopping '
@@ -13,19 +13,20 @@ license=('GPL3')
 depends=('bash' 'metasploit' 'arp-scan' 'yersinia' 'wireshark-cli' 'screen'
          'ethtool' 'dmidecode' 'vlan')
 makedepends=('git')
-source=('git+https://github.com/nccgroup/vlan-hopping.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/nccgroup/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/vlan-hopping"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/vlan-hopping"
+  cd $pkgname
 
-  install -Dm755 frogger.sh "$pkgdir/usr/bin/vlan-hopping"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/vlan-hopping/README.md"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/vlan-hopping/LICENSE"
+  install -Dm 755 frogger.sh "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='thezoo'
-pkgver=158.75c1641
+pkgname=thezoo
+pkgver=207.50350ad
 pkgrel=1
 groups=('blackarch-malware')
 pkgdesc='A project created to make the possibility of malware analysis open and available to the public.'
@@ -11,27 +11,28 @@ arch=('any')
 license=('GPL3')
 depends=('python2')
 makedepends=('git')
-source=('git+https://github.com/ytisf/theZoo.git#branch=master')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/ytisf/theZoo.git#branch=master")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/theZoo"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/theZoo"
+  cd $pkgname
 
-  mkdir -p "$pkgdir"/usr/{bin,share/thezoo}
+  install -dm 755 "$pkgdir"/usr/{bin,share/thezoo}
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/thezoo"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir"/usr/bin/thezoo << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/thezoo
-exec python2 ./theZoo.py "\${@}"
+cd /usr/share/$pkgname
+exec python2 ./theZoo.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/thezoo"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

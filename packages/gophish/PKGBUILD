@@ -1,34 +1,57 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='gophish'
-pkgver='0.4.0'
+pkgname=gophish
+pkgver=760.9f5368a
 pkgrel=1
 groups=('blackarch' 'blackarch-social')
 pkgdesc='Open-Source Phishing Framework.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
-url='https://getgophish.com/'
+arch=('x86_64' 'aarch64')
+url='https://github.com/gophish/gophish'
 license=('MIT')
-options=(!strip)
-source=("https://github.com/gophish/gophish/releases/download/v${pkgver}/gophish-v0.4-linux-64bit.zip")
-sha1sums=('252f0f2d7712d83c3495734b6e74485f0f3f35d9')
+makedepends=('git' 'go-pie')
+source=("git+https://github.com/$pkgname/$pkgname.git")
+sha512sums=('SKIP')
+_url="github.com/$pkgname/$pkgname"
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+build() {
+  cd $pkgname
+
+  mkdir -p "src/$_url" && rm -rf "src/$_url" && mv $pkgname "src/$_url" &&
+    cd "src/$_url"
+
+  GOPATH="$srcdir" go get -d -t $_url
+}
 
 package() {
-  cd "$srcdir"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  mv gophish-v0.4-linux-64bit "$pkgdir/usr/share/gophish"
+  GOPATH="$srcdir" go build -v $_url
 
-  chmod -R g-w "$pkgdir/usr/share/gophish"
-  chmod +x "$pkgdir/usr/share/gophish/gophish"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" *.md VERSION
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
-  cat > "$pkgdir/usr/bin/gophish" << EOF
+  rm -rf LICENSE *.md
+  cp -a * "$pkgdir/usr/share/$pkgname/"
+
+  chmod -R g-w "$pkgdir/usr/share/$pkgname"
+  chmod +x "$pkgdir/usr/share/gophish/$pkgname"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/gophish
-exec ./gophish "\${@}"
+cd /usr/share/$pkgname
+exec ./$pkgname "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/gophish"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

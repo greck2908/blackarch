@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='smtp-test'
-pkgver=3.acbe743
-pkgrel=3
+pkgname=smtp-test
+pkgver=4.1936e5c
+pkgrel=1
 groups=('blackarch' 'blackarch-scanner')
 pkgdesc='Automated testing of SMTP servers for penetration testing.'
 arch=('any')
@@ -11,32 +11,33 @@ url='https://github.com/isaudits/smtp-test'
 license=('custom:unknown')
 depends=('python2' 'python2-dnspython' 'cutycapt' 'nmap')
 makedepends=('git')
-source=('git+https://github.com/isaudits/smtp-test.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/isaudits/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/smtp-test"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/smtp-test"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/smtp-test"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/smtp-test/README.md"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/smtp-test"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/smtp-test" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/smtp-test
-exec python2 smtp-test.py "\$@"
+cd /usr/share/$pkgname
+exec python2 $pkgname.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/smtp-test"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -1,26 +1,29 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python2-geoip2'
-pkgver='2.6.0'
-pkgrel=1
-pkgdesc='Python bindings for the GeoIP2 IP-to-country resolver library.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
-url='https://pypi.python.org/pypi/geoip2'
+pkgname=python2-geoip2
+_pkgname=geoip2
+pkgver=3.0.0
+pkgrel=2
+pkgdesc='MaxMind GeoIP2 API.'
+arch=('any')
+url='https://pypi.python.org/pypi/GeoIP/'
 license=('Apache')
-depends=('python2' 'python2-maxminddb' 'python2-requests>=2.2')
-makedepends=('python2')
-source=("https://pypi.python.org/packages/83/78/60a16a81a6fa8f2898936fbf888c9d6d98a4f6de566f6ab071fe332790af/geoip2-${pkgver}.tar.gz")
-sha1sums=('35092114193c0fba21174321745e384c6525f3c6')
+depends=('python2' 'python2-requests' 'python2-urllib3' 'python2-maxminddb'
+         'geoip')
+makedepends=('python2-setuptools')
+source=("https://files.pythonhosted.org/packages/c8/d2/d4353117985a5cdf2dd86d738c3d6e90ca30527562a0ce1b6deb9b813fee/$_pkgname-$pkgver.tar.gz")
+sha512sums=('d37b37a498d8e13ab6cacebbd751b3e28722e05393c07450d72f180660423f5c23b03604ab65b8591b2c3f102cb513204ef093aaab791097a8fef3883f734256')
 
 build() {
-  cd "$srcdir/geoip2-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd "$srcdir/geoip2-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  python2 setup.py install --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 }
+

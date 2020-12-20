@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='snoopy-ng'
+pkgname=snoopy-ng
 pkgver=128.eac73f5
 pkgrel=4
 groups=('blackarch' 'blackarch-drone' 'blackarch-exploitation'
@@ -18,33 +18,32 @@ depends=('python2' 'autossh' 'python2-psutil' 'libpcap' 'python2-sqlalchemy'
          'aircrack-ng' 'tcpdump' 'sqlite3' 'iw' 'python2-pybluez'
          'python2-flask' 'gpsd' 'python2-dateutil' 'python2-publicsuffix')
 makedepends=('git')
-source=('git+https://github.com/sensepost/snoopy-ng.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/sensepost/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/snoopy-ng"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/snoopy-ng"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir"/usr/share/snoopy-ng/{includes,plugins,transforms,uat,setup}
-  mkdir -p "$pkgdir/usr/share/doc/snoopy-ng"
-  mkdir -p "$pkgdir/usr/share/sslstrip-snoopy"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir"/usr/share/snoopy-ng/{includes,plugins,transforms,uat,setup}
+  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+  install -dm 755 "$pkgdir/usr/share/sslstrip-snoopy"
 
-  cp -a LICENSE.txt "$pkgdir/usr/share/snoopy-ng/"
-  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/snoopy-ng/LICENSE.txt"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/snoopy-ng/README.md"
-  install -Dm644 TODO.txt "$pkgdir/usr/share/doc/snoopy-ng/TODO.txt"
-  install -Dm644 includes/* "$pkgdir/usr/share/snoopy-ng/includes/"
-  cp -a --no-preserve=ownership setup/* "$pkgdir/usr/share/snoopy-ng/setup/"
-  cp -a --no-preserve=ownership plugins/* "$pkgdir/usr/share/snoopy-ng/plugins/"
-  install -Dm644 uat/* "$pkgdir/usr/share/snoopy-ng/uat/"
-  install -Dm644 transforms/* "$pkgdir/usr/share/snoopy-ng/transforms/"
-  install -Dm755 snoopy.py "$pkgdir/usr/share/snoopy-ng/snoopy.py"
+  cp -a LICENSE.txt "$pkgdir/usr/share/$pkgname/"
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/snoopy-ng/LICENSE.txt"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md TODO.txt
+  install -Dm 644 includes/* "$pkgdir/usr/share/$pkgname/includes/"
+  cp -a --no-preserve=ownership setup/* "$pkgdir/usr/share/$pkgname/setup/"
+  cp -a --no-preserve=ownership plugins/* "$pkgdir/usr/share/$pkgname/plugins/"
+  install -Dm 644 uat/* "$pkgdir/usr/share/$pkgname/uat/"
+  install -Dm 644 transforms/* "$pkgdir/usr/share/$pkgname/transforms/"
+  install -Dm 755 snoopy.py "$pkgdir/usr/share/$pkgname/snoopy.py"
 
   echo "sqlite:///usr/share/snoopy-ng/snoopy.db" \
     > "$pkgdir/usr/share/snoopy-ng/transforms/db_path.conf"
@@ -54,7 +53,7 @@ package() {
 
   cat > "$pkgdir/usr/bin/snoopy" << EOF
 #!/bin/sh
-cd /usr/share/snoopy-ng
+cd /usr/share/$pkgname
 exec python2 snoopy.py "\$@"
 EOF
 
@@ -62,7 +61,7 @@ EOF
 
   cat > "$pkgdir/usr/bin/snoopy-auth" << EOF
 #!/bin/sh
-cd /usr/share/snoopy-ng
+cd /usr/share/$pkgname
 exec python2 includes/auth_handler.py "\$@"
 EOF
 
@@ -76,3 +75,4 @@ EOF
 
   chmod +x "$pkgdir/usr/bin/sslstrip-snoopy"
 }
+

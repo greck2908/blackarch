@@ -1,20 +1,21 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='perl-io-socket-portstate'
-pkgver='0.03'
-pkgrel=6
+pkgname=perl-io-socket-portstate
+_pkgname=IO-Socket-PortState
+pkgver=0.03
+pkgrel=9
 pkgdesc='Perl extension for checking the open or closed status of a port..'
 arch=('any')
 license=('PerlArtistic' 'GPL')
 options=('!emptydirs')
 depends=('perl>=0')
 url='http://search.cpan.org/~dmuey/IO-Socket-PortState-0.03/PortState.pm'
-source=("http://search.cpan.org/CPAN/authors/id/D/DM/DMUEY/IO-Socket-PortState-${pkgver}.tar.gz")
-sha1sums=('0294fc667b36bd8c9a82e79227088091febb08c0')
+source=("http://search.cpan.org/CPAN/authors/id/D/DM/DMUEY/$_pkgname-$pkgver.tar.gz")
+sha512sums=('84353b041558b5401f207d350b66ef696a9f3b23bddb845da76a98b072fe64f9761eb9f10e797744b5241d5eac606769ecc24cdfefb16669f446cf21968220e4')
 
 build() {
-  cd "$srcdir/IO-Socket-PortState-$pkgver"
+  cd "$_pkgname-$pkgver"
   (
     export PERL_MM_USE_DEFAULT=1 PERL5LIB="" PERL_AUTOINSTALL=--skipdeps \
     PERL_MM_OPT="INSTALLDIRS=vendor DESTDIR='$pkgdir'" \
@@ -28,9 +29,10 @@ build() {
 }
 
 package() {
-  cd "$srcdir/IO-Socket-PortState-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   make install
 
   find "$pkgdir" -name .packlist -o -name perllocal.pod -delete
 }
+

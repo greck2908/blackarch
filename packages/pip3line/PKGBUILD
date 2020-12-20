@@ -1,31 +1,30 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='pip3line'
+pkgname=pip3line
 pkgver=92.5e27195
 pkgrel=3
 epoch=2
 groups=('blackarch' 'blackarch-crypto')
 pkgdesc='The Swiss army knife of byte manipulation.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/nccgroup/pip3line'
-license=('GAGPL3')
-depends=('qt4' 'python2' 'python' 'gcc-libs' 'openssl' 'distorm'
-         'xdg-utils')
+license=('AGPL3')
+depends=('qt4' 'python2' 'python' 'gcc-libs' 'openssl' 'distorm' 'xdg-utils')
 makedepends=('git' 'cmake')
-source=('git+https://github.com/nccgroup/pip3line.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/nccgroup/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/pip3line"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/pip3line"
+  cd $pkgname
 
-  mkdir build
+  mkdir -p build
 
   cd build
 
@@ -34,9 +33,10 @@ build() {
 }
 
 package() {
-  cd "$srcdir/pip3line"
+  cd $pkgname
 
   cd build
 
   make DESTDIR="$pkgdir" install
 }
+

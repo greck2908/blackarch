@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='camscan'
+pkgname=camscan
 pkgver=1.0057215
 pkgrel=2
 groups=('blackarch' 'blackarch-scanner' 'blackarch-networking'
@@ -12,25 +12,26 @@ url='https://github.com/securestate/camscan'
 license=('BSD')
 depends=('python2' 'python2-paramiko')
 makedepends=('git' 'python2-setuptools')
-source=('git+https://github.com/securestate/camscan.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/securestate/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/camscan"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/camscan"
+  cd $pkgname
 
-  sed -i 's|/usr/bin/python|/usr/bin/python2|' camscan.py
+  sed -i 's|/usr/bin/python|/usr/bin/python2|' "$pkgname.py"
 }
 
 package() {
-  cd "$srcdir/camscan"
+  cd $pkgname
 
-  install -Dm755 camscan.py "$pkgdir/usr/bin/camscan"
-  install -Dm644 -t "$pkgdir/usr/share/doc/camscan/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/camscan/LICENSE"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

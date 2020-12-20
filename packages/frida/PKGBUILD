@@ -1,30 +1,56 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='frida'
-pkgver='10.6.41'
+pkgbase=frida
+pkgname=('python2-frida' 'python-frida')
+_pkgname=frida
+pkgver=14.2.2
 pkgrel=1
-pkgdesc='Inject JavaScript to explore native apps on Windows, Mac, Linux, iOS and Android.'
-groups=('blackarch' 'blackarch-reversing' 'blackarch-backdoor')
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
-url='http://www.frida.re'
-depends=('python' 'python-colorama' 'python-pygments' 'python-prompt_toolkit')
-makedepends=('python-setuptools')
+pkgdesc='Dynamic instrumentation toolkit for developers, reverse-engineers, and security researchers.'
+groups=('blackarch' 'blackarch-reversing' 'blackarch-binary')
+arch=('x86_64' 'aarch64')
+url='https://pypi.org/project/frida/#files'
+makedepends=('python-setuptools' 'python2-setuptools')
 license=('custom:unknown')
-source=("https://pypi.python.org/packages/08/ce/a03ec7019e8e8b1dabc2cbe2c569b62022a9c43f5ce0e302334dd584924e/frida-${pkgver}.tar.gz"
-        "https://raw.githubusercontent.com/frida/frida/master/COPYING")
-sha1sums=('2dd0d9ae3e31c35b13181fc81b513a08b13a728f'
-          '446db87c3fe0de0b2898ba8e8b3e5a8e7f644fdc')
+source=("https://files.pythonhosted.org/packages/45/7c/c1af58633862a0a0f9937f450aa8dfaf36bb47db634a3609d1601281cc3a/$pkgbase-$pkgver.tar.gz"
+        'https://raw.githubusercontent.com/frida/frida/master/COPYING')
+sha512sums=('81cf229ac124ed97a8d9b1d4390e17deed4e875bec85b2653b10e8637b884253468cce2af03e141a63ac487748ca1433da85395db9aa23761b6e96ff6f57bc2e'
+            'e36c8d5a0538fa4bb3575a60322057f7a687aab04c13deed25399462ba0be74ce6071cc41d967e23b9a96e552462d210280427a945c6cc956919b062878efc9a')
+
+prepare() {
+  cp -a "$pkgbase-$pkgver"{,-2}
+}
 
 build() {
-  cd "$srcdir/frida-$pkgver"
+  cd "$pkgbase-$pkgver-2"
+
+  python2 setup.py build
+
+  cd "$srcdir/$pkgbase-$pkgver"
 
   python setup.py build
 }
 
-package() {
-  cd "$srcdir/frida-$pkgver"
+package_python2-frida() {
+  depends=('python2' 'python2-colorama' 'python2-pygments'
+           'python2-prompt_toolkit')
 
-  python setup.py install --root="$pkgdir" --optimize=1
-  install -Dm644 "$srcdir/COPYING" "$pkgdir/usr/share/licenses/frida/COPYING"
+  cd "$pkgbase-$pkgver-2"
+
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+
+  install -Dm 644 "$srcdir/COPYING" \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+
+package_python-frida() {
+  depends=('python' 'python-colorama' 'python-pygments' 'python-prompt_toolkit')
+
+  cd "$pkgbase-$pkgver"
+
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+
+  install -Dm 644 "$srcdir/COPYING" \
+    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}
+

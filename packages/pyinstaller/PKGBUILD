@@ -1,9 +1,10 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='pyinstaller'
-pkgver='3.3'
-pkgrel=2
+pkgname=pyinstaller
+_pkgname=PyInstaller
+pkgver=3.5
+pkgrel=1
 epoch=2
 groups=('blackarch' 'blackarch-misc')
 pkgdesc='A program that converts (packages) Python programs into stand-alone executables, under Windows, Linux, Mac OS X, Solaris and AIX.'
@@ -12,27 +13,28 @@ url="http://www.pyinstaller.org/"
 license=('GPL')
 depends=('python2' 'python2-requests' 'python2-pyusb' 'python2-dis3'
          'python2-pefile' 'python2-macholib')
-source=("https://pypi.python.org/packages/cc/c2/5d9a7756419f47ef378add16c7c50c9d7794ae7a39b71b68b00bd7d3ae20/PyInstaller-${pkgver}.tar.gz")
-sha1sums=('6975981e24a2f5eea1f8aaa574ac2a097648c013')
+source=("https://files.pythonhosted.org/packages/e2/c9/0b44b2ea87ba36395483a672fddd07e6a9cb2b8d3c4a28d7ae76c7e7e1e5/$_pkgname-$pkgver.tar.gz")
+sha512sums=('bdb2a138af1f402dea8d89c7e317600896d3139742a12c6335aeff7c56e99977b8fa258c5a626dbf73d22f3e2b6064bf1d4494a021300fcadc051dde8712ed01')
 options=('!strip' '!emptydirs')
 
 prepare() {
-  cd "$srcdir/PyInstaller-$pkgver"
+  cd "PyInstaller-$pkgver"
   grep -RIl '^#!.*python' . | xargs sed -i '/^#!/ s|.*|#! /usr/bin/env python2|'
 }
 
 package() {
-  cd "$srcdir/PyInstaller-$pkgver"
+  cd "PyInstaller-$pkgver"
 
-  # Clean up.
-  rm -rf "bootloader" "old" "tests" "PKG-INFO" "setup.py"
+  rm -rf bootloader old tests PKG-INFO setup.py
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/doc/pyinstaller"
-  mkdir -p "$pkgdir/usr/share/pyinstaller"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  rm -rf "doc"
-  cp -a --no-preserve=ownership . "$pkgdir/usr/share/pyinstaller"
+  rm -rf doc
 
-  ln -s "/usr/share/pyinstaller/pyinstaller.py" "$pkgdir/usr/bin/pyinstaller"
+  cp -a --no-preserve=ownership . "$pkgdir/usr/share/$pkgname"
+
+  ln -s "/usr/share/$pkgname/$pkgname.py" "$pkgdir/usr/bin/$pkgname"
 }
+

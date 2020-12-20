@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='hashtag'
-pkgver='0.41'
+pkgname=hashtag
+pkgver=0.41
 pkgrel=7
 groups=('blackarch' 'blackarch-cracker')
 pkgdesc='A python script written to parse and identify password hashes.'
@@ -11,23 +11,24 @@ arch=('any')
 license=('custom:unknown')
 depends=('python2')
 makedepends=('git')
-source=('git+https://github.com/SmeegeSec/HashTag.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/SmeegeSec/HashTag.git")
+sha512sums=('SKIP')
 
-pkgver(){
-  cd "$srcdir/HashTag/"
+pkgver() {
+  cd $pkgname
 
   cat README.txt | grep -Ewi "Version" | awk '{ print $NF }'
 }
 
-prepare(){
-  cd "$srcdir/HashTag/"
+prepare() {
+  cd $pkgname
 
   sed -i 's/python/python2/' HashTag.py
 }
 
 package() {
-  cd "$srcdir/HashTag/"
+  cd $pkgname
 
-  install -Dm755 HashTag.py "$pkgdir/usr/bin/hashtag"
+  install -Dm 755 HashTag.py "$pkgdir/usr/bin/$pkgname"
 }
+

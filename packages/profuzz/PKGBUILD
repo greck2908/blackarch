@@ -1,44 +1,45 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='profuzz'
+pkgname=profuzz
 pkgver=9.aa6dded
-pkgrel=2
+pkgrel=4
 pkgdesc='Simple PROFINET fuzzer based on Scapy.'
 groups=('blackarch' 'blackarch-fuzzer')
 arch=('any')
 url='https://github.com/HSASec/ProFuzz'
 license=('GPL3')
-depends=('python2' 'python2-pyqt4' 'python2-gnuplot' 'python2-pyx' 'scapy'
-         'python2-crypto' 'tcpdump' 'graphviz')
+depends=('python2' 'python2-pyqt4' 'python2-gnuplot' 'python2-pyx' 'python2-scapy'
+         'python2-pycryptodome' 'tcpdump' 'graphviz')
 makedepends=('git')
-source=('git+https://github.com/HSASec/ProFuzz')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/HSASec/ProFuzz.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/ProFuzz"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/ProFuzz"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/profuzz"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/profuzz/README.md"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/profuzz/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/profuzz"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/profuzz" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/profuzz
+cd /usr/share/$pkgname
 exec python2 Fuzzer.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/profuzz"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

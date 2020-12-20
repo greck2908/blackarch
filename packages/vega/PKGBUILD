@@ -1,35 +1,31 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='vega'
-pkgver='1.0'
-pkgrel=9
+pkgname=vega
+pkgver=1.0
+pkgrel=10
 groups=('blackarch' 'blackarch-webapp')
 pkgdesc='An open source platform to test the security of web applications.'
 url='https://github.com/subgraph/Vega/wiki'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 license=('GPL2')
 depends=('java-environment' 'webkit2gtk')
-if [[ $CARCH == "x86_64" ]]; then
-  source=('https://support.subgraph.com/downloads/VegaBuild-linux.gtk.x86_64.zip')
-  sha1sums=('1a7684c9dda96e3595d7e17fc5ec88072a1baf27')
-elif [[ $CARCH == "i686" ]]; then
-  source=('https://support.subgraph.com/downloads/VegaBuild-linux.gtk.x86.zip')
-  sha1sums=('f945ac3049a5c592e63b2aaf1e5d742ca231f45c')
-fi
+source=('https://support.subgraph.com/downloads/VegaBuild-linux.gtk.x86_64.zip')
+sha512sums=('1a7684c9dda96e3595d7e17fc5ec88072a1baf27')
 
 package() {
-  cd "$srcdir/vega"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/vega"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  cp -a * "$pkgdir/usr/share/vega"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-cat > "$pkgdir/usr/bin/vega" << EOF
+cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-exec /usr/share/vega/Vega "\$@"
+exec /usr/share/$pkgname/Vega "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/vega"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

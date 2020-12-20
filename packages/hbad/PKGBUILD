@@ -1,30 +1,30 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='hbad'
-pkgver='1.0'
+pkgname=hbad
+pkgver=1.0
 pkgrel=2
 groups=('blackarch' 'blackarch-scanner')
 pkgdesc='This tool allows you to test clients on the heartbleed bug.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='http://www.curesec.com/'
 license=('MIT')
 depends=('openssl')
 source=('http://www.curesec.com/data/hbad-release.tar.gz')
-sha1sums=('054ba70d756023675c0294ffbc5b521362844c85')
+sha512sums=('054ba70d756023675c0294ffbc5b521362844c85')
 
 build() {
-  cd "$srcdir/hbad"
+  cd $pkgname
 
   make
 }
 
 package() {
-  cd "$srcdir/hbad"
+  cd $pkgname
 
-  install -Dm755 hbad "$pkgdir/usr/bin/hbad"
-  install -Dm644 server.crt "$pkgdir/usr/share/hbad/server.crt"
-  install -m644 server.key "$pkgdir/usr/share/hbad/server.key"
-  install -Dm644 README "$pkgdir/usr/share/doc/hbad/README.txt"
-  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/hbad/LICENSE.txt"
+  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" server.crt server.key
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

@@ -1,27 +1,28 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='padbuster'
+pkgname=padbuster
 pkgver=10.320a020
 pkgrel=1
 groups=('blackarch' 'blackarch-exploitation')
 pkgdesc='Automated script for performing Padding Oracle attacks.'
 url='http://www.gdssecurity.com/l/t.php'
 arch=('any')
-license=('RPL1.5')
+license=('custom:unknown')
 depends=('perl' 'perl-crypt-ssleay' 'perl-bytes-random-secure')
 makedepends=('git')
-source=('git+https://github.com/GDSSecurity/PadBuster.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/GDSSecurity/PadBuster.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/PadBuster"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/PadBuster"
+  cd $pkgname
 
-  install -Dm755 padBuster.pl "$pkgdir/usr/bin/padbuster"
+  install -Dm 755 padBuster.pl "$pkgdir/usr/bin/$pkgname"
 }
+

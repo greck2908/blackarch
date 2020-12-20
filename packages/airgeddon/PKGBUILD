@@ -1,54 +1,58 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='airgeddon'
-pkgver=985.927ec99
+pkgname=airgeddon
+pkgver=2392.adeefba
 pkgrel=1
 pkgdesc='Multi-use bash script for Linux systems to audit wireless networks.'
 groups=('blackarch' 'blackarch-wireless' 'blackarch-automation')
 arch=('any')
 url='https://github.com/v1s1t0r1sh3r3/airgeddon'
 license=('GPL3')
-depends=('bash>=4.2' 'xterm' 'iw' 'gawk' 'aircrack-ng' 'net-tools' 'coreutils'
-         'wireless_tools' 'sed')
-optdepends=('hashcat' 'crunch' 'wpaclean' 'mdk3' 'reaver' 'beef' 'hostapd'
-            'lighttpd' 'iptables' 'bettercap' 'ettercap' 'sslstrip' 'dsniff'
-            'bully' 'pixiewps' 'expect' 'dhcp' 'curl' 'ethtool' 'pciutils'
-            'rfkill' 'wget' 'usbutils' 'xorg-xdpyinfo' 'ccze' 'xorg-xset')
+depends=('bash' 'xterm' 'iw' 'gawk' 'aircrack-ng' 'coreutils' 'sed' 'iproute2'
+         'tmux' 'pciutils' 'procps-ng')
+optdepends=('hashcat' 'crunch' 'mdk4' 'reaver' 'beef' 'hostapd' 'lighttpd'
+            'iptables' 'bettercap' 'ettercap' 'sslstrip' 'dsniff' 'bully'
+            'pixiewps' 'dhcp' 'curl' 'ethtool' 'rfkill' 'wget' 'usbutils'
+            'xorg-xdpyinfo' 'ccze' 'xorg-xset' 'asleap' 'john' 'hostapd-wpe'
+            'nftables' 'openssl' 'mdk3' 'hcxtools' 'hcxdumptool' 'wireshark-cli')
 makedepends=('git' 'coreutils' 'binutils')
-source=('git+https://github.com/v1s1t0r1sh3r3/airgeddon.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/v1s1t0r1sh3r3/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/airgeddon"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/airgeddon"
+  cd $pkgname
 
-  sed -i 's|auto_update=1|auto_update=0|' airgeddon.sh
+  sed -i 's|AIRGEDDON_AUTO_UPDATE=true|AIRGEDDON_AUTO_UPDATE=false|' \
+    .airgeddonrc
 }
 
 package() {
-  cd "$srcdir/airgeddon"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/airgeddon"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/airgeddon/" README.md CHANGELOG.md
-  install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/airgeddon/LICENSE.md"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG.md \
+    CONTRIBUTING.md
 
-  rm -rf *.md .github binaries imgs Dockerfile pindb_checksum.txt .editorconfig
+  rm -rf *.md .github binaries imgs Dockerfile pindb_checksum.txt .editorconfig\
+    .git*
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/airgeddon"
+  cp -a --no-preserve=ownership . "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/airgeddon" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
 cd /usr/share/airgeddon
-exec bash airgeddon.sh "\${@}"
+exec bash $pkgname.sh "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/airgeddon"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

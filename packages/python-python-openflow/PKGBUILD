@@ -1,26 +1,29 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='python-python-openflow'
-pkgver='2017.2b1'
-pkgrel=1
+pkgname=python-python-openflow
+_pkgname=python-openflow
+pkgver=2020.1
+pkgrel=2
+epoch=1
 pkgdesc='Library to parse and generate OpenFlow messages.'
-url='https://pypi.python.org/pypi/python-openflow/'
+url='https://pypi.org/project/python-openflow/#files'
 arch=('any')
 license=('MIT')
 depends=('python')
 makedepends=('python-setuptools')
-source=("https://pypi.python.org/packages/29/e4/6167968655adc4f9a8cdf25fdd38f1460e9d5cd17acc08e36165ff48ec75/python-openflow-${pkgver}.tar.gz")
-sha1sums=('15103cdb8af7566768c85db4279865117525eb74')
+source=("https://files.pythonhosted.org/packages/69/0d/d4dd9f85918ccfa8d2ed1317803c2a42eed41aec7d77cb1a3d828f863eac/$_pkgname-$pkgver.tar.gz")
+sha512sums=('306db4884ee9c4d3b34f52bf2005c71dad4ae6de24ed4cd620e6a0b82106b054e43babef7efa45dfed4068ce91fb670fc644b3b2b057870345d41a21a67014de')
 
 build() {
-  cd "$srcdir/python-openflow-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   python setup.py build
 }
 
 package() {
-  cd "$srcdir/python-openflow-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  python setup.py install --root="$pkgdir" --optimize=1
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 }
+

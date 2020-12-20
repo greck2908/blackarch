@@ -1,41 +1,47 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='liffy'
-pkgver=65.8011cdd
+pkgname=liffy
+pkgver=13.43a9298
 pkgrel=2
+epoch=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-exploitation'
         'blackarch-fuzzer')
 pkgdesc='A Local File Inclusion Exploitation tool.'
 arch=('any')
-url='https://github.com/rotlogix/liffy'
-license=('GPL2')
-depends=('python2' 'python2-blessings' 'python2-requests')
+url='https://github.com/mzfr/liffy/'
+license=('GPL')
+depends=('python' 'python-requests' 'python-daemon' 'python-pyfiglet'
+         'python-argparse')
 makedepends=('git')
-source=('git+https://github.com/rotlogix/liffy.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/mzfr/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/liffy"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/liffy"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/liffy"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm755 *.py "$pkgdir/usr/share/liffy/"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/liffy/README.md"
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/liffy/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
-  cat > "$pkgdir/usr/bin/liffy" << EOF
+  rm README.md LICENSE
+
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname"
+
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/liffy
-exec python2 liffy.py "\$@"
+cd /usr/share/$pkgname
+exec python3 $pkgname.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/liffy"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

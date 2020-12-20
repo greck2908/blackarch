@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='routerhunter'
+pkgname=routerhunter
 pkgver=21.4da257c
 pkgrel=1
 groups=('blackarch' 'blackarch-scanner' 'blackarch-networking')
@@ -11,24 +11,25 @@ url='https://github.com/jh00nbr/Routerhunter-2.0'
 license=('custom:unknown')
 depends=('python2' 'python2-simplejson')
 makedepends=('git')
-source=('git+https://github.com/jh00nbr/Routerhunter-2.0.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/jh00nbr/Routerhunter-2.0.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/Routerhunter-2.0"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd "$srcdir/Routerhunter-2.0"
+  cd $pkgname
 
-  sed -i 's|bin/env python|bin/env python2|' routerhunter.py
+  sed -i 's|bin/env python|bin/env python2|' "$pkgname.py"
 }
 
 package() {
-  cd "$srcdir/Routerhunter-2.0"
+  cd $pkgname
 
-  install -Dm755 routerhunter.py "$pkgdir/usr/bin/routerhunter"
-  install -Dm644 README.md "$pkgdir/usr/share/doc/routerhunter/README.md"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 }
+

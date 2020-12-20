@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='pappy-proxy'
-pkgver=76.d3decc8
+pkgname=pappy-proxy
+pkgver=77.e1bb049
 pkgrel=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-proxy' 'blackarch-scanner'
         'blackarch-fuzzer' 'blackarch-recon')
@@ -18,21 +18,21 @@ depends=('python2' 'python2-autobahn' 'python2-twisted' 'python2-pyopenssl'
          'python2-pytest-mock' 'python2-scrypt' 'python2-decorator'
          'python2-txsocksx' 'python2-parsley')
 makedepends=('git' 'python2-setuptools')
-source=('git+https://github.com/roglew/pappy-proxy.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/roglew/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/pappy-proxy"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/pappy-proxy"
+  cd $pkgname
 
   python2 setup.py install --root="$pkgdir" --prefix=/usr
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/pappy-proxy/" README.md
-  install -Dm644 LICENSE.txt \
-    "$pkgdir/usr/share/licenses/pappy-proxy/LICENSE.txt"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

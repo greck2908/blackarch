@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='box-js'
-pkgver=339.2ee1daf
+pkgname=box-js
+pkgver=387.b945f8a
 pkgrel=1
 pkgdesc='A tool for studying JavaScript malware.'
 groups=('blackarch' 'blackarch-malware')
@@ -11,37 +11,38 @@ url='https://github.com/CapacitorSet/box-js'
 license=('MIT')
 depends=('nodejs' 'gnuplot')
 makedepends=('git' 'npm')
-source=('git+https://github.com/CapacitorSet/box-js.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/CapacitorSet/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/box-js"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/box-js"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/box-js"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
   npm install --production
 
   find . -name package.json | xargs sed -i "s|$srcdir|/usr/share/box-js|"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/box-js" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/box-js/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/box-js"
+  cp -a * "$pkgdir/usr/share/$pkgname"
 
-cat > "$pkgdir/usr/bin/box-js" << EOF
+cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/box-js
-exec node run.js "\${@}"
+cd /usr/share/$pkgname
+exec node run.js "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/box-js"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

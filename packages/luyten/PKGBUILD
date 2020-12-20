@@ -1,32 +1,31 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='luyten'
-pkgver='0.5.3'
+pkgname=luyten
+pkgver=0.5.4
 pkgrel=1
 groups=('blackarch' 'blackarch-decompiler' 'blackarch-misc')
 pkgdesc='An Open Source Java Decompiler Gui for Procyon.'
 arch=('any')
 url='https://github.com/deathmarine/Luyten'
-license=('Apache2')
+license=('APACHE')
 depends=('java-environment')
 makedepends=('git')
-noextract=("luyten-${pkgver}.jar")
-source=("https://github.com/deathmarine/Luyten/releases/download/v${pkgver}/luyten-${pkgver}.jar")
-sha1sums=('db16e22b0b4e9efb1d88c298863b55a85965bbd3')
+source=("https://github.com/deathmarine/Luyten/releases/download/v$pkgver/$pkgname-$pkgver.jar")
+sha512sums=('87a6a66122222a8d0dea466607131cd7148300d487b68f87b0c453e64865c5919b1690f01cda52b40faf3008c1b0c01e8189c5967d2e64bab60245f8964cfdd7')
+noextract=("$pkgname-$pkgver.jar")
 
 package() {
-  cd "$srcdir"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  mkdir -p "$pkgdir/usr/bin"
+  install -Dm 644 "$pkgname-$pkgver.jar" \
+    "$pkgdir/usr/share/$pkgname/$pkgname-$pkgver.jar"
 
-  install -Dm644 luyten-${pkgver}.jar \
-    "$pkgdir/usr/share/luyten/luyten-${pkgver}.jar"
-
-  cat > "$pkgdir/usr/bin/luyten" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-exec java -jar /usr/share/luyten/luyten-${pkgver}.jar "\${@}"
+exec java -jar /usr/share/$pkgname/$pkgname-$pkgver.jar "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/luyten"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

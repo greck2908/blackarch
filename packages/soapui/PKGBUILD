@@ -1,36 +1,37 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='soapui'
-pkgver='5.3.0'
-pkgrel=2
+pkgname=soapui
+pkgver=5.6.0
+pkgrel=1
 pkgdesc='The Swiss-Army Knife for SOAP Testing.'
 groups=('blackarch' 'blackarch-proxy' 'blackarch-fuzzer')
-arch=('any')
+arch=('x86_64')
 url='https://www.soapui.org/downloads/soapui/source-forge.html'
-license=('EUPL')
+license=('custom:unknown')
 depends=('java-environment')
 makedepends=('git')
-source=("http://cdn01.downloads.smartbear.com/soapui/5.3.0/SoapUI-${pkgver}-linux-bin.tar.gz")
-sha1sums=('367b310a3894e1c63047f39271947baeedc9f2a8')
+source=("https://s3.amazonaws.com/downloads.eviware/soapuios/$pkgver/SoapUI-$pkgver-linux-bin.tar.gz")
+sha512sums=('87bacab6d5c847fdadb0ec70e6f37fce236fd02b93a8beecd0e860366d4ef97030472c529b29a6af177fe1fa6594c18ebd171b88a76121d5cc23d298444e6fea')
 
 package() {
-  cd "$srcdir/SoapUI-$pkgver"
+  cd "SoapUI-$pkgver"
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/soapui"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/soapui/" README.md RELEASENOTES.txt
-  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/soapui/LICENSE.txt"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md RELEASENOTES.txt
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md RELEASENOTES.txt LICENSE.txt
 
-  cp -a * "$pkgdir/usr/share/soapui"
+  cp -a * "$pkgdir/usr/share/$pkgname"
 
-  cat > "$pkgdir/usr/bin/soapui" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-exec sh /usr/share/soapui/bin/soapui.sh "\${@}"
+exec sh /usr/share/$pkgname/bin/$pkgname.sh "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/soapui"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='server-status-pwn'
-pkgver=5.1067aac
-pkgrel=2
+pkgname=server-status-pwn
+pkgver=7.0c02af0
+pkgrel=3
 pkgdesc='A script that monitors and extracts requested URLs and clients connected to the service by exploiting publicly accessible Apache server-status instances.'
 groups=('blackarch' 'blackarch-recon')
 arch=('any')
@@ -11,34 +11,34 @@ url='https://github.com/mazen160/server-status_PWN'
 license=('MIT')
 depends=('python' 'python-argparse' 'python-beautifulsoup4' 'python-requests')
 makedepends=('git')
-source=('git+https://github.com/mazen160/server-status_PWN.git')
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/mazen160/server-status_PWN.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/server-status_PWN"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/server-status_PWN"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/server-status-pwn"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/server-status-pwn/" README.md
-  install -Dm644 LICENSE.txt \
-    "$pkgdir/usr/share/licenses/server-status-pwn/LICENSE.txt"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm README.md LICENSE.txt
 
-  cp -a * "$pkgdir/usr/share/server-status-pwn/"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/server-status-pwn" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/server-status-pwn
-exec python server-status_PWN.py "\${@}"
+cd /usr/share/$pkgname
+exec python server-status_PWN.py "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/server-status-pwn"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

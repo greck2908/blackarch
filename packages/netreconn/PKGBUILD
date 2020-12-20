@@ -1,20 +1,21 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='netreconn'
-pkgver='1.78'
-pkgrel=1
+pkgname=netreconn
+_pkgname=netrecon
+pkgver=1.78
+pkgrel=2
 groups=('blackarch' 'blackarch-networking' 'blackarch-recon' 'blackarch-scanner')
 pkgdesc='A collection of network scan/recon tools that are relatively small compared to their larger cousins.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='http://packetstormsecurity.com/files/86076/NetReconn-Scanning-Tool-Collection-1.76.html'
 license=('GPL2')
 depends=('perl' 'glibc' 'libpcap')
-source=("https://dl.packetstormsecurity.net/UNIX/utilities/netrecon-${pkgver}.tgz")
-sha1sums=('cc947e0a4df1cb34ccf232363708150d89689cd4')
+source=("https://dl.packetstormsecurity.net/UNIX/utilities/netrecon-$pkgver.tgz")
+sha512sums=('846e35fe18ad5aa6693544573ad97bc38e05ce6674facb11d98d4f25f1c51e946c2cf6605afc119d2cda8c2ef9fab4f8ab55952c7c203227273554b873d1bc2f')
 
 prepare() {
-  cd "$srcdir/netrecon-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   sed -i 's|/usr/local/share/man/man1|/usr/share/man/man1|' Makefile
   sed -i 's|/usr/local/bin|/usr/bin|' Makefile
@@ -24,24 +25,24 @@ prepare() {
 }
 
 build() {
-  cd "$srcdir/netrecon-$pkgver"
+  cd "$_pkgname-$pkgver"
 
   make linux
 }
 
 package() {
-  cd "$srcdir/netrecon-$pkgver"
+  cd "$_pkgname-$pkgver"
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/man/man1/"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/man/man1/"
 
-  install -Dm755 netrecon "$pkgdir/usr/bin/netreconn"
+  install -Dm 755 netrecon "$pkgdir/usr/bin/$pkgname"
 
-  for i in *.1
-  do
-    install -m644 $i "$pkgdir/usr/share/man/man1/$i"
+  for i in *.1 ; do
+    install -m 644 $i "$pkgdir/usr/share/man/man1/$i"
   done
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/netreconn/" README ChangeLog TODO
-  install -Dm644 COPYING "$pkgdir/usr/share/licenses/netreconn/COPYING"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README ChangeLog TODO
+  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
 }
+

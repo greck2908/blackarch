@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='massbleed'
-pkgver=16.cf7c5d6
+pkgname=massbleed
+pkgver=20.44b7e85
 pkgrel=1
 pkgdesc='SSL Vulnerability Scanner.'
 groups=('blackarch' 'blackarch-recon' 'blackarch-automation'
@@ -10,41 +10,36 @@ groups=('blackarch' 'blackarch-recon' 'blackarch-automation'
 url='https://github.com/1N3/Sn1per'
 license=('custom:unknown')
 arch=('any')
-depends=('unicornscan' 'nmap' 'python' 'sslscan' 'bash' 'testssl')
+depends=('unicornscan' 'nmap' 'python' 'sslscan' 'bash' 'testssl.sh')
 makedepends=('git')
-source=('git+https://github.com/1N3/MassBleed')
-install='massbleed.install'
-sha1sums=('SKIP')
+source=("$pkgname::git+https://github.com/1N3/MassBleed.git")
+sha512sums=('SKIP')
+install="$pkgname.install"
 
 pkgver() {
-  cd "$srcdir/MassBleed"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-#prepare() {
-#  cd "$srcdir/massbleed"
-#
-#  sed -i '/apt-get install/d' install.sh
-#}
-
 package() {
-  cd "$srcdir/MassBleed"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/massbleed"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/massbleed/" README.md
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
 
   rm *.md
 
-  cp -a * "$pkgdir/usr/share/massbleed"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  cat > "$pkgdir/usr/bin/massbleed" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/massbleed
-exec bash ./massbleed "\${@}"
+cd /usr/share/$pkgname
+exec bash ./$pkgname.sh "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/massbleed"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

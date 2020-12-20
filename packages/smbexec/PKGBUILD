@@ -1,45 +1,50 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='smbexec'
-pkgver=148.7827616
-pkgrel=8
-epoch=1
+pkgname=smbexec
+pkgver=59.a54fc14
+pkgrel=6
+epoch=2
 groups=('blackarch' 'blackarch-scanner' 'blackarch-recon' 'blackarch-fuzzer'
         'blackarch-exploitation')
 pkgdesc='A rapid psexec style attack with samba tools.'
-depends=('ruby2.3' 'ruby2.3-bundler' 'make')
 arch=('any')
-makedepends=('git')
 url='https://github.com/pentestgeek/smbexec'
 license=('custom:unknown')
 options=('!strip')
-install='smbexec.install'
-source=('git+https://github.com/pentestgeek/smbexec.git')
-sha1sums=('SKIP')
+depends=('ruby' 'ruby-bundler' 'ruby-pkg-config' 'libxslt')
+makedepends=('git' 'make')
+source=("git+https://github.com/brav0hax/$pkgname.git")
+#source=("git+https://github.com/pentestgeek/$pkgname.git")
+sha512sums=('SKIP')
+install="$pkgname.install"
 
 pkgver() {
-  cd "$srcdir/smbexec"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/smbexec"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/smbexec"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 README "$pkgdir/usr/share/doc/smbexec"
+  install -Dm 644 README -t "$pkgdir/usr/share/doc/$pkgname/"
 
-  cp -a * "$pkgdir/usr/share/smbexec"
+  cp -a * "$pkgdir/usr/share/$pkgname/"
 
-  rm "$pkgdir/usr/share/smbexec/README"
+  rm "$pkgdir/usr/share/$pkgname/README"
 
-  cat > "$pkgdir/usr/bin/smbexec" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-exec ruby-2.3 /usr/share/smbexec/smbexec.rb "\$@"
+cd /usr/share/$pkgname
+exec bundle exec ./$pkgname.rb "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/smbexec"
+  rm -rf "$pkgdir/usr/share/$pkgname/Gemfile.lock"
+
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

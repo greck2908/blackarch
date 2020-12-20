@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='http-enum'
-pkgver='0.4'
+pkgname=http-enum
+pkgver=0.4
 pkgrel=2
 pkgdesc='A tool to enumerate the enabled HTTP methods supported on a webserver.'
 arch=('any')
@@ -10,28 +10,29 @@ url='https://www.thexero.co.uk/tools/http-enum/'
 license=('custom:unknown')
 depends=('python2')
 groups=('blackarch' 'blackarch-scanner')
-source=("https://github.com/nullsecuritynet/tools/raw/master/scanner/http-enum/release/http-enum-${pkgver}.tar.gz")
-sha1sums=('cd36a55a30de1e7a72f7eb70173dba7e2b77dac8')
+source=("https://github.com/nullsecuritynet/tools/raw/master/scanner/$pkgname/release/$pkgname-$pkgver.tar.gz")
+sha512sums=('968c51c047163dccd8e51da4169dc4ef33b8d2f32775aef6e60e44791030c1abbc987a2d3486c713539d38109596b546e39f18948d73b0d80708d823a526a723')
 
 prepare() {
-  cd "$srcdir/http-enum-$pkgver"
+  cd "$pkgname-$pkgver"
 
   sed -i '1s|python$|env python2|' http-enum
 }
 
 package() {
-  cd "$srcdir/http-enum-$pkgver"
+  cd "$pkgname-$pkgver"
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/http-enum"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  cp -a * "$pkgdir/usr/share/http-enum"
+  cp -a * "$pkgdir/usr/share/$pkgname"
 
-  cat > "$pkgdir/usr/bin/http-enum" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/http-enum
-exec python2 http-enum "\${@}"
+cd /usr/share/$pkgname
+exec python2 $pkgname "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/http-enum"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

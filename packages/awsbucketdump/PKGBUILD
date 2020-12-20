@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='awsbucketdump'
-pkgver=74.73365f9
-pkgrel=1
+pkgname=awsbucketdump
+pkgver=80.b704285
+pkgrel=2
 pkgdesc='A tool to quickly enumerate AWS S3 buckets to look for loot.'
 groups=('blackarch' 'blackarch-automation' 'blackarch-scanner')
 arch=('any')
@@ -11,21 +11,22 @@ url='https://github.com/jordanpotti/AWSBucketDump'
 license=('MIT')
 depends=('python-xmltodict' 'python-requests' 'python-argparse' 'python')
 makedepends=('git')
-source=('git+https://github.com/jordanpotti/AWSBucketDump.git')
-md5sums=('SKIP')
+source=("$pkgname::git+https://github.com/jordanpotti/AWSBucketDump.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "${srcdir}/AWSBucketDump"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "${srcdir}/AWSBucketDump"
+  cd $pkgname
 
-  mkdir -p "${pkgdir}/usr/share/wordlists/awsbucketdump/"
+  install -dm 755 "$pkgdir/usr/share/wordlists/$pkgname"
 
-  install -Dm755 "AWSBucketDump.py" "$pkgdir/usr/bin/awsbucketdump"
-  install -Dm644 -t "${pkgdir}/usr/share/wordlists/awsbucketdump/" \
-    BucketNames.txt  interesting_Keywords.txt
+  install -Dm 755 AWSBucketDump.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm 644 -t "$pkgdir/usr/share/wordlists/$pkgname/" BucketNames.txt \
+    interesting_Keywords.txt
 }
+

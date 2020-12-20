@@ -1,49 +1,60 @@
- # This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='androguard'
-pkgver=1319.2f0a362
-pkgrel=1
-epoch=1
+pkgname=androguard
+pkgver=2118.8d091cbb
+pkgrel=2
+epoch=2
 groups=('blackarch' 'blackarch-binary' 'blackarch-disassembler'
         'blackarch-malware')
 pkgdesc='Reverse engineering, Malware and goodware analysis of Android applications and more.'
 arch=('any')
 url='https://github.com/androguard/androguard'
-license=('Apache2')
-depends=('python2' 'python2-lxml' 'sparsehash' 'muparser' 'snappy' 'bzip2'
-         'zlib' 'python2-pydot' 'python2-magic' 'python2-networkx')
-makedepends=('git' 'python2-setuptools')
-optdepends=(
-  'ipython2: interactive analysis support'
-  'psyco2-svn: acceleration support'
-  'python2-pygments'
-)
-source=('git+https://github.com/androguard/androguard.git')
-sha1sums=('SKIP')
+license=('APACHE')
+depends=('python' 'ipython' 'python-future' 'python-networkx' 'python-pygments'
+         'python-lxml' 'python-colorama' 'python-matplotlib' 'python-asn1crypto'
+         'python-click' 'python-pydot')
+makedepends=('git' 'python-setuptools')
+optdepends=('python-pyperclip: GUI'
+            'python-pyqt5: GUI'
+            'python-magic: magic'
+            'python-filemagic: magic alternative'
+            'python-sphinx: docs'
+            'python-sphinx_rtd_theme: docs'
+            'python-pydot: graphing')
+source=("git+https://github.com/$pkgname/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/androguard"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/androguard"
+  cd $pkgname
 
-  python2 setup.py build
+  python setup.py build
 }
 
 package() {
-  cd "$srcdir/androguard"
+  cd $pkgname
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/androguard/" README.md
-  install -Dm644 LICENCE-2.0 "$pkgdir/usr/share/licenses/androguard/LICENSE-2.0"
+  install -dm 755 "$pkgdir/usr/bin"
 
-  python2 setup.py install --root="$pkgdir" --optimize=1
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm 644 LICENCE-2.0 "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
-  for bin in $pkgdir/usr/bin/*
-  do
-    mv $bin `echo $bin | sed 's/.py//'`
-  done
+  python setup.py install --root="$pkgdir" --optimize=1 --skip-build
+
+#  for bin in "$pkgdir/usr/bin/"* ; do
+#    pkg="$(echo $bin | awk -F/ '{print $NF}')"
+#    if [[ "$pkg" != "androguard" ]] && [[ "$pkg" != "androapkid" ]] &&
+#      [[ "$pkg" != "androarsc" ]] && [[ "$pkg" != "androaxml" ]] &&
+#      [[ "$pkg" != "androcg" ]] && [[ "$pkg" != "androdd" ]] &&
+#      [[ "$pkg" != "androdis" ]]; then
+#      mv $bin `echo $bin | sed 's/.py//'`
+#    fi
+#  done
 }
+

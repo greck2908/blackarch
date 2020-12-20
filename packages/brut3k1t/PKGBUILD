@@ -1,43 +1,50 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='brut3k1t'
-pkgver=80.1973a5a
-pkgrel=2
+pkgname=brut3k1t
+pkgver=94.dcce5a1
+pkgrel=3
 groups=('blackarch' 'blackarch-cracker')
 arch=('any')
 pkgdesc='Brute-force attack that supports multiple protocols and services.'
 url='https://github.com/ex0dus-0x/brut3k1t'
 license=('MIT')
-depends=('python2' 'python2-pip' 'python2-selenium' 'python2-paramiko'
-         'python2-skpy' 'python2-mechanize' 'geckodriver' 'xmpppy')
+depends=('python' 'python-astroid' 'python-bcrypt' 'python-beautifulsoup4'
+         'python-cffi' 'python-cryptography' 'python-html5lib' 'python-isort'
+         'python-lazy-object-proxy' 'python-mccabe' 'python-mechanize'
+         'python-paramiko' 'python-pycparser' 'python-pylint' 'python-pynacl'
+         'python-selenium' 'python-six' 'python-soupsieve' 'python-toml'
+         'python-urllib3' 'python-webencodings' 'python-wrapt')
 makedepends=('git')
-source=('git+https://github.com/ex0dus-0x/brut3k1t.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/ex0dus-0x/$pkgname.git"
+        'requirements.txt.patch')
+sha512sums=('SKIP'
+            '3a770d6ab1b4ea878df27247cdce36c607247c05d6265c2231fc8cff392c1104754cb4792a60350d216457eac9694d720e337d1117e377eca8a3f776d12a2438')
 
 pkgver() {
-  cd "$srcdir/brut3k1t"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-package() {
-  cd "$srcdir/brut3k1t"
-
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/brut3k1t"
-
-  install -Dm644 -t "$pkgdir/usr/share/doc/brut3k1t" README.md docs/*
-
-  rm -rf docs README.md
-
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/brut3k1t"
-
-  cat > "$pkgdir/usr/bin/brut3k1t" << EOF
-#!/bin/sh
-cd /usr/share/brut3k1t
-exec python2 brut3k1t.py "\${@}"
-EOF
-
-  chmod a+x "$pkgdir/usr/bin/brut3k1t"
+prepare() {
+  patch -p1 < requirements.txt.patch
 }
+
+build() {
+  cd $pkgname
+
+  python setup.py build
+}
+
+package() {
+  cd $pkgname
+
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md
+  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+
+  mv "$pkgdir/usr/bin/brute" "$pkgdir/usr/bin/$pkgname"
+}
+

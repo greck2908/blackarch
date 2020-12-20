@@ -1,29 +1,29 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='elfparser'
+pkgname=elfparser
 pkgver=7.39d21ca
-pkgrel=1
+pkgrel=2
 groups=('blackarch' 'blackarch-binary')
 pkgdesc='Cross Platform ELF analysis.'
-arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+arch=('x86_64' 'aarch64')
 url='https://github.com/jacob-baines/elfparser'
 license=('MIT')
 depends=('boost')
 makedepends=('git' 'cmake')
-source=('git+https://github.com/jacob-baines/elfparser.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/jacob-baines/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/elfparser"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd "$srcdir/elfparser"
+  cd $pkgname
 
-  mkdir build
+  mkdir -p build
 
   cd build
 
@@ -33,7 +33,7 @@ build() {
 }
 
 package() {
-  cd "$srcdir/elfparser"
+  cd $pkgname
 
   cd build
 
@@ -43,6 +43,9 @@ package() {
 
   mv "$pkgdir/usr/local/bin/" "$pkgdir/usr/bin"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/elfparser/" README.md
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/elfparser/LICENSE"
+  rmdir "$pkgdir/usr/local"
+
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+

@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='dnsbf'
-pkgver='0.3'
+pkgname=dnsbf
+pkgver=0.3
 pkgrel=2
 groups=('blackarch' 'blackarch-scanner')
 pkgdesc='Search for available domain names in an IP range.'
@@ -11,11 +11,12 @@ url='http://code.google.com/p/dnsbf'
 license=('BSD')
 makedepends=('subversion')
 depends=('python2')
-source=('svn+http://dnsbf.googlecode.com/svn/trunk/')
-sha1sums=('SKIP')
+source=("$pkgname::svn+http://dnsbf.googlecode.com/svn/trunk/")
+sha512sums=('SKIP')
 
 package() {
-  cd "$srcdir/trunk"
+  cd $pkgname
 
-  install -Dm755 dnsbf.py "$pkgdir/usr/bin/dnsbf"
+  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
 }
+

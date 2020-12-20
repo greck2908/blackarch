@@ -1,44 +1,52 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='eaphammer'
-pkgver=67.a98d480
+pkgname=eaphammer
+pkgver=266.a5f2bdf
 pkgrel=1
 pkgdesc='Targeted evil twin attacks against WPA2-Enterprise networks. Indirect wireless pivots using hostile portal attacks.'
 groups=('blackarch' 'blackarch-wireless')
 arch=('any')
 url='https://github.com/s0lst1c3/eaphammer'
 license=('GPL3')
-depends=('python2' 'python2-nfcpy' 'python2-argparse' 'python2-tqdm' 'dnsmasq'
-         'libnfnetlink' 'libnl' 'openssl')
+depends=('python' 'python-argparse' 'python-tqdm' 'dnsmasq' 'libnfnetlink'
+         'libnl' 'openssl' 'python-pem' 'python-pyopenssl' 'apache' 'libpcap'
+         'curl' 'scapy' 'responder' 'hcxtools' 'hcxdumptool' 'python-flask'
+         'python-flask-cors' 'python-flask-socketio' 'python-pywebcopy')
 makedepends=('git')
-source=('git+https://github.com/s0lst1c3/eaphammer.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/s0lst1c3/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/eaphammer"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
+build() {
+  cd "$pkgname/local/hostapd-eaphammer/hostapd"
+
+  cp defconfig .config
+  make hostapd-eaphammer_lib
+}
+
 package() {
-  cd "$srcdir/eaphammer"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/bin"
-  mkdir -p "$pkgdir/usr/share/eaphammer"
+  install -dm 755 "$pkgdir/usr/bin"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/eaphammer/" README.md Changelog
-  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/eaphammer/LICENSE"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md Changelog
+  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
-  rm README.md LICENSE
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
 
-  cp -a * "$pkgdir/usr/share/eaphammer/"
-
-  cat > "$pkgdir/usr/bin/eaphammer" << EOF
+  cat > "$pkgdir/usr/bin/$pkgname" << EOF
 #!/bin/sh
-cd /usr/share/eaphammer
-exec python2 eaphammer "\${@}"
+cd /usr/share/$pkgname
+exec python $pkgname "\$@"
 EOF
 
-  chmod a+x "$pkgdir/usr/bin/eaphammer"
+  chmod +x "$pkgdir/usr/bin/$pkgname"
 }
+

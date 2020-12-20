@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='firstexecution'
-pkgver='6.a275793'
+pkgname=firstexecution
+pkgver=6.a275793
 pkgrel=2
 groups=('blackarch' 'blackarch-exploitation')
 pkgdesc='A Collection of different ways to execute code outside of the expected entry points.'
@@ -10,21 +10,22 @@ arch=('any')
 url='https://github.com/nccgroup/firstexecution'
 license=('GPL3')
 makedepends=('git')
-source=('git+https://github.com/nccgroup/firstexecution.git')
-sha1sums=('SKIP')
+source=("git+https://github.com/nccgroup/$pkgname.git")
+sha512sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/firstexecution"
+  cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$srcdir/firstexecution"
+  cd $pkgname
 
-  mkdir -p "$pkgdir/usr/share/firstexecution"
+  install -dm 755 "$pkgdir/usr/share/$pkgname"
 
-  cp -a WindowsPENative "$pkgdir/usr/share/firstexecution/WindowsPENative"
+  cp -a WindowsPENative "$pkgdir/usr/share/$pkgname/WindowsPENative"
 
-  install -Dm644 README.md "$pkgdir/usr/share/doc/firstexecution"
+  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname"
 }
+

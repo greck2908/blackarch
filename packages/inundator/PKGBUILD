@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='inundator'
-pkgver='0.5'
+pkgname=inundator
+pkgver=0.5
 pkgrel=5
 groups=('blackarch' 'blackarch-misc' 'blackarch-spoof')
 pkgdesc='An ids evasion tool, used to anonymously inundate intrusion detection logs with false positives in order to obfuscate a real attack.'
@@ -11,11 +11,18 @@ license=('BSD')
 url='http://inundator.sourceforge.net/'
 depends=('nmap' 'perl' 'perl-net-cidr' 'perl-net-socks')
 optdepends=('snort' 'tor')
-source=("http://downloads.sourceforge.net/inundator/inundator\_${pkgver}.tar.gz")
-sha1sums=('131e5c082112bba992e494ddf1bef8f68fb82fd5')
+source=("https://iweb.dl.sourceforge.net/project/$pkgname/$pkgver/${pkgname}_${pkgver}.tar.gz"
+        "$pkgname.pl.patch")
+sha512sums=('cb82024facb1aeaee1afc100e1c6cd49ae500411804d053f9bcf6b76bb34f64fda9f1c0f57328e76ae2798bb1e8667de4d5c35401d409e54cd3c195360f2384c'
+            '767865c3b85e01b1cbffaaa28216fb300299c4871689ad9fa49713a76a6e9921fa0b35034129a61de99f9dccf7c0c07f23d4e005a3c8e086f28ac96ef4a9802a')
+
+prepare() {
+  patch -p1 < "$pkgname.pl.patch"
+}
 
 package() {
-  cd "$srcdir/inundator-$pkgver"
+  cd "$pkgname-$pkgver"
 
   make DESTDIR="$pkgdir" install
 }
+

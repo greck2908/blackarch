@@ -1,0 +1,30 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-antlr4-python3-runtime
+_pkgname=antlr4-python3-runtime
+pkgver=4.9
+pkgrel=2
+pkgdesc='ANTLR 4.9 runtime for Python 3.6.3'
+arch=('any')
+url='https://pypi.org/project/antlr4-python3-runtime/#files'
+license=('BSD')
+makedepends=('python2-setuptools' 'python-setuptools')
+source=("https://files.pythonhosted.org/packages/ab/8e/f72c4523030ea8cecb1f2b26a9151fe916292ae05f42fea1981872a787f1/$_pkgname-$pkgver.tar.gz")
+sha512sums=('379ea967e15e9a06d7ecbc526eb26a3b0d4ef4c150c7aa57d707830c3b2dc8b5680e4a7911df7f6041bfebd1b333877b6c00e21558af04bddf2450f04b5bb895')
+
+build() {
+  cd "$_pkgname-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  depends=('python' 'python-typing')
+
+  cd "$_pkgname-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
+    --skip-build
+}
+

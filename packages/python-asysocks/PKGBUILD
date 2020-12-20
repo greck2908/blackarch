@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-asysocks
+_pkgname=asysocks
+pkgver=0.0.10
+pkgrel=2
+pkgdesc='Socks5 / Socks4 client and server library.'
+arch=('any')
+url='https://pypi.org/project/asysocks/#files' # https://github.com/skelsec/asysocks
+license=('MIT')
+depends=('python')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/30/bb/a17cf296930119d1bea9a6079ddb9245d44cb43388d6792252a7c9eeba63/$_pkgname-$pkgver.tar.gz")
+sha512sums=('a5d794f0483dc61efa7eb98719768b4e19ff3b02ecb8c3ac68965d17209c7610974e9b6ef16f681097fd4bd9e30e0e366e934bf7287d252397802cac493e36bf')
+
+build() {
+  cd "$_pkgname-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "$_pkgname-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" -O1 --skip-build
+}
+

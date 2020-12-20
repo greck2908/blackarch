@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( http://blackarch.org ).
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
 # See COPYING for license details.
 
-pkgname='novahot'
-pkgver='1.0.1'
-pkgrel=2
+pkgname=novahot
+pkgver=23.69857bb
+pkgrel=1
 pkgdesc='A webshell framework for penetration testers.'
 groups=('blackarch' 'blackarch-webapp')
 arch=('any')
@@ -11,22 +11,29 @@ url='https://github.com/chrisallenlane/novahot'
 license=('BSD')
 depends=('nodejs')
 makedepends=('git' 'npm')
-source=("https://github.com/chrisallenlane/novahot/archive/v${pkgver}.tar.gz")
-sha1sums=('71b0094e4f62bf5fddb05e6e029f102e95afc830')
+source=("git+https://github.com/chrisallenlane/$pkgname.git")
+sha512sums=('SKIP')
+
+pkgver() {
+  cd $pkgname
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
 
 package() {
-  cd "$srcdir/novahot-$pkgver"
+  cd $pkgname
 
-  local _npmdir="$pkgdir/usr/lib/node_modules/"
+  _npmdir="$pkgdir/usr/lib/node_modules/"
 
-  mkdir -p $_npmdir
+  install -dm 755 $_npmdir
 
   cd $_npmdir
 
-  npm install --user root -g --prefix "$pkgdir/usr" novahot@$pkgver
+  npm install --user root -g --prefix "$pkgdir/usr" novahot@
 
-  cd "$srcdir/novahot-$pkgver"
+  cd "$srcdir/$pkgname"
 
-  install -Dm644 -t "$pkgdir/usr/share/doc/novahot" README.md CONTRIBUTING.md
-  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/novahot/LICENSE.txt"
+  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md CONTRIBUTING.md
+  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 }
+
