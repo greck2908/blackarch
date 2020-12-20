@@ -1,30 +1,29 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ipdecap
-pkgver=96.45d2a7d
+pkgname='ipdecap'
+pkgver=83.b719681
 pkgrel=1
 groups=('blackarch' 'blackarch-networking')
 pkgdesc='Can decapsulate traffic encapsulated within GRE, IPIP, 6in4, ESP (ipsec) protocols, and can also remove IEEE 802.1Q (virtual lan) header.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://www.loicp.eu/ipdecap#dependances'
 license=('GPL3')
 depends=('openssl' 'libpcap')
 makedepends=('git')
-source=("git+https://github.com/lpefferkorn/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/lpefferkorn/ipdecap.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ipdecap"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/ipdecap"
 
   chmod +x autogen.sh
-
   ./autogen.sh
 
   ./configure --prefix=/usr
@@ -33,12 +32,12 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ipdecap"
 
   make DESTDIR="$pkgdir" install
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" AUTHORS Contributors \
-    INSTALL NEWS README TODO ChangeLog
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm644 AUTHORS "$pkgdir/usr/share/doc/ipdecap/AUTHORS"
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/ipdecap/COPYING"
+  install -m644 -t "$pkgdir/usr/share/doc/ipdecap/" ChangeLog \
+    Contributors INSTALL NEWS README TODO
 }
-

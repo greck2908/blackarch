@@ -1,29 +1,29 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=fuddly
-pkgver=569.fd2c4d0
-pkgrel=3
+pkgname='fuddly'
+pkgver=465.ed17a0b
+pkgrel=1
 groups=('blackarch' 'blackarch-fuzzer')
 pkgdesc='Fuzzing and Data Manipulation Framework (for GNU/Linux).'
 arch=('any')
 url='https://github.com/k0retux/fuddly'
 license=('GPL3')
 depends=('python2' 'python2-pycups' 'python2-rpyc' 'python2-pysqlite'
-         'python2-crcmod' 'python2-xtermcolor' 'sqlite' 'python2-enum34')
+         'python2-crcmod' 'python2-xtermcolor' 'sqlite')
 makedepends=('git' 'python2-sphinx')
-source=("git+https://github.com/k0retux/$pkgname.git")
-sha512sums=('SKIP')
-install="$pkgname.install"
+source=('git+https://github.com/k0retux/fuddly.git')
+install=fuddly.install
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/fuddly"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/fuddly"
 
   cd docs
 
@@ -31,7 +31,7 @@ prepare() {
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/fuddly"
 
   cd docs
 
@@ -39,25 +39,24 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/fuddly"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/fuddly"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.rst TODO
-  cp -a docs/build/html/ "$pkgdir/usr/share/doc/$pkgname/"
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm644 -t "$pkgdir/usr/share/doc/fuddly/" README.rst TODO
+  cp -a docs/build/html/ "$pkgdir/usr/share/doc/fuddly/"
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/fuddly/COPYING"
 
   rm -rf README.rst TODO COPYING docs
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/fuddly"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/fuddly" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 fuddly_shell.py "\$@"
+cd /usr/share/fuddly
+exec python2 client.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/fuddly"
 }
-

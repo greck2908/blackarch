@@ -1,45 +1,44 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dsd
-pkgver=96.f175834
+pkgname='dsd'
+pkgver=91.7ee04e5
 pkgrel=1
 groups=('blackarch' 'blackarch-misc')
 pkgdesc='Digital Speech Decoder'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/szechyjs/dsd'
 license=('GPL2')
-depends=('libsndfile' 'mbelib' 'itpp' 'portaudio')
+depends=('libsndfile' 'mbelib' 'itpp')
 makedepends=('git' 'cmake')
-source=("git+https://github.com/szechyjs/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/szechyjs/dsd')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/dsd"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/dsd"
 
-  mkdir -p build
-
+  mkdir build
   cd build
 
-  cmake ../ -DCMAKE_INSTALL_PREFIX="/usr"
+  cmake ../ -DCMAKE_INSTALL_PREFIX="/usr/"
 
   make
 }
 
 package() {
-  cd "$pkgname/build"
+  cd "$srcdir/dsd/build"
 
   make DESTDIR="$pkgdir" install
 
   cd ..
 
-  install -Dm 644 -t  "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG
-  install -Dm 644 COPYRIGHT "$pkgdir/usr/share/licenses/$pkgname/COPYRIGHT"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/dsd/README.md"
+  install -m644 CHANGELOG "$pkgdir/usr/share/doc/dsd/CHANGELOG"
+  install -Dm644 COPYRIGHT "$pkgdir/usr/share/licenses/dsd/COPYRIGHT"
 }
-

@@ -1,30 +1,35 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=unicorn-powershell
-pkgver=194.9eb67da
+pkgname='unicorn-powershell'
+pkgver=85.e1d23fe
 pkgrel=1
 groups=('blackarch' 'blackarch-backdoor' 'blackarch-exploitation')
 pkgdesc='A simple tool for using a PowerShell downgrade attack and inject shellcode straight into memory.'
 arch=('any')
 url='https://github.com/trustedsec/unicorn'
 license=('custom:unknown')
-depends=('python')
+depends=('python2')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/trustedsec/unicorn.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/trustedsec/unicorn.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/unicorn"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-package() {
-  cd $pkgname
+prepare() {
+  cd "$srcdir/unicorn"
 
-  install -Dm 755 unicorn.py "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/README" CHANGELOG.txt \
-    CREDITS.txt README.md
+  sed -i 's|/usr/bin/python|/usr/bin/python2|' unicorn.py
 }
 
+package() {
+  cd "$srcdir/unicorn"
+
+  install -Dm755 unicorn.py "$pkgdir/usr/bin/unicorn-powershell"
+  install -Dm644 -t "$pkgdir/usr/share/doc/unicorn/README" CHANGELOG.txt \
+    CREDITS.txt README.md
+}

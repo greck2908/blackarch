@@ -1,19 +1,20 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=pdfid
-pkgver=0.2.7
+pkgname='pdfid'
+pkgver='0.2.2'
 pkgrel=1
 groups=('blackarch' 'blackarch-forensic')
 pkgdesc='Scan a file to look for certain PDF keywords.'
 arch=('any')
 url='http://blog.didierstevens.com/programs/pdf-tools/'
 license=('custom:unknown')
-source=("http://didierstevens.com/files/software/${pkgname}_v${pkgver//./_}.zip")
-depends=('python')
-sha512sums=('02bb09b7d4541a55300a81f8c640a789b660f4d23933bc4ce3fa4055b85022611290bcee8dbd7842bcd95178b6c65b2e7fe2b99a17ce398c82642cbd1d07a4c5')
+source=('http://didierstevens.com/files/software/pdfid_v0_2_1.zip')
+depends=('python2')
+sha1sums=('acc5637a95583f1d550a0286896c244265e0fcbb')
 
 package() {
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
-}
+  cd "$srcdir"
 
+  install -Dm755 pdfid.py "$pkgdir/usr/bin/pdfid"
+}

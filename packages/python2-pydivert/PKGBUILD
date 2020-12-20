@@ -1,0 +1,26 @@
+# This file is part of BlackArch Linux ( http://blackarch.org ).
+# See COPYING for license details.
+
+pkgname='python2-pydivert'
+pkgver='2.1.0'
+pkgrel=1
+pkgdesc='Python binding to windivert driver.'
+arch=('any')
+url='https://pypi.python.org/pypi/pydivert/'
+license=('LGPL3')
+depends=('python2')
+makedepends=('python2-setuptools')
+source=("https://pypi.python.org/packages/cf/71/2da9bcf742df3ab23f75f10fedca074951dd13a84bda8dea3077f68ae9a6/pydivert-${pkgver}.tar.gz")
+sha1sums=('d0e44dc5bbaf8728dbe83f626d695953428d443a')
+
+build() {
+  cd "$srcdir/pydivert-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "$srcdir/pydivert-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+}

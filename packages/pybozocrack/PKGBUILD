@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=pybozocrack
+pkgname='pybozocrack'
 pkgver=75.9900883
 pkgrel=1
 pkgdesc='A silly & effective MD5 cracker in Python.'
@@ -11,27 +11,26 @@ url='https://github.com/ikkebr/PyBozoCrack'
 license=('custom:unknown')
 depends=('python2' 'python2-wheel')
 makedepends=('git' 'python2-setuptools')
-source=("$pkgname::git+https://github.com/ikkebr/PyBozoCrack.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/ikkebr/PyBozoCrack')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/PyBozoCrack"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/PyBozoCrack"
 
   python2 setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/PyBozoCrack"
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr --skip-build
+  python2 setup.py install --root="$pkgdir" --prefix=/usr --optimize=1
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" *.rst
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/pybozocrack/" *.rst
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/pybozocrack/LICENSE"
 }
-

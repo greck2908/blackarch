@@ -1,29 +1,29 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=lanmap2
+pkgname='lanmap2'
 pkgver=127.1197999
 pkgrel=3
 epoch=1
 pkgdesc='Passive network mapping tool.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url="http://github.com/rflynn/lanmap2"
 license=('GPL')
 groups=('blackarch' 'blackarch-recon')
 depends=('sqlite3' 'libpcap' 'php' 'graphviz' 'libbsd')
 makedepends=('git' 'make' 'gcc-libs')
-source=("git+http://github.com/rflynn/$pkgname.git")
-sha512sums=('SKIP')
-install="$pkgname.install"
+install='lanmap2.install'
+source=('git+http://github.com/rflynn/lanmap2.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/lanmap2"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/lanmap2"
 
   sed -i 's/DbFile\[\] = .*/DbFile\[\] = "db\/db";/g' src/report.c
 
@@ -40,26 +40,26 @@ prepare() {
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/lanmap2"
 
   make all
 }
 
 package () {
-  cd $pkgname
+  cd "$srcdir/lanmap2"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname/tools"
-  install -dm 755 "$pkgdir/usr/share/doc/$pkgname/"
+  mkdir -p "$pkgdir/usr/share/lanmap2/tools"
+  mkdir -p "$pkgdir/usr/share/doc/lanmap2"
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -m 755 "$srcdir/lanmap2/src/cap" "$pkgdir/usr/share/$pkgname"
-  install -m 755 "$srcdir/lanmap2/tools/os-graph" \
-    "$pkgdir/usr/share/$pkgname/tools"
-  install -m 755 "$srcdir/lanmap2/tools/oui2insert" \
-    "$pkgdir/usr/share/$pkgname/tools"
+  install -m755 "$srcdir/lanmap2/src/cap" "$pkgdir/usr/share/lanmap2"
+  install -m755 "$srcdir/lanmap2/tools/os-graph" \
+    "$pkgdir/usr/share/lanmap2/tools"
+  install -m755 "$srcdir/lanmap2/tools/oui2insert" \
+    "$pkgdir/usr/share/lanmap2/tools"
 
-  cp -a graph web db img "$pkgdir/usr/share/$pkgname/"
-  cp -a doc/* ref "$pkgdir/usr/share/doc/$pkgname/"
+  cp -a graph web db img "$pkgdir/usr/share/lanmap2"
+  cp -a doc/* ref "$pkgdir/usr/share/doc/lanmap2"
 
   cat > "$pkgdir/usr/bin/lanmap2-cap" << EOF
 #!/bin/sh
@@ -69,7 +69,7 @@ if [ \$EUID != 0 ] ; then
   exit 1
 fi
 
-cd /usr/share/$pkgname
+cd /usr/share/lanmap2
 ./cap
 EOF
 
@@ -83,7 +83,7 @@ if [ \$EUID != 0 ] ; then
   exit 1
 fi
 
-cd /usr/share/$pkgname/graph
+cd /usr/share/lanmap2/graph
 
 # Fix PHP.
 tmp=\`mktemp /tmp/lanmap.XXXXXXXX\`
@@ -95,4 +95,3 @@ EOF
 
   chmod +x "$pkgdir/usr/bin/lanmap2-graph"
 }
-

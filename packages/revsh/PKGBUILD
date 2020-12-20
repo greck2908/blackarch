@@ -1,29 +1,27 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=revsh
-pkgver=267.36a9a90
+pkgname='revsh'
+pkgver=229.36c9cf0
 pkgrel=1
 pkgdesc='A reverse shell with terminal support, data tunneling, and advanced pivoting capabilities.'
 groups=('blackarch' 'blackarch-backdoor' 'blackarch-networking')
 url='https://github.com/emptymonkey/revsh/'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 license=('MIT')
 depends=('openssl')
 makedepends=('git')
-source=("git+https://github.com/emptymonkey/$pkgname.git"
-        'git+https://github.com/openssl/openssl.git')
-sha512sums=('SKIP'
-            'SKIP')
+source=('git+https://github.com/emptymonkey/revsh.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/revsh"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/revsh"
 
   sed -i 's|/usr/local|/usr/|g' Makefile
 
@@ -32,28 +30,22 @@ prepare() {
 }
 
 build() {
-  cd openssl
-
-  ./config no-shared -static
-  make
-
-  cd "$srcdir/$pkgname"
+  cd "$srcdir/revsh"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/revsh"
 
-  make DESTDIR="$pkgdir" install
+  make DESTDIR="$pkgdir/" install
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 755 in_the_key_of_c "$pkgdir/usr/bin/revsh-in_the_key_of_c"
-  install -Dm 644 Documentation/revsh.1 "$pkgdir/usr/share/man/man1/revsh.1"
+  install -Dm755 revsh "$pkgdir/usr/bin/revsh"
+  install -Dm755 in_the_key_of_c "$pkgdir/usr/bin/revsh-in_the_key_of_c"
+  install -Dm644 Documentation/revsh.1 "$pkgdir/usr/share/man/man1/revsh.1"
 
-  rm "Documentation/$pkgname.1"
+  rm Documentation/revsh.1
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" INSTALL Documentation/*
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/revsh" INSTALL Documentation/*
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/revsh/LICENSE"
 }
-

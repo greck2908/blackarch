@@ -1,43 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ibrute
+pkgname='ibrute'
 pkgver=12.3a6a11e
 pkgrel=2
 groups=('blackarch' 'blackarch-cracker' 'blackarch-mobile')
 pkgdesc='An AppleID password bruteforce tool. It uses Find My Iphone service API, where bruteforce protection was not implemented.'
 arch=('any')
 url='https://github.com/hackappcom/ibrute/'
-license=('custom:unknown')
+license=('unknown')
 depends=('python2' 'python2-simplejson' 'python2-lxml')
 makedepends=('git')
-source=("git+https://github.com/hackappcom/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/hackappcom/ibrute.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ibrute"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ibrute"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/ibrute"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/ibrute/README.md"
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname"
+  cp -a * "$pkgdir/usr/share/ibrute"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/ibrute" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/ibrute
 exec python2 id_brute.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/ibrute"
 }
-

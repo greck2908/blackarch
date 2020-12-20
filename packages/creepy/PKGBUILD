@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=creepy
+pkgname='creepy'
 pkgver=137.9f60449
 pkgrel=3
 epoch=1
@@ -14,34 +14,33 @@ provides=('creepy')
 makedepends=('git')
 depends=('python2' 'python2-tweepy' 'python2-osmgpsmap' 'python2-flickrapi'
          'python2-beautifulsoup3' 'python2-exiv2' 'python2-configobj'
-         'python2-simplejson' 'python2-yapsy' 'python2-pyqt4' 'pyqt4-common')
-source=("git+https://github.com/ilektrojohn/$pkgname.git")
-sha512sums=('SKIP')
+         'python2-simplejson' 'python2-yapsy' 'python2-pyqt4')
+source=('git+https://github.com/ilektrojohn/creepy.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/creepy"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/creepy"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/creepy"
 
-  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/doc/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/creepy/doc/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/creepy/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a creepy/* "$pkgdir/usr/share/$pkgname/"
+  cp -a creepy/* "$pkgdir/usr/share/creepy/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/creepy" << EOF
 #!/bin/sh
-exec python2 "/usr/share/$pkgname/CreepyMain.py" "\$@"
+exec python2 "/usr/share/creepy/CreepyMain.py" "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/creepy"
 }
-

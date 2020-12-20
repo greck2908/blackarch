@@ -1,27 +1,27 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=flamerobin
+pkgname='flamerobin'
 pkgver=2370.c75f8618
-pkgrel=5
+pkgrel=2
 pkgdesc='A tool to handle Firebird database management.'
 groups=('blackarch' 'blackarch-database')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://www.flamerobin.org/'
-license=('custom:unknown')
-depends=('wxgtk' 'boost' 'boost-libs' 'libfbclient')
+license=('expat')
+depends=('wxgtk' 'boost' 'libfbclient')
 makedepends=('git')
-source=("$pkgname::git://git.code.sf.net/p/flamerobin/flamerobin-git.git")
-sha512sums=('SKIP')
+source=('git://git.code.sf.net/p/flamerobin/flamerobin-git.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/flamerobin-git"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/flamerobin-git"
 
   CXXFLAGS=-fpermissive ./configure --prefix=/usr \
     --with-wx-config=/usr/bin/wx-config
@@ -30,8 +30,7 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/flamerobin-git"
 
   make DESTDIR="$pkgdir" install
 }
-

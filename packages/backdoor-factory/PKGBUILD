@@ -1,45 +1,41 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=backdoor-factory
-pkgver=205.896844f
+pkgname='backdoor-factory'
+pkgver=198.87bd28d
 pkgrel=1
-epoch=1
 groups=('blackarch' 'blackarch-backdoor' 'blackarch-binary')
 pkgdesc='Patch win32/64 binaries with shellcode.'
 url='https://github.com/secretsquirrel/the-backdoor-factory'
 arch=('any')
-license=('BSD')
-depends=('python2' 'python2-capstone' 'python2-pefile')
+license=('GPL3')
+depends=('python2' 'python2-pefile' 'python2-capstone')
 makedepends=('git')
-options=('!strip')
-source=("$pkgname::git+https://github.com/secretsquirrel/the-backdoor-factory.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/secretsquirrel/the-backdoor-factory.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/the-backdoor-factory"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/the-backdoor-factory"
 
-  install -dm 755 "$pkgdir/usr/bin/"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/backdoor-factory"
+  mkdir -p "$pkgdir/usr/bin/"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/backdoor-factory/README.md"
 
-  rm COPYING LICENSE.txt README.md
+  rm README.md
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/backdoor-factory"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/backdoor-factory" << EOF
 #!/bin/sh
-exec python2 /usr/share/$pkgname/backdoor.py "\$@"
+exec python2 /usr/share/backdoor-factory/backdoor.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/backdoor-factory"
 }
-

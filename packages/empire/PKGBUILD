@@ -1,65 +1,63 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=empire
-pkgver=2250.c53bbc06
+pkgname='empire'
+pkgver=1262.4469f61
 pkgrel=1
-epoch=2
+epoch=1
 pkgdesc='A PowerShell and Python post-exploitation agent.'
 groups=('blackarch' 'blackarch-automation')
 arch=('any')
-url='https://github.com/BC-SECURITY/Empire'
-license=('BSD')
-depends=('python' 'python-urllib3' 'python-requests' 'python-iptools'
-         'python-pydispatcher' 'python-flask' 'python-macholib' 'python-dropbox'
-         'python-zlib_wrapper' 'python-netifaces' 'python-m2crypto'
-         'python-jinja' 'python-cryptography' 'python-pefile' 'python-xlutils'
-         'python-pyminifier' 'python-pycryptodome' 'python-simplejson'
-         'python-xlrd' 'python-xlwt' 'python-bcrypt' 'java-environment'
-         'python-flask-socketio')
+url='https://github.com/adaptivethreat/Empire'
+license=('custom:unknown')
+depends=('python2-m2crypto' 'swig' 'python2-iptools' 'python2-crypto'
+         'python2-pydispatcher' 'python2-flask' 'python2-pyopenssl'
+         'python2-zlib_wrapper' 'python2-pysqlite' 'python2-netifaces'
+         'python2-argparse' 'python2-lxml' 'python2-dropbox' 'python2-macholib'
+         'python2-pdb' 'python2-urllib3' 'openssl' 'java-environment')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/BC-SECURITY/Empire.git"
-        'https://files.pythonhosted.org/packages/0d/1d/6cc4bd4e79f78be6640fab268555a11af48474fac9df187c3361a1d1d2f0/pyOpenSSL-19.1.0.tar.gz'
-        'setup_database.py.patch')
-sha512sums=('SKIP'
-            '4acd96f287d72eb11bd812697d28cd6eb6a96a4653248b65f967187830a6b17cc1254775a18a3405469f3d45abdae6f02d165f2f35f035f3174c2826fba82916'
-            '9ffc3dc5d6a1dfd5b71cd22a0878a0231958938cb939e5fda5467c301fb4837ff96a299c2cbf2b2cc232fd8dd340c9086130e1067870c8c4272d7cc05e3954b4')
-install="$pkgname.install"
+source=('git+https://github.com/adaptivethreat/Empire.git'
+        'https://pypi.python.org/packages/b0/9e/7088f6165c40c46416aff434eb806c1d64ad6ec6dbc201f5ad4d0484704e/pyOpenSSL-17.2.0.tar.gz')
+sha1sums=('SKIP'
+          'ab5454f2d297c642c7c3dffeeca359f914a11dd3')
+install='empire.install'
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Empire"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  #patch -p1  < "$srcdir/setup_database.py.patch"
+  cd "$srcdir/Empire"
 
-  cd $pkgname
+	 grep -iRl 'python' . | xargs sed -i 's|#!.*/usr/bin/python|#!/usr/bin/python2|;s|#!.*/usr/bin/env python$|#!/usr/bin/env python2|'
 
-  # need by empire
-  cp -r "$srcdir/pyOpenSSL-19.1.0/src/OpenSSL" OpenSSL
+#	sed -i 's|../data/empire.db|/usr/share/empire/data/empire.db|' setup/setup_database.py
+# sed -i 's|../data/empire.pem|/usr/share/empire/data/empire.pem|' setup/cert.sh
+
+  # temp dirty fix
+  cp -r $srcdir/pyOpenSSL-17.2.0/src/OpenSSL OpenSSL
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Empire"
 
-  install -dm 755 "$pkgdir/usr/bin/"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin/"
+  mkdir -p "$pkgdir/usr/share/empire"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md changelog
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/empire/" README.md changelog
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/empire/LICENSE"
 
   rm changelog LICENSE README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/empire"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/empire" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python $pkgname "\$@"
+cd /usr/share/empire/
+exec python2 empire "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/empire"
 }
-

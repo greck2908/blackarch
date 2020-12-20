@@ -1,44 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=tplmap
-pkgver=713.9444e66
+pkgname='tplmap'
+pkgver=660.4fdcd32
 pkgrel=1
 pkgdesc='Automatic Server-Side Template Injection Detection and Exploitation Tool.'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-exploitation')
 arch=('any')
 url='https://github.com/epinna/tplmap'
 license=('custom:unknown')
-depends=('python2' 'python2-requests' 'python2-yaml' 'python2-flask'
-         'python2-idna' 'python2-chardet' 'python2-certifi' 'python2-urllib3')
+depends=('python2' 'python2-requests' 'python2-yaml' 'python2-flask')
 makedepends=('git')
-source=("git+https://github.com/epinna/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/epinna/tplmap.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/tplmap"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/tplmap"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/tplmap"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/tplmap/README.md"
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname"
+  cp -a * "$pkgdir/usr/share/tplmap"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/tplmap" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/tplmap
+exec python2 tplmap.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/tplmap"
 }
-

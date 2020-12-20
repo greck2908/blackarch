@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=vfeed
+pkgname='vfeed'
 pkgver=79.46d8aa9
 pkgrel=1
 epoch=3
@@ -12,35 +12,33 @@ arch=('any')
 license=('BSD')
 depends=('python2')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/toolswatch/vFeed.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/toolswatch/vFeed.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/vFeed"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/vFeed"
 
-  install -dm 755 "$pkgdir/usr/bin/"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin/"
+  mkdir -p "$pkgdir/usr/share/vfeed"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" CHANGELOG.md README.md \
-    CREDITS
-  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
+  install -Dm644 -t "$pkgdir/usr/share/doc/vfeed" CHANGELOG.md README.md CREDITS
+  install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/vfeed/LICENSE.md"
 
   rm -rf LICENSE.md CHANGELOG.md README.md CREDITS docs/
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/vfeed"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/vfeed" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/vfeed
 exec python2 vfeedcli.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/vfeed"
 }
-

@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=jexboss
+pkgname='jexboss'
 pkgver=86.338b531
 pkgrel=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-exploitation')
@@ -11,34 +11,33 @@ url='https://github.com/joaomatosf/jexboss'
 license=('Apache')
 depends=('python2' 'python2-urllib3' 'python2-ipaddress')
 makedepends=('git')
-source=("git+https://github.com/joaomatosf/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/joaomatosf/jexboss.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/jexboss"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/jexboss"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  install -dm755 "$pkgdir/usr/bin"
+  install -dm755 "$pkgdir/usr/share/jexboss"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/jexboss/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/jexboss/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/jexboss"
 
-cat > "$pkgdir/usr/bin/$pkgname" << EOF
+cat > "$pkgdir/usr/bin/jexboss" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/jexboss
+exec python2 jexboss.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/jexboss"
 }
-

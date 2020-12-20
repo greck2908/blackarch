@@ -1,0 +1,26 @@
+# This file is part of BlackArch Linux ( http://blackarch.org ).
+# See COPYING for license details.
+
+pkgname='python2-nassl'
+pkgver='0.17.0'
+pkgrel=1
+pkgdesc='Experimental OpenSSL wrapper for Python 2.7 and SSLyze.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='http://pypi.python.org/pypi/nassl'
+license=('BSD')
+depends=('python2')
+makedepends=('python2-setuptools')
+source=("https://pypi.python.org/packages/80/c9/ba55fb58a6f9582aabda91ae6cc6bc2c3c8511856e634a63b9b59b308143/nassl-${pkgver}.zip")
+sha1sums=('19daee30be70bcec230e48ff071abd541d3fa5a4')
+
+build() {
+  cd "$srcdir/nassl-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "$srcdir/nassl-$pkgver"
+
+  python2 setup.py install --root="$pkgdir" --optimize=1
+}

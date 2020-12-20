@@ -1,35 +1,34 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=reverseip
-pkgver=13.42cc9c3
-pkgrel=6
+pkgname='reverseip'
+pkgver=12.ca8eb44
+pkgrel=1
 pkgdesc='Ruby based reverse IP-lookup tool.'
 groups=('blackarch' 'blackarch-recon')
 arch=('any')
 url='https://github.com/lolwaleet/ReverseIP'
 license=('custom:unknown')
-depends=('ruby' 'ruby-colorize' 'ruby-mechanize' 'ruby-mini_portile2')
+depends=('ruby' 'ruby-colorize')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/lolwaleet/ReverseIP.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/lolwaleet/ReverseIP')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ReverseIP"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/ReverseIP"
 
   sed -i '1 i\#!/usr/bin/env ruby' revIP.rb
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ReverseIP"
 
-  install -Dm 755 revIP.rb "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm755 revIP.rb "$pkgdir/usr/bin/reverseip"
+  install -Dm644 -t "$pkgdir/usr/share/doc/reverseip/" README.md
 }
-

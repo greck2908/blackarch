@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=reconscan
+pkgname='reconscan'
 pkgver=37.d321842
-pkgrel=3
+pkgrel=1
 pkgdesc='Network reconnaissance and vulnerability assessment tools.'
 groups=('blackarch' 'blackarch-recon' 'blackarch-scanner')
 arch=('any')
@@ -11,42 +11,41 @@ url='https://github.com/RoliSoft/ReconScan'
 license=('GPL3')
 depends=('python3' 'python-lxml' 'python-colorama' 'python-python-libnmap')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/RoliSoft/ReconScan.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/RoliSoft/ReconScan.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ReconScan"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ReconScan"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/reconscan"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
+  install -Dm644 -t "$pkgdir/usr/share/doc/reconscan/" README.md
+  install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/reconscan/LICENSE.md"
 
   rm *.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/reconscan/"
 
-  cat > "$pkgdir/usr/bin/$pkgname-recon" << EOF
+  cat > "$pkgdir/usr/bin/reconscan-recon" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python3 recon.py "\$@"
+cd /usr/share/reconscan
+exec python3 recon.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname-recon"
+  chmod a+x "$pkgdir/usr/bin/reconscan-recon"
 
-  cat > "$pkgdir/usr/bin/$pkgname-vulnscan" << EOF
+  cat > "$pkgdir/usr/bin/reconscan-vulnscan" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python3 vulnscan.py "\$@"
+cd /usr/share/reconscan
+exec python3 vulnscan.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname-vulnscan"
+  chmod a+x "$pkgdir/usr/bin/reconscan-vulnscan"
 }
-

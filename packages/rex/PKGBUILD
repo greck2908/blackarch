@@ -1,41 +1,37 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=rex
-pkgver=601.5d51db5
+pkgname='rex'
+pkgver=433.380fd7e
 pkgrel=1
 pkgdesc="Shellphish's automated exploitation engine, originally created for the Cyber Grand Challenge."
 groups=('blackarch' 'blackarch-exploitation')
 arch=('any')
 url='https://github.com/shellphish/rex'
 license=('BSD')
-depends=('python2' 'python2-simuvex' 'python2-tracer' 'angr-py2' 'angrop')
+depends=('python2' 'python2-simuvex' 'python2-tracer' 'angr' 'angrop')
 makedepends=('git' 'python2-setuptools')
-source=("git+https://github.com/shellphish/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/shellphish/rex.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/rex"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/rex"
 
   python2 setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/rex"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  python2 setup.py install --root="$pkgdir"
 
-  python2 setup.py install --root="$pkgdir" --skip-build
-
-  cp -a tests "$pkgdir/usr/share/$pkgname/tests"
-
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/rex/tests" tests/*
+  install -Dm644 -t "$pkgdir/usr/share/doc/rex/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/rex/LICENSE"
 }
-

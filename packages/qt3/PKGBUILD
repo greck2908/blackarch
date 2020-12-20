@@ -1,11 +1,11 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=qt3
-pkgver=3.3.8b
+pkgname='qt3'
+pkgver='3.3.8b'
 pkgrel=1
 pkgdesc='A cross-platform application and UI framework.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://www.trolltech.com/products/qt/index.html'
 license=('GPL')
 depends=('libpng' 'libxmu' 'libxcursor' 'libxinerama' 'glu' 'libxft'
@@ -16,11 +16,11 @@ optdepends=('qtchooser: set the default Qt toolkit'
             'postgresql-libs: PostgreSQL driver'
             'unixodbc: ODBC driver')
 options=('!docs')
-source=("ftp://ftp.qt-project.org/qt/source/qt-x11-free-$pkgver.tar.gz"
+source=("ftp://ftp.qt-project.org/qt/source/qt-x11-free-${pkgver}.tar.gz"
         'qt3-png15.patch' 'qt-copy-kde-patches.tar.bz2' 'qt-patches.tar.bz2'
         'eastern_asian_languagues.diff' 'qt-odbc.patch' 'gcc-4.6.patch'
         'qt-x11-free-3.3.5-makelibshared.patch')
-sha512sums=('745def6250dc7f337dbb265e20bf38dcb41fd854'
+sha1sums=('745def6250dc7f337dbb265e20bf38dcb41fd854'
           '3d19510c46016a1a211d97bf8f82b01498b1b33c'
           '33418e5b117458af23c72cdbffc0c339bc34bdc4'
           '116afa0e737bdf27ea27f9b3653aeb56db9ec151'
@@ -30,7 +30,7 @@ sha512sums=('745def6250dc7f337dbb265e20bf38dcb41fd854'
           'e89720eac87c3e925d0efae6a16f334c5159e4f6')
 
 prepare() {
-  cd "qt-x11-free-$pkgver"
+  cd "$srcdir/qt-x11-free-${pkgver}"
 
   for i in ../qt-copy-kde-patches/*
   do
@@ -54,6 +54,8 @@ prepare() {
 }
 
 build() {
+  cd "$srcdir"
+
   export QTDIR="${srcdir}"/qt-x11-free-${pkgver}
   export PATH=${QTDIR}/bin:${PATH}
   export LD_LIBRARY_PATH=${QTDIR}/lib:${LD_LIBRARY_PATH}
@@ -80,7 +82,7 @@ build() {
 }
 
 package() {
-  cd "qt-x11-free-$pkgver"
+  cd "$srcdir/qt-x11-free-$pkgver"
 
   make INSTALL_ROOT="${pkgdir}" install
 
@@ -89,7 +91,7 @@ package() {
 
   rm -rf "${pkgdir}"/usr/share/qt3/{phrasebooks,templates,translations}
   rm -rf "${pkgdir}"/usr/share/qt3/mkspecs/{aix*,*bsd*,cygwin*,dgux*,darwin*,hpux*,hurd*,irix*,linux-g++$ARCH/linux-g++$ARCH,lynxos*,macx*,qnx*,reliant*,sco*,solaris*,tru64*,unixware*,win32*}
-  install -dm 755 "${pkgdir}"/usr/share/man
+  mkdir -p "${pkgdir}"/usr/share/man
 
   cp -r "${srcdir}"/qt-x11-free-${pkgver}/doc/man/{man1,man3} \
     "${pkgdir}"/usr/share/man/
@@ -99,11 +101,10 @@ package() {
     mv $i ${i%.*}-qt3.1
   done
 
-  install -dm 755 "${pkgdir}"/usr/bin
+  mkdir -p "${pkgdir}"/usr/bin
 
   for b in "${pkgdir}"/usr/lib/qt3/bin/*
   do
     ln -s /usr/lib/qt3/bin/$(basename $b) "${pkgdir}"/usr/bin/$(basename $b)-qt3
   done
 }
-

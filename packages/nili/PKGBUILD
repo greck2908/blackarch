@@ -1,53 +1,52 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=nili
-pkgver=39.285220a
-pkgrel=4
+pkgname='nili'
+pkgver=36.97f75f4
+pkgrel=1
 pkgdesc='Tool for Network Scan, Man in the Middle, Protocol Reverse Engineering and Fuzzing.'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-reversing'
         'blackarch-fuzzer')
 arch=('any')
 url='https://github.com/niloofarkheirkhah/nili'
 license=('GPL3')
-depends=('python' 'python-argparse' 'python-scapy' 'netzob')
+depends=('python' 'python-argparse' 'scapy' 'netzob')
 makedepends=('git' 'python-setuptools')
-source=("git+https://github.com/niloofarkheirkhah/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/niloofarkheirkhah/nili.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/nili"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/nili"
 
   python setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/nili"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/nili"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  python setup.py install --root="$pkgdir" --optimize=1
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/nili/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/nili/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/nili"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/nili" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname/$pkgname
-exec python3 __main__.py "\$@"
+cd /usr/share/nili/nili
+exec python3 __main__.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/nili"
 }
-

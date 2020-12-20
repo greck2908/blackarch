@@ -1,17 +1,18 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=sagan-rules
-pkgver=20190703
-pkgrel=1
+pkgname='sagan-rules'
+pkgver='11102015'
+pkgrel=2
 pkgdesc='Rules package for Sagan.'
 arch=('any')
 url='http://sagan.softwink.com/'
 license=('GPL')
-source=("http://sagan.quadrantsec.com/rules/$pkgname-$pkgver.tar.gz")
-sha512sums=('0caf1db9bbe7e47558e72f6a041b276f1afc5bd3de16684ba657c9209e194ce05348d19e2536aa792d56d66d2f854051ec8d284a4f84c0cbb43471a8193a8d0f')
+source=('https://quadrantsec.com/rules/sagan-rules-current.tar.gz')
+sha1sums=('eed83c76776747571f40c2ba12b6cf3047a995be')
 
 package() {
-  install -Dm 644 -t "$pkgdir/usr/share/sagan/rules" rules/*
-}
+  cd "$srcdir"
 
+  install -Dm644 -t "$pkgdir/usr/share/sagan/rules" rules/*
+}

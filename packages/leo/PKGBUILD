@@ -1,44 +1,37 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=leo
-pkgver=23486.e46e9315f
-pkgrel=2
+pkgname='leo'
+pkgver='5.6'
+pkgrel=1
 pkgdesc="Literate programmer's editor, outliner, and project manager."
-groups=('blackarch' 'blackarch-misc')
 arch=('any')
-url='https://github.com/leo-editor/leo-editor/'
-license=('custom:unknown')
-depends=('python' 'tk' 'python-pmw' 'python-pyqt5' 'python-yaml' 'python-flask')
-makedepends=('git' 'unzip' 'python-setuptools')
-source=("$pkgname::git+https://github.com/leo-editor/leo-editor.git")
-sha512sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+url='http://webpages.charter.net/edreamleo/front.html'
+license=('custom')
+depends=('python2' 'tk' 'python2-pmw' 'python2-pyqt')
+makedepends=('unzip' 'python2-setuptools')
+groups=('blackarch' 'blackarch-misc')
+source=("https://downloads.sourceforge.net/project/leo/Leo/${pkgver}/Leo-${pkgver}.zip")
+sha1sums=('93a052eddf31dfe34aa342ec6a5f111319e895c9')
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Leo-$pkgver"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/leo"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/leo/" INSTALL.TXT README.MD
+  install -Dm644 LICENSE.TXT "$pkgdir/usr/share/licenses/leo/LICENSE.TXT"
 
-  rm README.md LICENSE
+  rm INSTALL.TXT README.MD LICENSE.TXT
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/leo/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/leo" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python launchLeo.py "\$@"
+cd /usr/share/leo
+exec python2 launchLeo.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/leo"
 }
-

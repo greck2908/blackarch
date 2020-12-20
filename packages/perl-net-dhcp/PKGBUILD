@@ -1,22 +1,21 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=perl-net-dhcp
-_pkgname=Net-DHCP
-pkgver=0.7_007
-pkgrel=8
+pkgname='perl-net-dhcp'
+pkgver='0.7_007'
+pkgrel=5
 epoch=1
 pkgdesc='Object methods to create a DHCP packet.'
 arch=('any')
-url='http://search.cpan.org/~djzort/Net-DHCP-0.684/lib/Net/DHCP.pm'
 license=('PerlArtistic' 'GPL')
 options=('!emptydirs')
 depends=('perl-module-build')
-source=("http://search.cpan.org/CPAN/authors/id/D/DJ/DJZORT/$_pkgname-$pkgver.tar.gz")
-sha512sums=('87aa497a910a9d31ac5a0a783ed79b1c941074a640dea808d3fcd8af436f10a7ef011c754e806313f9ca8e20e91ab76307eb1ba980fd261d4ba6d6925ecf726f')
+url='http://search.cpan.org/~djzort/Net-DHCP-0.684/lib/Net/DHCP.pm'
+source=("http://search.cpan.org/CPAN/authors/id/D/DJ/DJZORT/Net-DHCP-${pkgver}.tar.gz")
+sha1sums=('321443cc96c33c035f9e362adbc5ff4b0fde1f4a')
 
 prepare() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/Net-DHCP-$pkgver"
 
   export PERL_MM_USE_DEFAULT=1 PERL5LIB="" \
     PERL_AUTOINSTALL=--skipdeps \
@@ -26,7 +25,7 @@ prepare() {
 }
 
 build() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/Net-DHCP-$pkgver"
 
   /usr/bin/perl Build.PL
 
@@ -35,10 +34,9 @@ build() {
 }
 
 package() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/Net-DHCP-$pkgver"
 
   ./Build install
 
   find "$pkgdir" -name .packlist -o -name perllocal.pod -delete
 }
-

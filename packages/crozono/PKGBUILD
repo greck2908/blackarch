@@ -1,42 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=crozono
-pkgver=5.6a51669
-pkgrel=2
-epoch=1
+pkgname='crozono'
+pkgver=20.ece1a5e
+pkgrel=1
 pkgdesc='A modular framework designed to automate the penetration testing of wireless networks from drones and such unconventional devices.'
 groups=('blackarch' 'blackarch-drone' 'blackarch-wireless')
 arch=('any')
 url='https://github.com/crozono/crozono-free'
 license=('custom:unknown')
-depends=('python' 'python-colorama' 'python-pyfiglet' 'python-poormanslogging'
-         'python-pexpect')
+depends=('python' 'python-colorama' 'python-pyfiglet' 'python-poormanslogging')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/andy737/crozono-free.git")
-#source=("$pkgname::git+https://github.com/crozono/crozono-free.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/crozono/crozono-free.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/crozono-free"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/crozono-free"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/crozono"
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  install -Dm644 -t "$pkgdir/usr/share/doc/crozono/" README.md
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  rm README.md
+
+  cp -a * "$pkgdir/usr/share/crozono"
+
+  cat > "$pkgdir/usr/bin/crozono" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python $pkgname.py "\$@"
+cd /usr/share/crozono
+exec python crozono.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/crozono"
 }
-

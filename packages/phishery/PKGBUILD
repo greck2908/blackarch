@@ -1,53 +1,54 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=phishery
+pkgname='phishery'
 pkgver=14.5743953
-pkgrel=2
+pkgrel=1
 groups=('blackarch' 'blackarch-backdoor' 'blackarch-social')
 pkgdesc='An SSL Enabled Basic Auth Credential Harvester with a Word Document Template URL Injector.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/ryhanson/phishery'
 license=('custom:unknown')
-depends=('glibc')
-makedepends=('git' 'go-pie')
-source=("git+https://github.com/ryhanson/$pkgname.git")
-sha512sums=('SKIP')
+depends=('glibc' 'go')
+makedepends=('go' 'git')
+source=('git+https://github.com/ryhanson/phishery.git')
+sha1sums=('SKIP')
+_url='github.com/ryhanson/phishery'
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/phishery"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  mkdir -p "src/$url" && rm -rf "src/$url" && mv $pkgname "src/$url" &&
-    cd "src/$url"
+  cd "$srcdir"
 
-  GOPATH="$srcdir" go get -d -t $url
+  mkdir -p src/$url && rm -rf src/$url && mv phishery src/$url && cd src/$url
+
+  GOPATH="$srcdir" go get -d -t $_url
 }
 
 package() {
-  install -dm 755 "$pkgdir/usr/bin"
+  cd "$srcdir"
 
-  GOPATH="$srcdir" go build -v $url
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 755 "$srcdir/phishery" "$pkgdir/usr/share/$pkgname/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/README.md" \
-    "src/$url/README.md"
-  install -Dm 644 "src/$url/LICENSE" \
-    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  GOPATH="$srcdir" go build -v $_url
 
-  rm "src/$url/README.md" "src/$url/LICENSE"
+  install -Dm755 "$srcdir/phishery" "$pkgdir/usr/share/phishery/phishery"
+  install -Dm644 src/$url/README.md "$pkgdir/usr/share/doc/phishery/README.md"
+  install -Dm644 src/$url/LICENSE "$pkgdir/usr/share/licenses/phishery/LICENSE"
 
-  cp -a "src/$url/"* "$pkgdir/usr/share/$pkgname"
+  rm src/$url/README.md src/$url/LICENSE
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cp -a src/$_url/* "$pkgdir/usr/share/phishery"
+
+  cat > "$pkgdir/usr/bin/phishery" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec ./$pkgname "\$@"
+cd /usr/share/phishery
+exec ./phishery "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/phishery"
 }
-

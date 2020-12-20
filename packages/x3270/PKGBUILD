@@ -1,47 +1,39 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=x3270
-pkgver=4.0ga9
+pkgname='x3270'
+pkgver='3.5beta7'
 pkgrel=1
-epoch=1
 pkgdesc='An IBM 3270 terminal emulator for the X Window System.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://x3270.bgp.nu/'
 license=('BSD' 'MIT')
 depends=('openssl' 'libxaw')
 makedepends=('imake' 'openssl' 'libx11' 'libxaw' 'libxt' 'xbitmaps'
-             'xorg-mkfontdir' 'xorg-bdftopcf' 'tcl')
+             'xorg-mkfontdir')
 backup=('etc/x3270/ibm_hosts')
-source=("http://x3270.bgp.nu/download/04.00/suite3270-$pkgver-src.tgz")
-sha512sums=('5b75ef40e9ea4152dcca999ed1f206c662ba2fb227663c3c6681626bdb171c759805f19020b0d5cda6bc787d85b43b88f9a33784e88f6bb576b78fa4f528bdf8')
-install="$pkgname.install"
+install='x3270.install'
+source=("http://x3270.bgp.nu/download/03.05/suite3270-${pkgver}-src.tgz")
+sha1sums=('221693c0c4555e34c40dbca58056bdc03bb8e200')
 
 build() {
-  cd "suite3270-${pkgver:0:3}"
+  cd "$srcdir/suite3270-${pkgver:0:3}"
 
-  if [[ "$CARCH" == "aarch64" ]]; then
-    ./configure --prefix=/usr --bindir=/usr/bin --sbindir=/usr/bin \
-      --sysconfdir=/etc --with-fontdir=/usr/share/fonts/3270 --build=arm
-  else
-    ./configure --prefix=/usr --bindir=/usr/bin --sbindir=/usr/bin \
-      --sysconfdir=/etc --with-fontdir=/usr/share/fonts/3270
-  fi
+  ./configure --prefix=/usr --bindir=/usr/bin --sbindir=/usr/bin \
+    --sysconfdir=/etc --with-fontdir=/usr/share/fonts/3270
 
   make
 }
 
 package() {
-  cd "suite3270-${pkgver:0:3}"
+  cd "$srcdir/suite3270-${pkgver:0:3}"
 
-  install -dm 755 "$pkgdir/usr/share/fonts/3270/fonts.dir"
+  mkdir -p "$pkgdir/usr/share/fonts/3270/fonts.dir"
 
   make DESTDIR="$pkgdir" install
 
-  install -Dm 644 x3270/x3270-icon2.xpm \
-    "$pkgdir/usr/share/pixmaps/x3270-icon2.xpm"
-  #install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 x3270-icon2.xpm "$pkgdir/usr/share/pixmaps/x3270-icon2.xpm"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/x3270/LICENSE"
 
   #chmod 644 "$pkgdir/etc/x3270/ibm_hosts"
 }
-

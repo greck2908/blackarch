@@ -1,43 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=mitmer
+pkgname='mitmer'
 pkgver=22.b01c7fe
-pkgrel=3
+pkgrel=2
 groups=('blackarch' 'blackarch-sniffer' 'blackarch-networking')
 pkgdesc="A man-in-the-middle and phishing attack tool that steals the victim's credentials of some web services like Facebook."
 arch=('any')
 url='https://github.com/husam212/MITMer'
 license=('custom')
-depends=('python2' 'python2-scapy' 'python2-nfqueue')
+depends=('python2' 'scapy' 'python2-nfqueue')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/husam212/MITMer.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/husam212/MITMer.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/MITMer"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/MITMer"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/mitmer"
 
-  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/mitmer/README.md"
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/mitmer"
 
-  rm "$pkgdir/usr/share/$pkgname/README.md"
+  rm "$pkgdir/usr/share/mitmer/README.md"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/mitmer" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/mitmer
+exec python2 mitmer.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/mitmer"
 }
-

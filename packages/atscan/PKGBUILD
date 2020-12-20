@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=atscan
-pkgver=2427.9a3cebc
+pkgname='atscan'
+pkgver=1830.e2dfd48
 pkgrel=1
 groups=('blackarch' 'blackarch-scanner' 'blackarch-webapp' 'blackarch-fuzzer'
         'blackarch-exploitation' 'blackarch-automation')
@@ -13,43 +13,42 @@ license=('MIT')
 depends=('perl' 'perl-io-socket' 'perl-uri' 'perl-term-ansicolor'
          'perl-html-parser' 'perl-term-readkey' 'perl-http-cookies'
          'perl-getopt-long' 'perl-http-message' 'perl-encode-locale'
-         'perl-file-copy-recursive' 'perl-libwww')
+         'perl-file-copy-recursive')
 makedepends=('git' 'dos2unix')
-source=("$pkgname::git+https://github.com/AlisamTechnology/ATSCAN-V3.1.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/AlisamTechnology/ATSCAN-V3.1.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ATSCAN-V3.1"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/ATSCAN-V3.1"
 
-  dos2unix "$pkgname.pl"
+  dos2unix atscan.pl
 
-  sed -i 's|defined @ARGV|@ARGV|' "$pkgname.pl"
+  sed -i 's|defined @ARGV|@ARGV|' atscan.pl
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ATSCAN-V3.1"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/atscan"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/atscan/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/atscan/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/atscan" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec perl $pkgname.pl "\$@"
+cd /usr/share/atscan
+exec perl atscan.pl "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/atscan"
 }
-

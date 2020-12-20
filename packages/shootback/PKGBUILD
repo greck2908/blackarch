@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=shootback
-pkgver=83.cab462c
+pkgname='shootback'
+pkgver=56.73cdc12
 pkgrel=1
 pkgdesc='A reverse TCP tunnel let you access target behind NAT or firewall.'
 groups=('blackarch' 'blackarch-backdoor' 'blackarch-tunnel')
@@ -11,42 +11,41 @@ url='https://github.com/aploium/shootback'
 license=('MIT')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/aploium/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/aploium/shootback.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/shootback"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/shootback"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/shootback"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/shootback/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/shootback/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/shootback"
 
   cat > "$pkgdir/usr/bin/shootback-master" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 master.py "\$@"
+cd /usr/share/shootback
+exec python2 master.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname-master"
+  chmod a+x "$pkgdir/usr/bin/shootback-master"
 
-  cat > "$pkgdir/usr/bin/$pkgname-slaver" << EOF
+  cat > "$pkgdir/usr/bin/shootback-slaver" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 slaver.py "\$@"
+cd /usr/share/shootback
+exec python2 slaver.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname-slaver"
+  chmod a+x "$pkgdir/usr/bin/shootback-slaver"
 }
-

@@ -1,45 +1,41 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ufonet
-pkgver=69.6633a16
-pkgrel=2
+pkgname='ufonet'
+pkgver=32.1c88898
+pkgrel=1
 groups=('blackarch' 'blackarch-dos' 'blackarch-webapp')
-pkgdesc="A tool designed to launch DDoS attacks against a target, using 'Open Redirect' vectors on third party web applications, like botnet."
+pkgdesc="A tool designed to launch DDoS attacks against a target, using
+'Open Redirect' vectors on third party web applications, like botnet."
 arch=('any')
 url='https://github.com/epsylon/ufonet'
 license=('custom:unknown')
-depends=('python' 'python-pycurl' 'python-geoip' 'geoip' 'python-scapy'
-         'python-requests' 'python-pycryptodomex' 'python-pycryptodome'
-         'python-crypto' 'python-pygeoip' 'python-python-geoip')
+depends=('python2' 'python2-pycurl' 'python2-geoip' 'geoip')
 makedepends=('git')
-source=("git+https://github.com/epsylon/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/epsylon/ufonet.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ufonet"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ufonet"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/ufonet"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md docs/*
+  install -Dm644 -t "$pkgdir/usr/share/doc/ufonet/" README.md docs/*
 
-  rm -rf README.md docs
+  cp -a * "$pkgdir/usr/share/ufonet"
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
-
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/ufonet" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python $pkgname "\$@"
+cd /usr/share/ufonet
+exec python2 ufonet "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/ufonet"
 }
-

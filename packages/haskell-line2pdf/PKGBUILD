@@ -1,25 +1,25 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=haskell-line2pdf
-pkgver=0.0.7
+pkgname='haskell-line2pdf'
+pkgver='0.0.7'
 pkgrel=3
 pkgdesc='Simple command-line utility to convert text into PDF.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://hackage.haskell.org/package/line2pdf'
 license=('GPL')
 makedepends=('ghc')
 depends=('haskell-regex-compat' 'haskell-mtl')
 install='haskell-line2pdf.install'
-source=("http://hackage.haskell.org/packages/archive/line2pdf/$pkgver/line2pdf-$pkgver.tar.gz")
-sha512sums=('3ffeee768fc31ea23ed14cd082fc54997c1c9790203a68939b686fbf34e944e6c5ab525de52fda3aab22af2bbe8577c27262b48b082cc2d3dfe322a21f541be2')
+source=("http://hackage.haskell.org/packages/archive/line2pdf/$pkgver/line2pdf-${pkgver}.tar.gz")
+sha1sums=('b09ecfda64345dddb48c3fe02ffc102948cd1bb0')
 options=('staticlibs')
 
 build() {
-  cd "line2pdf-$pkgver"
+  cd "$srcdir/line2pdf-$pkgver"
 
   runhaskell Setup configure -O -p --enable-split-objs --enable-shared \
-    --prefix=/usr --docdir="/usr/share/doc/$pkgname" \
+    --prefix=/usr --docdir="/usr/share/doc/haskell-line2pdf" \
     --libsubdir=\$compiler/site-local/\$pkgid
   runhaskell Setup build
   runhaskell Setup haddock
@@ -29,14 +29,11 @@ build() {
 }
 
 package() {
-  cd "line2pdf-$pkgver"
+  cd "$srcdir/line2pdf-$pkgver"
 
-  install -Dm 744 register.sh "$pkgdir/usr/share/haskell/$pkgname/register.sh"
-  install -m 744 unregister.sh \
-    "$pkgdir/usr/share/haskell/$pkgname/unregister.sh"
-  install -dm 755 "$pkgdir/usr/share/doc/ghc/html/libraries"
-  ln -s "/usr/share/doc/$pkgname/html" \
-    "$pkgdir/usr/share/doc/ghc/html/libraries/line2pdf"
+  install -Dm744 register.sh "$pkgdir/usr/share/haskell/haskell-line2pdf/register.sh"
+  install -m744 unregister.sh "$pkgdir/usr/share/haskell/haskell-line2pdf/unregister.sh"
+  mkdir -p "$pkgdir/usr/share/doc/ghc/html/libraries"
+  ln -s "/usr/share/doc/haskell-line2pdf/html" "$pkgdir/usr/share/doc/ghc/html/libraries/line2pdf"
   runhaskell Setup copy --destdir="$pkgdir"
 }
-

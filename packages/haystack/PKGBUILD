@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=haystack
+pkgname='haystack'
 pkgver=1823.c178b5a
 pkgrel=1
 pkgdesc='A Python framework for finding C structures from process memory - heap analysis - Memory structures forensics.'
@@ -12,26 +12,25 @@ license=('GPL3')
 depends=('python2' 'python2-levenshtein' 'python2-ptrace' 'python2-networkx')
 makedepends=('git' 'python2-setuptools')
 source=('git+https://github.com/trolldbois/python-haystack.git')
-sha512sums=('SKIP')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/python-haystack"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/python-haystack"
 
   python2 setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/python-haystack"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.rst CHANGES.txt
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/haystack/" README.rst CHANGES.txt
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/haystack/LICENSE.txt"
 
-  python2 setup.py install --root="$pkgdir" --optimize=1 --skip-build
+  python2 setup.py install --root="$pkgdir" --optimize=1
 }
-

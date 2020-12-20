@@ -1,45 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=maryam
-pkgver=462.473f218
+pkgname='maryam'
+pkgver=123.7a1e208
 pkgrel=1
-epoch=2
-pkgdesc='Full-featured Web Identification framework written in Python.'
+pkgdesc='Tool to scan Web application and networks and easily and complete the information gathering process.'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-webapp' 'blackarch-recon')
 arch=('any')
-url='https://github.com/saeeddhqan/Maryam'
+url='https://github.com/black-brain/maryam'
 license=('MIT')
-depends=('python2' 'python2-argparse' 'python2-beautifulsoup4')
+depends=('python2' 'python2-python-whois')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/saeeddhqan/Maryam.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/black-brain/maryam.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/maryam"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/maryam"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/maryam"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/maryam/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/maryam/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/maryam/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/maryam" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname "\$@"
+cd /usr/share/maryam
+exec python2 maryam.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/maryam"
 }
-

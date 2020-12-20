@@ -1,49 +1,48 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=daredevil
-pkgver=41.dfa025e
+pkgname='daredevil'
+pkgver=37.897f602
 pkgrel=1
 pkgdesc='A tool to perform (higher-order) correlation power analysis attacks (CPA).'
 groups=('blackarch' 'blackarch-crypto')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/SideChannelMarvels/Daredevil'
 license=('GPL3')
 depends=('openmp')
 makedepends=('git' 'clang')
-source=("$pkgname::git+https://github.com/SideChannelMarvels/Daredevil.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/SideChannelMarvels/Daredevil.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Daredevil"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/Daredevil"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Daredevil"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/daredevil"
 
-  cp -a LUT CONFIG "$pkgdir/usr/share/$pkgname/"
+  cp -a LUT CONFIG "$pkgdir/usr/share/daredevil/"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/share/$pkgname/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 daredevil "$pkgdir/usr/share/daredevil/daredevil"
+  install -Dm644 -t "$pkgdir/usr/share/doc/daredevil/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/daredevil/LICENSE"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/daredevil" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec ./$pkgname "\$@"
+cd /usr/share/daredevil
+exec ./daredevil "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/daredevil"
 }
-

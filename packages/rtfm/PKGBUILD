@@ -1,41 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=rtfm
-pkgver=93.02f6432
-pkgrel=3
+pkgname='rtfm'
+pkgver=82.95aa66e
+pkgrel=1
 pkgdesc='A database of common, interesting or useful commands, in one handy referable form.'
 groups=('blackarch' 'blackarch-misc')
 arch=('any')
 url='https://github.com/leostat/rtfm'
-license=('custom:unknown')
-depends=('python' 'python-terminaltables' 'python-urllib3')
+license=('custom:unknow')
+depends=('python2' 'python2-terminaltables')
 makedepends=('git')
-source=("git+https://github.com/leostat/$pkgname.git")
+source=('git+https://github.com/leostat/rtfm.git')
 md5sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "${srcdir}/rtfm"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "${srcdir}/rtfm"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "${pkgdir}/usr/share/rtfm"
+  mkdir -p "${pkgdir}/usr/share/doc/rtfm"
+  mkdir -p "${pkgdir}/usr/bin"
 
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/share/$pkgname/"
-  install -Dm 644 *.sql "$pkgdir/usr/share/$pkgname/"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm755 rtfm.py "${pkgdir}/usr/share/rtfm/"
+  install -Dm644 *.sql "${pkgdir}/usr/share/rtfm/"
+  install -Dm644 README.md "${pkgdir}/usr/share/doc/rtfm"
 
-  cat >> "$pkgdir/usr/bin/$pkgname" << EOF
+  cat >> "${pkgdir}/usr/bin/rtfm" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python $pkgname.py "\$@"
+
+cd /usr/share/rtfm
+exec python2 rtfm.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "${pkgdir}/usr/bin/rtfm"
 }
-

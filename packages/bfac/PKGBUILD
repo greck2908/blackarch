@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=bfac
-pkgver=51.a482db2
-pkgrel=2
+pkgname='bfac'
+pkgver=44.33be807
+pkgrel=1
 pkgdesc="An automated tool that checks for backup artifacts that may disclose the web-application's source code."
 groups=('blackarch' 'blackarch-recon' 'blackarch-webapp')
 arch=('any')
@@ -11,34 +11,33 @@ url='https://github.com/mazen160/bfac'
 license=('GPL3')
 depends=('python' 'python-colorama' 'python-requests' 'python-argparse')
 makedepends=('git')
-source=("git+https://github.com/mazen160/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/mazen160/bfac.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/bfac"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/bfac"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/bfac"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG.txt \
+  install -Dm644 -t "$pkgdir/usr/share/doc/bfac/" README.md CHANGELOG.txt \
     CONTRIBUTORS.txt
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/bfac/LICENSE.txt"
 
   rm README.md CHANGELOG.txt CONTRIBUTORS.txt LICENSE.txt
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/bfac/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/bfac" << EOF
 #!/bin/sh
-exec python /usr/share/$pkgname/$pkgname "\$@"
+exec python /usr/share/bfac/bfac "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/bfac"
 }
-

@@ -1,71 +1,70 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=proxmark
-pkgver=2404.e6158a48
+pkgname='proxmark'
+pkgver=2044.380e0d08
 pkgrel=1
 groups=('blackarch' 'blackarch-radio' 'blackarch-recon' 'blackarch-scanner')
 pkgdesc='A powerful general purpose RFID tool, the size of a deck of cards, designed to snoop, listen and emulate everything from Low Frequency (125kHz) to High Frequency (13.56MHz) tags.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/Proxmark/proxmark3'
 license=('GPL2')
-depends=('libusb' 'perl' 'qt4' 'termcap' 'pcsclite')
-makedepends=('git' 'arm-none-eabi-gcc' 'arm-none-eabi-newlib' 'pcsclite')
-source=("$pkgname::git+https://github.com/Proxmark/proxmark3.git")
-sha512sums=('SKIP')
+depends=('libusb' 'perl' 'qt4' 'termcap')
+makedepends=('git' 'arm-none-eabi-gcc' 'arm-none-eabi-newlib')
+source=('git+https://github.com/Proxmark/proxmark3.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/proxmark3"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/proxmark3"
 
   make -j1
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/proxmark3"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/proxmark"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md HACKING.txt \
+  install -Dm644 -t "$pkgdir/usr/share/doc/proxmark/" README.md HACKING.txt \
     COMPILING.txt CHANGELOG.md doc/*
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/proxmark/LICENSE.txt"
 
   rm -rf *.txt *.md doc/
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/proxmark"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/proxmark" << EOF
 #!/bin/sh
-exec /usr/share/$pkgname/client/proxmark3 "\$@"
+exec /usr/share/proxmark/client/proxmark3 "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/proxmark"
 
-  cat > "$pkgdir/usr/bin/$pkgname-flasher" << EOF
+  cat > "$pkgdir/usr/bin/proxmark-flasher" << EOF
 #!/bin/sh
-exec /usr/share/$pkgname/client/flasher "\$@"
+exec /usr/share/proxmark/client/flasher "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname-flasher"
+  chmod a+x "$pkgdir/usr/bin/proxmark-flasher"
 
-  cat > "$pkgdir/usr/bin/$pkgname-fpga-compress" << EOF
+  cat > "$pkgdir/usr/bin/proxmark-fpga-compress" << EOF
 #!/bin/sh
-exec /usr/share/$pkgname/client/fpga_compress "\$@"
+exec /usr/share/proxmark/client/fpga_compress "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname-fpga-compress"
+  chmod a+x "$pkgdir/usr/bin/proxmark-fpga-compress"
 
-  cat > "$pkgdir/usr/bin/$pkgname-unbind-$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/proxmark-unbind-proxmark" << EOF
 #!/bin/sh
-exec /usr/share/$pkgname/client/unbind-$pkgname "\$@"
+exec /usr/share/proxmark/client/unbind-proxmark "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname-unbind-$pkgname"
+  chmod a+x "$pkgdir/usr/bin/proxmark-unbind-proxmark"
 }
-

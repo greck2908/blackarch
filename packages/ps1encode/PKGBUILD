@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ps1encode
+pkgname='ps1encode'
 pkgver=41.68d7778
-pkgrel=3
+pkgrel=1
 pkgdesc='A tool to generate and encode a PowerShell based Metasploit payloads.'
 url='https://github.com/CroweCybersecurity/ps1encode'
 arch=('any')
@@ -12,33 +12,32 @@ license=('MIT')
 depends=('ruby' 'metasploit')
 optdepends=('mingw-w64-gcc')
 makedepends=('git')
-source=("git+https://github.com/CroweCybersecurity/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/CroweCybersecurity/ps1encode.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ps1encode"
 
   echo "$(git rev-list --count HEAD)"."$(git rev-parse --short HEAD)"
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ps1encode"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/ps1encode"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/ps1encode/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/ps1encode/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/ps1encode/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/ps1encode" << EOF
 #!/bin/sh
-exec ruby /usr/share/$pkgname/$pkgname.rb "\$@"
+exec ruby /usr/share/ps1encode/ps1encode.rb "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/ps1encode"
 }
-

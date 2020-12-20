@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=mrtparse
-pkgver=504.9546e0b
+pkgname='mrtparse'
+pkgver=464.9851c48
 pkgrel=1
 pkgdesc='A module to read and analyze the MRT format data.'
 groups=('blackarch' 'blackarch-misc' 'blackarch-networking')
@@ -11,24 +11,23 @@ url='https://github.com/YoshiyukiYamauchi/mrtparse'
 license=('APACHE')
 depends=('python2' 'python2-setuptools')
 makedepends=('git')
-source=("git+https://github.com/YoshiyukiYamauchi/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/YoshiyukiYamauchi/mrtparse.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/mrtparse"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/mrtparse"
 
 	python2 setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/mrtparse"
 
-  python2 setup.py install --root="$pkgdir" --optimize=1 --skip-build
+  python2 setup.py install --root="$pkgdir" --optimize=1
 }
-

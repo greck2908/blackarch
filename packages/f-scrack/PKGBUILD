@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=f-scrack
+pkgname='f-scrack'
 pkgver=19.9a00357
 pkgrel=2
 pkgdesc='A single file bruteforcer supports multi-protocol.'
@@ -11,26 +11,25 @@ url='https://github.com/ysrc/F-Scrack'
 license=('GPL3')
 depends=('python2')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/ysrc/F-Scrack.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/ysrc/F-Scrack.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/F-Scrack"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/F-Scrack"
 
   sed -i '1i\#!/usr/bin/python2' F-Scrack.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/F-Scrack"
 
-  install -Dm 755 F-Scrack.py "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 F-Scrack.py "$pkgdir/usr/bin/f-scrack"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/f-scrack/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/f-scrack/LICENSE"
 }
-

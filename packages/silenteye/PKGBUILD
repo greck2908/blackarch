@@ -1,33 +1,33 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=silenteye
-pkgver=20.9319304
-pkgrel=1
+pkgname='silenteye'
+pkgver=16.7f4124e
+pkgrel=3
 pkgdesc='A cross-platform application design for an easy use of steganography.'
 groups=('blackarch' 'blackarch-stego')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/achorein/silenteye/'
 license=('GPL3')
-depends=('qt4' 'qca')
+depends=('qt4' 'qca-qt4')
 makedepends=('git' 'cmake')
-source=("git+https://github.com/achorein/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/achorein/silenteye.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/silenteye"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/silenteye"
 
   touch README
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/silenteye"
 
   ENABLE_PACK=1 cmake -DCMAKE_INSTALL_PREFIX=/usr .
 
@@ -35,14 +35,25 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/silenteye"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/silenteye"
 
   make DESTDIR="$pkgdir" install
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 -t "$pkgdir/usr/share/licenses/$pkgname/" LICENSE COPYING
-}
+  install -Dm644 -t "$pkgdir/usr/share/doc/silenteye/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/licenses/silenteye/" LICENSE COPYING
 
+  rm README.md LICENSE COPYING Makefile
+
+#  cp -a * "$pkgdir/usr/share/silenteye"
+
+#  cat > "$pkgdir/usr/bin/silenteye" << EOF
+#!/bin/sh
+#cd /usr/share/silenteye
+#exec ./silenteye "\${@}"
+#EOF
+
+#  chmod a+x "$pkgdir/usr/bin/silenteye"
+}

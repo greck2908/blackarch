@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=scrape-dns
+pkgname='scrape-dns'
 pkgver=58.3df392f
 pkgrel=3
 groups=('blackarch' 'blackarch-scanner')
@@ -11,32 +11,31 @@ url='https://github.com/304GEEK/Scrape-DNS'
 license=('GPL2')
 depends=('bash' 'dnsutils')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/304GEEK/Scrape-DNS.git")
-sha512sums=('SKIP')
+source=("git+https://github.com/304GEEK/Scrape-DNS.git")
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Scrape-DNS"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Scrape-DNS"
 
-  install -dm 755 "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 644 -t "$pkgdir/usr/share/scrape-dns" Timing-Scrape.sh bar.sh \
+  install -Dm644 -t "$pkgdir/usr/share/scrape-dns" Timing-Scrape.sh bar.sh \
     scrape.sh
-  install -m 644 {all,custom,porn,updates}.list "$pkgdir/usr/share/$pkgname/"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -m644 {all,custom,porn,updates}.list "$pkgdir/usr/share/scrape-dns/"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/scrape-dns/README.md"
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/scrape-dns/COPYING"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/scrape-dns" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/scrape-dns
 exec sh scrape.sh "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/scrape-dns"
 }
-

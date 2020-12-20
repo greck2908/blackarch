@@ -1,24 +1,60 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=rainbowcrack
-pkgver=1.8
-pkgrel=1
+pkgname='rainbowcrack'
+pkgver='1.6'
+pkgrel=2
 groups=('blackarch' 'blackarch-cracker')
 pkgdesc='Password cracker based on the faster time-memory trade-off. With MySQL and Cisco PIX Algorithm patches.'
-arch=('x86_64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://project-rainbowcrack.com/'
-license=('custom:unknown')
-depends=('gcc-libs')
-source=("http://project-rainbowcrack.com/$pkgname-$pkgver-linux64.zip")
-sha512sums=('84dbf3431605fb5dcc8e7cd305a43e9b239ebd6e5ef120edd951a3180c38498fe3a26157e3b55d114c6630f8ac1382a610d8e6230779c5b12cbc42c04e9aff57')
+license=('custom')
+depends=('openssl')
+makedepends=('git')
+source=('git+http://github.com/BlackArchLinux/rainbowcrack'
+        'http://www.oxid.it/downloads/rc_patch_mysql_pix.zip')
+sha1sums=('SKIP'
+          '0a32e1e3e1ef00a83bf14467a713d39911dbc37d')
+
+build() {
+  cd "$srcdir/rainbowcrack/src"
+
+  # MySQL and Cisco PIX Algorithm patches
+  install -Dm644 ${srcdir}/*.{h,cpp} .
+
+  # missing headers
+  sed -i "11i#include <stdlib.h>\n#include <string.h>" Public.h
+  sed -i 's/md2.h/mdc2.h/g' Hash*.*
+
+  # DSO link fix for crypto
+  sed -i "s/-lssl/& -lcrypto/" makefile.linux
+
+  # MDC2 fix
+  sed -i 's/MD2/MDC2/g' Hash*.*
+
+  make -f makefile.linux
+}
 
 package() {
-  cd "$pkgname-$pkgver-linux64"
+  cd "$srcdir/rainbowcrack/src"
 
-  install -Dm 755 -t "$pkgdir/usr/bin" r{t,c}*
-  install -Dm 755 alglib0.so "$pkgdir/usr/lib/alglib0.so"
-  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" charset.txt readme.txt
-  install -Dm 644 readme.txt "$pkgdir/usr/share/doc/$pkgname/readme.txt"
+  # bin
+  mkdir -p "$pkgdir/usr/bin"
+  install -Dm755 r{t,c}* "$pkgdir/usr/bin"
+
+  # data
+  install -Dm644 "$srcdir/readme.txt" \
+    "$pkgdir/usr/share/rainbowcrack/patches.txt"
+  install -Dm644 charset.txt ../readme.txt \
+    "$pkgdir/usr/share/rainbowcrack"
+
+  # docs
+  mkdir -p "$pkgdir/usr/share/doc/rainbowcrack"
+  install -Dm644 ../doc/* \
+    "$pkgdir/usr/share/doc/rainbowcrack"
+
+  # license
+  install -Dm644 ../disclaimer.txt \
+    "$pkgdir/usr/share/licenses/rainbowcrack/LICENCE"
 }
 

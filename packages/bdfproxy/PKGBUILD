@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=bdfproxy
-pkgver=105.3fecc12
+pkgname='bdfproxy'
+pkgver=101.f9d50ec
 pkgrel=1
 groups=('blackarch' 'blackarch-proxy' 'blackarch-binary')
 pkgdesc='Patch Binaries via MITM: BackdoorFactory + mitmProxy'
@@ -12,17 +12,17 @@ license=('GPL3')
 depends=('python2' 'python2-simplejson' 'python2-configobj' 'python2-pefile'
          'backdoor-factory'  'capstone' 'mitmproxy')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/secretsquirrel/BDFProxy.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/secretsquirrel/BDFProxy')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/BDFProxy"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/BDFProxy"
 
   git submodule init
   git submodule update
@@ -32,27 +32,26 @@ prepare() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/BDFProxy"
 
   ./install.sh
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/bdfproxy"
 
-  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
-  install -Dm 644 bdf/COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/bdfproxy/README.md"
+  install -Dm644 bdf/COPYING "$pkgdir/usr/share/licenses/bdfproxy/COPYING"
 
   rm README.md bdf/COPYING bdf/README.md
 
-  cp -r * "$pkgdir/usr/share/$pkgname/"
+  cp -r * "$pkgdir/usr/share/bdfproxy"
 
-  chmod +x "$pkgdir/usr/share/$pkgname/bdf_proxy.py"
+  chmod +x "$pkgdir/usr/share/bdfproxy/bdf_proxy.py"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/bdf-proxy" << EOF
 #!/bin/sh
-exec python2 /usr/share/$pkgname/bdf_proxy.py "\$@"
+exec python2 /usr/share/bdfproxy/bdf_proxy.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/bdf-proxy"
 }
-

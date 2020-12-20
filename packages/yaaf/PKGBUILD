@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=yaaf
+pkgname='yaaf'
 pkgver=7.4d6273a
-pkgrel=6
+pkgrel=3
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 pkgdesc='Yet Another Admin Finder.'
 arch=('any')
@@ -11,18 +11,17 @@ url='https://github.com/Plasticoo/YAAF'
 license=('GPL')
 depends=('python')
 makedepends=('git' 'python-setuptools')
-source=("$pkgname::git+https://github.com/Plasticoo/YAAF.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/Plasticoo/YAAF')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/YAAF"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/YAAF"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr
+  python setup.py install "--root=$pkgdir"
 }
-

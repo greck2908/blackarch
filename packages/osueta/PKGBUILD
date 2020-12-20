@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=osueta
-pkgver=82.2ee8068
-pkgrel=2
+pkgname='osueta'
+pkgver=71.3c04bfe
+pkgrel=3
 groups=('blackarch' 'blackarch-exploitation')
 pkgdesc='A simple Python script to exploit the OpenSSH User Enumeration Timing Attack.'
 arch=('any')
@@ -11,32 +11,32 @@ url='https://github.com/c0r3dump3d/osueta'
 license=('GPL2')
 depends=('python2' 'python2-ipy' 'python2-python-nmap' 'python2-paramiko')
 makedepends=('git')
-source=("git+https://github.com/c0r3dump3d/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/c0r3dump3d/osueta.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/osueta"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/osueta"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/osueta"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md README
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/osueta/README.md"
+  install -Dm644 README "$pkgdir/usr/share/doc/osueta/README"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/osueta/LICENSE"
 
-  cp -a *.py "$pkgdir/usr/share/$pkgname/"
+  cp -a *.py "$pkgdir/usr/share/osueta"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/osueta" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/osueta
+exec python2 osueta.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/osueta"
 }
-

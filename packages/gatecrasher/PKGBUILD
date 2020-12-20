@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=gatecrasher
+pkgname='gatecrasher'
 pkgver=2.3ad5225
 pkgrel=1
 pkgdesc='Network auditing and analysis tool developed in Python.'
@@ -11,34 +11,33 @@ url='https://github.com/michaeltelford/gatecrasher'
 license=('BSD')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/michaeltelford/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/michaeltelford/gatecrasher')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/gatecrasher"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/gatecrasher"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/gatecrasher"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENCE.txt "$pkgdir/usr/share/licenses/$pkngmae/LICENCE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/gatecrasher/" README.md
+  install -Dm644 LICENCE.txt "$pkgdir/usr/share/licenses/gatecrasher/LICENCE.txt"
 
   rm README.md LICENCE.txt
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/gatecrasher/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/gatecrasher" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/gatecrasher
+exec python2 gatecrasher.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/gatecrasher"
 }
-

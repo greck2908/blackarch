@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=cmsfuzz
+pkgname='cmsfuzz'
 pkgver=5.6be5a98
-pkgrel=5
+pkgrel=3
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner' 'blackarch-fuzzer')
 pkgdesc='Fuzzer for wordpress, cold fusion, drupal, joomla, and phpnuke.'
 arch=('any')
@@ -11,33 +11,32 @@ url='https://github.com/nahamsec/CMSFuzz'
 license=('GPL3')
 depends=('ruby')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/nahamsec/CMSFuzz.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/nahamsec/CMSFuzz.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/CMSFuzz"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/CMSFuzz"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/cmsfuzz"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/cmsfuzz/README.md"
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/cmsfuzz"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/cmsfuzz" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/cmsfuzz
 exec ruby dirbf.rb "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/cmsfuzz"
 }
-

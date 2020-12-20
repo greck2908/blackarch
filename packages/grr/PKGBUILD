@@ -1,44 +1,46 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=grr
-pkgver=55.76f6ee9
+pkgname='grr'
+pkgver=20.9546b16
 pkgrel=1
 pkgdesc='High-throughput fuzzer and emulator of DECREE binaries.'
 groups=('blackarch' 'blackarch-fuzzer')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/trailofbits/grr'
-license=('Apache')
-depends=('gflags' 'radamsa' 'xed-intel' 'xed')
-makedepends=('git' 'clang' 'cmake' 'llvm')
-source=("git+https://github.com/trailofbits/$pkgname.git")
-sha512sums=('SKIP')
+license=('Apache2')
+depends=('gflags')
+makedepends=('git' 'clang')
+source=('git+https://github.com/trailofbits/grr.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/grr"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-build() {
-  cd $pkgname
+prepare() {
+  cd "$srcdir/grr"
 
-  mkdir -p build
-  cd build
-  cmake build -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++ \
-    -DCMAKE_BUILD_TYPE=RELEASE -DCMAKE_INSTALL_PREFIX=/usr ..
+  sed -i 's|clang-3.8|clang|' Makefile
+  sed -i 's|clang++-3.8|clang++|' Makefile
+}
+
+build() {
+  cd "$srcdir/grr"
+
   make all
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/grr"
 
-  install -dm 755 "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 755 -t "$pkgdir/usr/bin" \
+  install -Dm755 -t "$pkgdir/usr/bin" \
     bin/debug_decree_user/{grrcov,grrplay,grrshot}
-  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" *.png
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/grr/" *.png
+  install -Dm644 README.md "$pkgdir/usr/share/doc/grr/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/grr/LICENSE"
 }
-

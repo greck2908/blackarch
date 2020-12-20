@@ -1,35 +1,36 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=rfidiot
-pkgver=107.88f2ef9
+pkgname='rfidiot'
+pkgver=78.f4b5582
 pkgrel=1
 groups=('blackarch' 'blackarch-wireless')
 pkgdesc='An open source python library for exploring RFID devices.'
 url='http://rfidiot.org/'
 license=('GPL')
+makedepends=('git' 'python2-distribute' 'python2-crypto')
 depends=('python2' 'openssl')
-makedepends=('git' 'python2-distribute' 'python2-pycryptodome')
 arch=('any')
-source=("$pkgname::git+https://github.com/AdamLaurie/RFIDIOt.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/AdamLaurie/RFIDIOt')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/RFIDIOt"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/RFIDIOt"
 
+  # Change shebang lines.
   find . -type f -name '*.py' -exec sed -i '1s/python\r\?$/python2/' '{}' \;
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/RFIDIOt"
 
-  python2 setup.py install --root="$pkgdir" --optimize=1
+  python2 setup.py install --root="$pkgdir/" --optimize=1
 
   cd "$pkgdir/usr/bin"
 
@@ -46,4 +47,3 @@ package() {
     rm -f "$file"
   done
 }
-

@@ -1,36 +1,35 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=fraud-bridge
+pkgname='fraud-bridge'
 pkgver=10.775c563
 pkgrel=4
 groups=('blackarch' 'blackarch-tunnel' 'blackarch-networking')
 pkgdesc='ICMP and DNS tunneling via IPv4 and IPv6.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 depends=('libgcrypt')
 makedepends=('git')
 url='https://github.com/stealth/fraud-bridge'
 license=('GPL3')
-source=("git+https://github.com/stealth/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/stealth/fraud-bridge.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/fraud-bridge"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/fraud-bridge"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/fraud-bridge"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 fraud-bridge "$pkgdir/usr/bin/fraud-bridge"
+  install -Dm644 README "$pkgdir/usr/share/doc/fraud-bridge/README"
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/fraud-bridge/LICENSE"
 }
-

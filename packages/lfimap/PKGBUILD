@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=lfimap
+pkgname='lfimap'
 pkgver=6.0edee6d
 pkgrel=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-fuzzer')
@@ -11,33 +11,32 @@ url='https://github.com/aepereyra/lfimap/'
 license=('unknown')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/aepereyra/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/aepereyra/lfimap.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/lfimap"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/lfimap"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/lfimap"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README
+  install -Dm644 README "$pkgdir/usr/share/doc/lfimap/README"
 
   rm README
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/lfimap"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/lfimap" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/lfimap
+exec python2 lfimap.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/lfimap"
 }
-

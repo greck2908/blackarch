@@ -1,22 +1,21 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=idswakeup
-pkgver=1.0
+pkgname='idswakeup'
+pkgver='1.0'
 pkgrel=2
 groups=('blackarch' 'blackarch-recon' 'blackarch-networking' 'blackarch-scanner')
 pkgdesc='A collection of tools that allows to test network intrusion detection systems.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://www.hsc.fr/ressources/outils/idswakeup/index.html.en'
 license=('custom:unknown')
 depends=('libnet')
-source=("http://www.hsc.fr/ressources/outils/$pkgname/download/IDSwakeup-$pkgver.tgz")
-sha512sums=('1b1499860693ca83a0f0438cc6a5fe7566ea29960b9db1033b9e30570c99807ae253e0627ffcc3fbb31352f4ce6a229bad78e885d01411d2dd054e1aca769f59')
+source=("http://www.hsc.fr/ressources/outils/idswakeup/download/IDSwakeup-${pkgver}.tgz")
+sha1sums=('1b481ec7e6de4d71429419962772d9b2f9053684')
 
 package() {
-  cd "IDSwakeup-$pkgver"
+  cd "$srcdir/IDSwakeup-$pkgver"
 
-  install -Dm 755 IDSwakeup "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 IDSwakeup "$pkgdir/usr/bin/idswakeup"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/idswakeup/LICENSE"
 }
-

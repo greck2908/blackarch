@@ -1,22 +1,22 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dnsa
-pkgver=0.6
-pkgrel=1
-pkgdesc='A dns security swiss army knife.'
-arch=('x86_64' 'aarch64')
+pkgname='dnsa'
+pkgver='0.5'
+pkgrel=3
+pkgdesc='DNSA is a dns security swiss army knife.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://packetfactory.openwall.net/projects/dnsa/index.html'
 license=('GPL')
 depends=('libnet' 'libpcap')
 groups=('blackarch' 'blackarch-scanner')
-source=("http://packetfactory.openwall.net/projects/$pkgname/$pkgname-ng-current.tar.gz")
-sha512sums=('fac4d77d0c74786905eb6862064fad2deab0a6213f2dbb91daba367683e1cb69ac1eea9936adafc39983aa4d6dc3c61c3138b6a067209380dd648422a633d87f')
+source=("http://packetfactory.openwall.net/projects/dnsa/dnsa-current.tar.gz")
+sha1sums=('06ea0a82972db05624fc8e8617f09dbcbf0478e2')
 
 build() {
-  cd "$pkgname-$pkgver-ng-beta1/sources"
+  cd "$srcdir/dnsa-$pkgver/sources"
 
-  if [[ "$CARCH" == "x86_64" ]];
+  if [[ "$CARCH" == "i686" || "$CARCH" == "x86_64" ]];
   then
     ./configure --prefix=/usr
   else
@@ -26,14 +26,8 @@ build() {
   make
 }
 
-package() {
-  cd "$pkgname-$pkgver-ng-beta1/sources"
-
-  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+package(){
+  cd "$srcdir/dnsa-$pkgver/sources"
 
   make DESTDIR="$pkgdir" install
-
-  cd ..
-  cp -a docs/* "$pkgdir/usr/share/doc/$pkgname/"
 }
-

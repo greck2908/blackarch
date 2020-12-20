@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=foresight
+pkgname='foresight'
 pkgver=57.6f48984
-pkgrel=4
+pkgrel=1
 pkgdesc='A tool for predicting the output of random number generators.'
 groups=('blackarch' 'blackarch-crypto')
 arch=('any')
@@ -11,27 +11,26 @@ url='https://github.com/ALSchwalm/foresight'
 license=('MIT')
 depends=('python' 'python-argparse')
 makedepends=('git' 'python-setuptools')
-source=("git+https://github.com/ALSchwalm/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/ALSchwalm/foresight.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/foresight"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/foresight"
 
   python setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/foresight"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr --skip-build
+  python setup.py install --root="$pkgdir" --prefix=/usr
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/foresight/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/foresight/LICENSE"
 }
-

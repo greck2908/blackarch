@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=abcd
+pkgname='abcd'
 pkgver=4.2738809
 pkgrel=2
 pkgdesc='ActionScript ByteCode Disassembler.'
@@ -11,29 +11,28 @@ url='https://github.com/MITRECND/abcd'
 license=('BSD')
 depends=('python2' 'python2-setuptools' 'python2-pyswf')
 makedepends=('git')
-source=("git+https://github.com/MITRECND/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/MITRECND/abcd.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/abcd"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/abcd"
 
   sed -i '1 i\#!/usr/bin/python2' abcdump.py abcgraph.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/abcd"
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr
+  python2 setup.py install --root="$pkgdir"
 
-  install -Dm 755 abcdump.py "$pkgdir/usr/bin/abcdump"
-  install -Dm 755 abcgraph.py "$pkgdir/usr/bin/abcgraph"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 abcdump.py "$pkgdir/usr/bin/abcdump"
+  install -Dm755 abcgraph.py "$pkgdir/usr/bin/abcgraph"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/abcd/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/abcd/LICENSE"
 }
-

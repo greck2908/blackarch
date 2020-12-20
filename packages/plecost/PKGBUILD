@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=plecost
+pkgname='plecost'
 pkgver=98.1a4a11b
-pkgrel=4
+pkgrel=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-fingerprint')
 pkgdesc='Wordpress finger printer Tool.'
 arch=('any')
@@ -13,26 +13,31 @@ depends=('python' 'python-lxml' 'python-lxml' 'python-termcolor'
          'python-simplejson' 'python-aiohttp' 'python-chardet' 'python-argparse'
          'python-beautifulsoup4' 'python-sphinx_rtd_theme')
 makedepends=('git' 'python-setuptools')
-source=("git+https://github.com/iniqua/$pkgname.git"
-        'requirements.txt.patch')
-sha512sums=('SKIP'
-            '80c9aa3e0b15d0372e9949a946f36f49122ae9343a765ad637a256d60fcf8869d3ae69790c4a72800ecba6fcf3a2265dd83196255100c71a0da5c43ab8cedd1c')
+source=('git+https://github.com/iniqua/plecost.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/plecost"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  patch -p1 < requirements.txt.patch
+  cd "$srcdir/plecost"
+
+  sed -i 's/==2.2.3//' requirements.txt setup.py
+  sed -i 's/==0.14.4//' requirements.txt setup.py
+  sed -i 's/==4.3.2//' requirements.txt setup.py
+  sed -i 's/==1.1.0//' requirements.txt setup.py
+  sed -i 's/==0.1.6//' requirements.txt setup.py
+  sed -i 's/==1.0.7//' requirements.txt setup.py
+  sed -i 's/==3.8.0//' requirements.txt setup.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/plecost"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr -O1
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/plecost/" README.md CHANGELOG.md
 }
-

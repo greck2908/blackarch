@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dumb0
+pkgname='dumb0'
 pkgver=19.1493e74
 pkgrel=2
 groups=('blackarch' 'blackarch-automation' 'blackarch-webapp')
@@ -11,26 +11,25 @@ url='https://github.com/0verl0ad/Dumb0'
 license=('GPL2')
 depends=('perl' 'perl-libwww')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/0verl0ad/Dumb0")
-sha512sums=('SKIP')
+source=('git+https://github.com/0verl0ad/Dumb0')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Dumb0"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/Dumb0"
 
   sed -i '1i\#!/usr/bin/perl' Dumb0.pl
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Dumb0"
 
-  install -Dm 755 Dumb0.pl "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 Dumb0.pl "$pkgdir/usr/bin/dumb0"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/dumb0/README"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/dumb0/LICENSE"
 }
-

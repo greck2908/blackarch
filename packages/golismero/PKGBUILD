@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=golismero
-pkgver=73.7d605b9
+pkgname='golismero'
+pkgver=61.1eb98ed
 pkgrel=1
 groups=('blackarch' 'blackarch-webapp')
 pkgdesc='Opensource web security testing framework.'
@@ -18,29 +18,28 @@ depends=('python2' 'python2-beautifulsoup3' 'python2-colorizer' 'python2-yaml'
          'python2-psycopg2' 'python2-argparse')
 makedepends=('git')
 options=('!strip')
-source=("git+https://github.com/golismero/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/golismero/golismero.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/golismero"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/golismero"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/golismero"
+  mkdir -p "$pkgdir/usr/bin"
 
-  cp -a * "$pkgdir/usr/share/$pkgname"
+  cp -a * "$pkgdir/usr/share/golismero"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/golismero" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/golismero
+exec python2 golismero.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/golismero"
 }
-

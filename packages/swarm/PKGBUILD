@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=swarm
+pkgname='swarm'
 pkgver=41.1713c1e
-pkgrel=4
+pkgrel=2
 epoch=1
 pkgdesc='A distributed penetration testing tool.'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-recon' 'blackarch-cracker'
@@ -11,36 +11,35 @@ groups=('blackarch' 'blackarch-scanner' 'blackarch-recon' 'blackarch-cracker'
 arch=('any')
 url='https://github.com/Arvin-X/swarm'
 license=('GPL3')
-depends=('python2' 'python2-ipy' 'python2-pymongo')
+depends=('python2' 'python2-ipy')
 makedepends=('git')
-source=("git+https://github.com/Arvin-X/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/Arvin-X/swarm.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/swarm"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/swarm"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/swarm"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md docs/*
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/swarm/" README.md docs/*
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/swarm/LICENSE"
 
   rm -rf docs README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/swarm"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/swarm" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/swarm
+exec python2 swarm.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/swarm"
 }
-

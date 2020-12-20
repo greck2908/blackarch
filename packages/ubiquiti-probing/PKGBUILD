@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ubiquiti-probing
+pkgname='ubiquiti-probing'
 pkgver=5.c28f4c1
-pkgrel=4
+pkgrel=2
 pkgdesc='A Ubiquiti device discovery tool.'
 groups=('blackarch' 'blackarch-recon' 'blackarch-scanner')
 arch=('any')
@@ -11,19 +11,18 @@ url='https://github.com/headlesszeke/ubiquiti-probing'
 license=('custom:unknown')
 depends=('ruby')
 makedepends=('git')
-source=("git+https://github.com/headlesszeke/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/headlesszeke/ubiquiti-probing.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ubiquiti-probing"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ubiquiti-probing"
 
-  install -Dm 755 scan.rb "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm755 scan.rb "$pkgdir/usr/bin/ubiquiti-probing"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/ubiquiti-probing/README.md"
 }
-

@@ -1,29 +1,29 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dirbuster-ng
+pkgname='dirbuster-ng'
 pkgver=9.0c34920
 pkgrel=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 pkgdesc='C CLI implementation of the Java dirbuster tool.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/digination/dirbuster-ng'
 license=('custom:unknown')
 depends=('curl')
 makedepends=('git' 'cmake')
-source=("git+https://github.com/digination/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/digination/dirbuster-ng.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/dirbuster-ng"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/dirbuster-ng"
 
-  mkdir -p build
+  mkdir build
 
   cd build
 
@@ -33,15 +33,14 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/dirbuster-ng"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/dirbuster-ng"
 
-  install -Dm 755 "build/$pkgname" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/README"
-  cp -a wordlists "$pkgdir/usr/share/$pkgname/wordlists"
+  install -Dm755 build/dirbuster-ng "$pkgdir/usr/bin/dirbuster-ng"
+  install -Dm644 README "$pkgdir/usr/share/doc/dirbuster-ng/README"
+  cp -a wordlists "$pkgdir/usr/share/dirbuster-ng/wordlists"
 
-  find "$pkgdir/usr/share/$pkgname/" -type d -exec chmod 755 {} +
-  find "$pkgdir/usr/share/$pkgname/" -type f -exec chmod 644 {} +
+  find "$pkgdir/usr/share/dirbuster-ng/" -type d -exec chmod 755 {} +
+  find "$pkgdir/usr/share/dirbuster-ng/" -type f -exec chmod 644 {} +
 }
-

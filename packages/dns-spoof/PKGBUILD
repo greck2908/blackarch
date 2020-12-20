@@ -1,34 +1,33 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dns-spoof
-pkgver=13.81ba29f
+pkgname='dns-spoof'
+pkgver=12.3918a10
 pkgrel=1
 pkgdesc='Yet another DNS spoof utility.'
 groups=('blackarch' 'blackarch-spoof')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/maurotfilho/dns-spoof'
 license=('GPL')
 depends=('libpcap')
 makedepends=('git')
-source=("git+https://github.com/maurotfilho/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/maurotfilho/dns-spoof.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/dns-spoof"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/dns-spoof"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/dns-spoof"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm755 dns-spoof "$pkgdir/usr/bin/dns-spoof"
 }
-

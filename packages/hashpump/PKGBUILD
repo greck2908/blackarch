@@ -1,39 +1,38 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=hashpump
+pkgname='hashpump'
 pkgver=49.314268e
 pkgrel=1
 pkgdesc='A tool to exploit the hash length extension attack in various hashing algorithms.'
 groups=('blackarch' 'blackarch-crypto' 'blackarch-cracker')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/bwall/HashPump'
 license=('MIT')
 depends=('openssl')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/bwall/HashPump.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/bwall/HashPump.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/HashPump"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 
 build() {
-  cd $pkgname
+  cd "$srcdir/HashPump"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/HashPump"
 
-  install -dm 755 "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/bin"
 
   make INSTALLLOCATION="$pkgdir/usr/bin" install
 
-  install -Dm 644 LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 LICENSE.TXT "$pkgdir/usr/share/licenses/hashpump/LICENSE.TXT"
 }
-

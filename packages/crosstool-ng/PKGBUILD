@@ -1,31 +1,28 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=crosstool-ng
-pkgver=1.24.0
-pkgrel=2
+pkgname='crosstool-ng'
+pkgver='1.23.0'
+pkgrel=1
 pkgdesc='Versatile (cross-)toolchain generator.'
 groups=('blackarch' 'blackarch-misc')
-arch=('x86_64' 'aarch64')
-url='https://crosstool-ng.github.io/'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='http://crosstool-ng.org/'
 license=('GPL')
 depends=('make' 'gperf' 'wget' 'help2man')
-makedepends=('unzip')
-source=("https://github.com/crosstool-ng/crosstool-ng/archive/$pkgname-$pkgver.tar.gz")
-sha512sums=('a0f355b37e221687f5aa2a0ded701bd503debfb29d2200ee8737c141c430078678be04690e491b3927792ac43d2499e5899bd993f1e514ebac737fd1d126871f')
+source=("http://crosstool-ng.org/download/crosstool-ng/crosstool-ng-${pkgver}.tar.bz2")
+sha1sums=('9b8dcb493af9e8f7dc6a306833fe9c377f1c6bb7')
 
 build() {
-  cd "$pkgname-$pkgname-$pkgver"
+  cd "$srcdir/crosstool-ng-$pkgver"
 
-  ./bootstrap
   ./configure --prefix=/usr
 
   make -j1
 }
 
 package() {
-  cd "$pkgname-$pkgname-$pkgver"
+  cd "$srcdir/crosstool-ng-$pkgver"
 
   make DESTDIR="$pkgdir" install
 }
-

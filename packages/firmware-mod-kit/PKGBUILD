@@ -1,27 +1,20 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=firmware-mod-kit
-pkgver=145.104c821
-pkgrel=2
+pkgname='firmware-mod-kit'
+pkgver='099'
+pkgrel=5
 groups=('blackarch' 'blackarch-firmware')
 pkgdesc='Modify firmware images without recompiling.'
-url='https://github.com/rampageX/firmware-mod-kit'
-arch=('x86_64' 'aarch64')
+url='http://code.google.com/p/firmware-mod-kit'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 license=('MIT')
 depends=('python-magic')
-makedepends=('gcc' 'git' 'make')
-source=("$pkgname::git+https://github.com/rampageX/$pkgname.git")
-sha512sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+source=("http://firmware-mod-kit.googlecode.com/files/fmk_${pkgver}.tar.gz")
+sha1sums=('3d9aba969bdd88bf32940b9879b9e714ea7d2147')
 
 build(){
-  cd "$pkgname/src"
+  cd "$srcdir/fmk/src"
 
   ./configure --prefix=/usr
 
@@ -29,19 +22,24 @@ build(){
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/fmk"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
-  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+  # Base directories
+  mkdir -p "$pkgdir/usr/share/firmware-mod-kit"
+  mkdir -p "$pkgdir/usr/share/doc/firmware-mod-kit"
 
-  install -m 755 *.sh "$pkgdir/usr/share/$pkgname/"
-  install -m 644 *.inc "$pkgdir/usr/share/$pkgname/"
-  install -m 644 firmware_mod_kit_version.txt "$pkgdir/usr/share/$pkgname/"
+  # Shell scripts
+  install -m755 *.sh "$pkgdir/usr/share/firmware-mod-kit/"
 
-  install -m 644 *.htm "$pkgdir/usr/share/doc/$pkgname/"
-  install -m 644 *.md "$pkgdir/usr/share/doc/$pkgname/"
+  # Include files
+  install -m644 *.inc "$pkgdir/usr/share/firmware-mod-kit/"
 
-  cp -a --no-preserve=ownership ipk_template other-scripts src \
-    "$pkgdir/usr/share/$pkgname/"
+  # Docs
+  install -m644 *.htm "$pkgdir/usr/share/doc/firmware-mod-kit/"
+  install -m644 firmware_mod_kit_version.txt \
+    "$pkgdir/usr/share/firmware-mod-kit/"
+
+  # Bin
+  cp -a --no-preserve=ownership src ipk_template \
+    "$pkgdir/usr/share/firmware-mod-kit/"
 }
-

@@ -1,56 +1,49 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=quicksand-lite
-pkgver=32.42af152
+pkgname='quicksand-lite'
+pkgver=27.d3cd912
 pkgrel=1
 groups=('blackarch' 'blackarch-defensive' )
 pkgdesc='Command line tool for scanning streams within office documents plus xor db attack.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/tylabs/quicksand_lite'
 license=('MPL2')
 depends=('zlib' 'libzip' 'yara')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/tylabs/quicksand_lite.git"
-        'libqs.h.patch')
-sha512sums=('SKIP'
-            '8a250b79d982e194d870b03f7113fa1b2a78946b5aa9f42ecc57b8be10e25ca6a53c40ac90e80a03eef5df767acbe7053e39e3ee514bf8f74ec953e44c0dce10')
+source=('git+https://github.com/tylabs/quicksand_lite.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/quicksand_lite"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  patch -p1 < libqs.h.patch
-}
-
 build() {
-  cd $pkgname
+  cd "$srcdir/quicksand_lite"
 
   gcc -g -o quicksand quicksand.c -L/usr/lib -lyara -lzip -lz
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/quicksand_lite"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/quicksand-lite"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" INSTALL.txt
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/quicksand-lite" INSTALL.txt
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/quicksand-lite/LICENSE"
 
   rm INSTALL.txt LICENSE
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/quicksand-lite"
 
   cat > "$pkgdir/usr/bin/quicksand" << EOF
 #!/bin/sh
-export QS=/usr/share/$pkgname
-exec /usr/share/$pkgname/quicksand "\$@"
+export QS=/usr/share/quicksand-lite
+exec /usr/share/quicksand-lite/quicksand "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/quicksand"
+  chmod a+x "$pkgdir/usr/bin/quicksand"
 }
-

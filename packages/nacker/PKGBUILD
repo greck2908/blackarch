@@ -1,42 +1,41 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=nacker
+pkgname='nacker'
 pkgver=23.b67bb39
-pkgrel=3
+pkgrel=2
 groups=('blackarch' 'blackarch-networking')
 pkgdesc='A tool to circumvent 802.1x Network Access Control on a wired LAN.'
 arch=('any')
 url='https://github.com/carmaa/nacker'
 license=('GPL2')
-depends=('python2' 'python2-netifaces' 'python2-netaddr' 'python2-scapy')
+depends=('python2' 'python2-netifaces' 'python2-netaddr' 'scapy')
 makedepends=('git')
-source=("git+https://github.com/carmaa/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/carmaa/nacker.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/nacker"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/nacker"
 
-  install -dm 755 "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 644 $pkgname "$pkgdir/usr/share/$pkgname/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 nacker "$pkgdir/usr/share/nacker/nacker"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/nacker/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/nacker/LICENSE"
 
-  cp -a caravan "$pkgdir/usr/share/$pkgname/caravan"
+  cp -a caravan "$pkgdir/usr/share/nacker/caravan"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/nacker" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname "\$@"
+cd /usr/share/nacker
+exec python2 nacker "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/nacker"
 }
-

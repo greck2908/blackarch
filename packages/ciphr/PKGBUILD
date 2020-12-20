@@ -1,52 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ciphr
-pkgver=127.5da7137
-_gemver=0.0.6
-pkgrel=9
+pkgname='ciphr'
+pkgver=123.5cf32ef
+_gemver='0.0.1'
+pkgrel=2
 pkgdesc='A CLI tool for encoding, decoding, encryption, decryption, and hashing streams of data.'
 groups=('blackarch' 'blackarch-crypto')
 url='https://github.com/frohoff/ciphr'
 arch=('any')
 license=('MIT')
-depends=('ruby' 'ruby-bundler')
-makedepends=('git')
-source=("git+https://github.com/frohoff/$pkgname.git")
-install="$pkgname.install"
+depends=('ruby' 'ruby-parslet' 'ruby-base32' 'ruby-slop')
+makedepends=('git' 'ruby-bundler')
+source=('git+https://github.com/frohoff/ciphr.git')
 sha256sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ciphr"
 
   echo $(git rev-list --count master).$(git rev-parse --short master)
 }
 
-prepare() {
-  cd $pkgname
+build() {
+  cd "$srcdir/ciphr"
 
-  sed -i 's|"bundler", "~> 1.3"|"bundler"|g' "$pkgname.gemspec"
+  bundle install --path=bundle
+  bundle exec rake build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ciphr"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname/"
+  local _gemdir="$(ruby -e'puts Gem.default_dir')"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md TODO
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  gem install --ignore-dependencies --no-user-install -i "$pkgdir/$_gemdir" \
+    -n "$pkgdir/usr/bin" pkg/ciphr-${_gemver}.gem
 
-  rm README.md LICENSE.txt
+  rm "$pkgdir/$_gemdir/cache/ciphr-${_gemver}.gem"
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
-
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname
-exec bundle exec ./bin/$pkgname "\$@"
-EOF
-
-  chmod a+x "$pkgdir/usr/bin/$pkgname"
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/ciphr/LICENSE.txt"
 }
-

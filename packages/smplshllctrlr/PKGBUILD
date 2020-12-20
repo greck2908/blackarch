@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=smplshllctrlr
+pkgname='smplshllctrlr'
 pkgver=9.2baf390
 pkgrel=2
 pkgdesc='PHP Command Injection exploitation tool.'
@@ -11,33 +11,32 @@ url='https://github.com/z0noxz/smplshllctrlr'
 license=('custom:unknown')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/z0noxz/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/z0noxz/smplshllctrlr.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/smplshllctrlr"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/smplshllctrlr"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/smplshllctrlr"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/smplshllctrlr/README.md"
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname"
+  cp -a * "$pkgdir/usr/share/smplshllctrlr"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/smplshllctrlr" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 simple-shell-controller.py "\$@"
+cd /usr/share/smplshllctrlr
+exec python2 simple-shell-controller.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/smplshllctrlr"
 }
-

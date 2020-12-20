@@ -1,21 +1,21 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=3proxy
-pkgver=0.8.13
+pkgname='3proxy'
+pkgver='0.8.11'
 pkgrel=1
 groups=('blackarch' 'blackarch-proxy')
 pkgdesc='Tiny free proxy server.'
 url='http://3proxy.ru/'
 license=('GPL')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 options=('!makeflags')
 depends=('openssl')
-source=("https://github.com/z3APA3A/$pkgname/archive/$pkgver.tar.gz")
-sha512sums=('94b4a2568917c1d720276e38050a13e144d3e92ff41edd02eeebac0a6c21e6a839a58ea7dcb3abc03370e0f18452c953cfd7ad15ebac87e66b78d94fa52fbd79')
+source=("http://3proxy.ru/${pkgver}/3proxy-${pkgver}.tgz")
+sha1sums=('0bef5462e558db2d86cce92f8dc916b494dd7bde')
 
 prepare() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/3proxy"
 
   sed -i "s|/usr/bin/install|/bin/install|g" Makefile.Linux
   sed -i "s|/usr/local|/usr|g" Makefile.Linux
@@ -25,19 +25,16 @@ prepare() {
 }
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/3proxy"
 
   make -f Makefile.Linux prefix=/usr
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/3proxy"
 
-  make -f Makefile.Linux install DESTDIR="$pkgdir"
-
-  find "$pkgdir/etc/$pkgname" -type f | xargs chmod 644
+  make -f Makefile.Linux install "DESTDIR=$pkgdir/"
 
   # Fix conflict with extra/libproxy.
-  mv "$pkgdir/usr/bin/proxy" "$pkgdir/usr/bin/$pkgname"
+  mv "$pkgdir/usr/bin/proxy" "$pkgdir/usr/bin/3proxy"
 }
-

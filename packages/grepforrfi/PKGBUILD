@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=grepforrfi
-pkgver=0.1
+pkgname='grepforrfi'
+pkgver='0.1'
 pkgrel=4
 groups=('blackarch' 'blackarch-scanner')
 pkgdesc='Simple script for parsing web logs for RFIs and Webshells v1.2'
@@ -10,15 +10,20 @@ url='http://www.irongeek.com/downloads/grepforrfi.txt'
 arch=('any')
 license=('GPL2')
 depends=('python2')
-source=('http://www.irongeek.com/downloads/grepforrfi.txt')
-sha512sums=('9da2f683b68470bc540833686f0b7ba10ab6e27dd9647d5fee85941fa55a3256d0a3fead03392e663dcc3ad63ee644a4406f5d50c8e9647aaa6ebde0ee8e20c5')
-install="$pkgname.install"
+install='grepforrfi.install'
+source=('http://www.irongeek.com/downloads/grepforrfi.txt'
+        'grepforrfi.install')
+sha1sums=('73ca0cad49310ff3dc0efac3de5257bf6ed3a831'
+          'aa4642d61fd98a0d24ccfa10e841836c6a460041')
 
 prepare(){
-  sed -i 's/python2.5/python2/' "$pkgname.txt"
+  cd "$srcdir"
+
+  sed -i 's/python2.5/python2/' grepforrfi.txt
 }
 
 package() {
-  install -Dm 755 "$pkgname.txt" "$pkgdir/usr/bin/$pkgname"
-}
+  cd "$srcdir"
 
+  install -Dm755 grepforrfi.txt "$pkgdir/usr/bin/grepforrfi"
+}

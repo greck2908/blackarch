@@ -1,42 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=owasp-zsc
-pkgver=315.5bb9fed
+pkgname='owasp-zsc'
+pkgver=311.0d6dcaa
 pkgrel=1
 groups=('blackarch' 'blackarch-exploitation')
 arch=('any')
 pkgdesc='Shellcode/Obfuscate Code Generator.'
 url='https://github.com/zscproject/OWASP-ZSC'
 license=('GPL3')
-depends=('python2')
+depends=('python2' 'java-environment')
+#depends=('python2' 'java-environment' 'ironpython')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/zscproject/OWASP-ZSC.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/zscproject/OWASP-ZSC.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/OWASP-ZSC"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/OWASP-ZSC"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "${pkgdir}/usr/bin"
+  mkdir -p "${pkgdir}/usr/share/owasp-zsc"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" readme.md CHANGELOG.md
-  install -Dm 644 LICENSE.md "${pkgdir}/usr/share/licenses/$pkgname/LICENSE.md"
+  install -Dm644 -t "$pkgdir/usr/share/doc/owasp-zsc/" readme.md CHANGELOG.md
+  install -Dm644 LICENSE.md "${pkgdir}/usr/share/licenses/owasp-zsc/LICENSE.md"
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/owasp-zsc"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/owasp-zsc" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 zsc.py "\$@"
+cd /usr/share/owasp-zsc
+exec python2 zsc.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/owasp-zsc"
 }
-

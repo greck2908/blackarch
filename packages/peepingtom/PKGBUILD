@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=peepingtom
+pkgname='peepingtom'
 pkgver=56.bc6f4d8
 pkgrel=2
 epoch=1
@@ -12,36 +12,35 @@ url='https://bitbucket.org/LaNMaSteR53/peepingtom'
 license=('GPL3')
 depends=('python2' 'curl' 'phantomjs')
 makedepends=('git')
-source=("git+https://bitbucket.org/LaNMaSteR53/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://bitbucket.org/LaNMaSteR53/peepingtom.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/peepingtom"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/peepingtom"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/peepingtom"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/peepingtom/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/peepingtom/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/peepingtom"
 
-  ln -s /usr/bin/phantomjs "$pkgdir/usr/share/$pkgname/phantomjs"
+  ln -s /usr/bin/phantomjs "$pkgdir/usr/share/peepingtom/phantomjs"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/peepingtom" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/peepingtom
+exec python2 peepingtom.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/peepingtom"
 }
-

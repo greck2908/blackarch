@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dnsteal
-pkgver=26.8b5ed85
-pkgrel=1
+pkgname='dnsteal'
+pkgver=23.9b3b929
+pkgrel=2
 groups=('blackarch' 'blackarch-networking')
 pkgdesc='DNS Exfiltration tool for stealthily sending files over DNS requests..'
 arch=('any')
@@ -11,26 +11,25 @@ url='https://github.com/m57/dnsteal'
 license=('GPL2')
 makedepends=('git')
 depends=('python2')
-source=("git+https://github.com/m57/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/m57/dnsteal.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/dnsteal"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/dnsteal"
 
-  sed -i 's|env python|env python2|' "$pkgname.py"
+  sed -i 's|env python|env python2|' dnsteal.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/dnsteal"
 
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 dnsteal.py "$pkgdir/usr/bin/dnsteal"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/dnsteal/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/dnsteal/LICENSE"
 }
-

@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=msf-mpc
-pkgver=33.2acb87f
+pkgname='msf-mpc'
+pkgver=26.13e9f7f
 pkgrel=1
 groups=('blackarch' 'blackarch-automation' 'blackarch-backdoor'
         'blackarch-malware')
@@ -12,22 +12,21 @@ url='https://github.com/g0tmi1k/mpc'
 license=('MIT')
 depends=('metasploit')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/g0tmi1k/mpc.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/g0tmi1k/mpc.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/mpc"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/mpc"
 
-  install -dm 755 "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 755 msfpc.sh "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 mpc.sh "$pkgdir/usr/bin/msf-mpc"
+  install -Dm644 -t "$pkgdir/usr/share/doc/msf-mpc/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/msf-mpc/LICENSE"
 }
-

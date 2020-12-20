@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=sshscan
-pkgver=1.0
+pkgname='sshscan'
+pkgver='1.0'
 pkgrel=2
 epoch=1
 groups=('blackarch' 'blackarch-cracker' 'blackarch-scanner')
@@ -12,14 +12,17 @@ url='https://github.com/getdual/scripts-n-tools/blob/master/sshscan.py'
 license=('unknown')
 depends=('python2' 'python2-pexpect' 'python2-netaddr')
 makedepends=('git')
-source=("https://raw.githubusercontent.com/getdual/scripts-n-tools/master/$pkgname.py")
-sha512sums=('ab4a15eb66c1f1767a0266321a46afcd39a0df8229ad6e23482dda4a1b36f79b8d9fd996a66e135827f5e73f3d724b7a7dace42ca7d6844513d7eb50db0bbab5')
+source=('https://raw.githubusercontent.com/getdual/scripts-n-tools/master/sshscan.py')
+sha1sums=('db02afe30de468336036088c8583a0686a8483c5')
 
 prepare() {
-  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' "$pkgname.py"
+  cd "$srcdir"
+
+  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' sshscan.py
 }
 
 package() {
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
-}
+  cd "$srcdir"
 
+  install -Dm755 sshscan.py "$pkgdir/usr/bin/sshscan"
+}

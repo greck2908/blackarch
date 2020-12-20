@@ -1,42 +1,52 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=radare2-unicorn
-pkgver=616.1943c67
+pkgname='radare2-unicorn'
+pkgver=409.4918331
 pkgrel=1
 pkgdesc='Unicorn Emulator Plugin for radare2.'
 groups=('blackarch' 'blackarch-disassembler' 'blackarch-binary'
         'blackarch-reversing')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/radare/radare2-extras/tree/master/unicorn'
 license=('GPL3')
-depends=('radare2' 'unicorn' 'unicorn' 'yara' 'openssl' 'jansson' 'capstone')
+depends=('radare2' 'unicorn' 'unicorn' 'yara')
 makedepends=('git' 'pkg-config')
-source=("$pkgname::git+https://github.com/radare/radare2-extras.git")
-install="$pkgname.install"
-sha512sums=('SKIP')
+source=('git+https://github.com/radare/radare2-extras.git')
+install='radare2-unicorn.install'
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/radare2-extras"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
+prepare() {
+  cd "$srcdir/radare2-extras"
+
+ # sed -i 's|~/.config/radare2/plugins|/usr/share/radare2-extras/plugins/unicorn|' \
+ #   unicorn/Makefile
+}
+
 build() {
-  cd $pkgname
+  cd "$srcdir/radare2-extras"
 
   ./configure --prefix=/usr
 
-  make unicorn
+  make all
 
   cd unicorn
+
+  ./configure --prefix=/usr
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/radare2-extras"
 
-  make DESTDIR="$pkgdir" unicorn-install
+  cd unicorn
+
+  install -Dm755 -t "$pkgdir/usr/share/radare2-extras/plugins/unicorn" *.so
 }
-

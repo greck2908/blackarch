@@ -1,49 +1,48 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=flashscanner
+pkgname='flashscanner'
 pkgver=11.6815b02
-pkgrel=4
+pkgrel=2
 groups=('blackarch' 'blackarch-scanner' 'blackarch-webapp')
 pkgdesc='Flash XSS Scanner.'
 arch=('any')
 url='https://github.com/riusksk/FlashScanner'
 license=('custom:unknown')
-depends=('perl' 'perl-uri' 'perl-libwww')
+depends=('perl' 'perl-uri')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/riusksk/FlashScanner.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/riusksk/FlashScanner.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/FlashScanner"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/FlashScanner"
 
   sed -i 's|# !/url/bin/perl -w|#!/usr/bin/perl -w|' FlashScanner.pl
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/FlashScanner"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/flashscanner"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/FlashScanner/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/flashscanner"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/flashscanner" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/flashscanner
 exec perl FlashScanner.pl "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/flashscanner"
 }
-

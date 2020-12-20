@@ -1,30 +1,30 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=urlcrazy
-pkgver=0.5
-pkgrel=12
+pkgname='urlcrazy'
+pkgver='0.5'
+pkgrel=10
 groups=('blackarch' 'blackarch-webapp')
 pkgdesc='Generate and test domain typos and variations to detect and perform typo squatting, URL hijacking, phishing, and corporate espionage.'
 arch=('any')
 url='http://www.morningstarsecurity.com/research/urlcrazy'
 license=('custom')
 depends=('ruby')
-source=("http://www.morningstarsecurity.com/downloads/$pkgname-$pkgver.tar.gz")
-sha512sums=('157ad3ce675fff67faba61be8332985a9e90bb3308cf8629f91aff5d5940af6bbd71c44f6719d08fc01216c7ea7b8b1f57891d689dcaaf523ad240865776e1f0')
+source=("http://www.morningstarsecurity.com/downloads/urlcrazy-${pkgver}.tar.gz")
+sha1sums=('23234a40fbcc51d3f96dbf43eadc302bfe11abc7')
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/urlcrazy-$pkgver"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/urlcrazy"
+  mkdir -p "$pkgdir/usr/share/doc/urlcrazy"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README CHANGELOG
+  install -Dm644 -t "$pkgdir/usr/share/doc/urlcrazy" README CHANGELOG
 
   rm README CHANGELOG
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/urlcrazy"
 
-  ln -s "/usr/share/$pkgname/$pkgname" "$pkgdir/usr/bin/$pkgname"
+  ln -s "/usr/share/urlcrazy/urlcrazy" "$pkgdir/usr/bin/urlcrazy"
 }
-

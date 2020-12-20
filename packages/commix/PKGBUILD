@@ -1,27 +1,31 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=commix
-pkgver=1512.62651314
+pkgname='commix'
+pkgver=1006.bbb4389
 pkgrel=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-automation'
         'blackarch-exploitation')
 pkgdesc='Automated All-in-One OS Command Injection and Exploitation Tool.'
 arch=('any')
-url='https://github.com/commixproject/commix'
-license=('custom:unknown' 'AGPL')
-depends=('python2' 'python2-scapy')
+url='https://github.com/stasinopoulos/commix'
+license=('custom:unknown' 'GAGPL')
+depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/commixproject/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/stasinopoulos/commix.git')
+#        'settings.py.patch')
+sha1sums=('SKIP')
+#          'b9d759d0481f0b4bcd6920b7e44cfd333228de7c')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/commix"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
+  cd "$srcdir"
+
   sed -i '20 i\from os.path import expanduser' commix/src/utils/settings.py
   sed -i \
     's|OUTPUT_DIR = ".output/"|OUTPUT_DIR = expanduser("~") + "/commix-output/"|' \
@@ -31,25 +35,24 @@ prepare() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/commix"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/commix"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md readme/AUTHOR \
-    readme/CHANGELOG.md COMMITMENT.txt
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/commix/" README.md readme/AUTHOR \
+    readme/CHANGELOG.md
+  install -Dm644 readme/COPYING "$pkgdir/usr/share/licenses/commix/COPYING"
 
-  rm -rf README.md readme/ LICENSE.txt
+  rm -rf README.md readme/
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/commix"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/commix" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/commix
+exec python2 commix.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/commix"
 }
-

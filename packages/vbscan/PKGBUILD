@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=vbscan
-pkgver=39.2b1ce48
-pkgrel=2
+pkgname='vbscan'
+pkgver=25.27c77e9
+pkgrel=1
 epoch=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-fuzzer' 'blackarch-scanner')
 pkgdesc='A black box vBulletin vulnerability scanner written in perl.'
@@ -12,34 +12,34 @@ url='https://github.com/rezasp/vbscan'
 license=('GPL3')
 depends=('perl')
 makedepends=('git')
-source=("git+https://github.com/rezasp/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/rezasp/vbscan.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/vbscan"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/vbscan"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/vbscan"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG.md
-  install -Dm 644 LICENCE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/vbscan/README.md"
+  install -Dm644 -t "$pkgdir/usr/share/licenses/vbscan/" CHANGELOG.md \
+    COPYING.GPL LICENCE
 
-  rm *.md
+  rm README.md CHANGELOG.md COPYING.GPL LICENCE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/vbscan/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/vbscan" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec perl $pkgname.pl "\$@"
+cd /usr/share/vbscan
+exec perl vbscan.pl "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/vbscan"
 }
-

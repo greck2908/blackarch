@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=shellme
+pkgname='shellme'
 pkgver=5.d5206f0
 pkgrel=1
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-automation')
@@ -11,30 +11,29 @@ arch=('any')
 license=('MIT')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/hatRiot/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/hatRiot/shellme.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/shellme"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/shellme"
 
-  install -dm 755 "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/bin/"
 
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/share/$pkgname/$pkgname.py"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/shellme/LICENSE.md"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/shellme/README.md"
+  install -Dm755 shellme.py "$pkgdir/usr/share/shellme/shellme.py"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/shellme" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/shellme
+exec python2 shellme.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/shellme"
 }
-

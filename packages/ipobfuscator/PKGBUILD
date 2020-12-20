@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ipobfuscator
+pkgname='ipobfuscator'
 pkgver=26.0a7f802
 pkgrel=1
 pkgdesc='A simple tool to convert the IP to a DWORD IP.'
@@ -11,26 +11,25 @@ url='https://github.com/OsandaMalith/IPObfuscator'
 license=('custom:unknown')
 depends=()
 makedepends=('git')
-source=("$pkgname::git+https://github.com/OsandaMalith/IPObfuscator.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/OsandaMalith/IPObfuscator.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/IPObfuscator"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/IPObfuscator"
 
-  gcc ip.c -o $pkgname
+  gcc ip.c -o ipobfuscator
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/IPObfuscator"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 ipobfuscator "$pkgdir/usr/bin/ipobfuscator"
+  install -Dm644 -t "$pkgdir/usr/share/doc/ipobfuscator/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/ipobfuscator/LICENSE"
 }
-

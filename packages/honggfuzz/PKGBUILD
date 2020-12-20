@@ -1,38 +1,36 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=honggfuzz
-pkgver=3831.5810856f
+pkgname='honggfuzz'
+pkgver='1.2'
 pkgrel=1
 groups=('blackarch' 'blackarch-fuzzer' 'blackarch-hardware')
 pkgdesc='A general-purpose fuzzer with simple, command-line interface.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://code.google.com/p/honggfuzz/'
-license=('Apache')
+license=('Apache2')
 depends=('binutils' 'libunwind')
-makedepends=('git')
-source=("git+https://github.com/google/$pkgname.git"
+source=("https://github.com/google/honggfuzz/archive/${pkgver}.tar.gz"
         'makefile.patch')
-sha512sums=('SKIP'
-            'e9f2a0190d152b3394ffab69e20fc216cb7c0464f20dbe7723574dcd176c73dc32126c638c248ca181b103e147de6027940db80e2781d78fe00f55ca23e1b16c')
+sha1sums=('1d95c3d5f6cf475ef7b5af6e83ab143dac9ba999'
+          'f38a348db1aed83a079e3a2d8f440fed6bc40d3b')
 
-pkgver() {
-  cd $pkgname
+prepare() {
+  cd "$srcdir"
 
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+  #patch -p1 < makefile.patch
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/honggfuzz-$pkgver"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/honggfuzz-$pkgver"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm755 honggfuzz "$pkgdir/usr/bin/honggfuzz"
+  install -Dm644 -t "$pkgdir/usr/share/doc/honggfuzz/" README.md CHANGELOG
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/honggfuzz/COPYING"
 }
-

@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=letmefuckit-scanner
+pkgname='letmefuckit-scanner'
 pkgver=3.f3be22b
 pkgrel=2
 groups=('blackarch' 'blackarch-scanner' 'blackarch-webapp')
@@ -11,25 +11,24 @@ url='https://github.com/onthefrontline/LetMeFuckIt-Scanner'
 license=('custom:unknown')
 depends=('python2' 'python2-pygoogle-simple')
 makedepends=('git' 'python2-setuptools')
-source=("$pkgname::git+https://github.com/onthefrontline/LetMeFuckIt-Scanner.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/onthefrontline/LetMeFuckIt-Scanner.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/LetMeFuckIt-Scanner"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/LetMeFuckIt-Scanner"
 
   sed -i '1 i\#!/usr/bin/python2' letmefuckit.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/LetMeFuckIt-Scanner"
 
-  install -Dm 755 letmefuckit.py "$pkgdir/usr/bin/letmefuckit"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm755 letmefuckit.py "$pkgdir/usr/bin/letmefuckit"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/letmefuckit-scanner/README.md"
 }
-

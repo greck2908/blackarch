@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=mat
-pkgver=0.6.1
-pkgrel=5
+pkgname='mat'
+pkgver='0.6.1'
+pkgrel=4
 groups=('blackarch' 'blackarch-defensive' 'blackarch-misc')
 pkgdesc='Metadata Anonymisation Toolkit composed of a GUI application, a CLI application and a library.'
 arch=('any')
@@ -11,9 +11,9 @@ url='https://mat.boum.org/'
 license=('GPL2')
 makedepends=('python2-setuptools')
 depends=('python2' 'python2-distutils-extra' 'python2-pdfrw' 'python2-poppler'
-         'python2-cairo' 'hachoir-core' 'hachoir-parser' 'python2-mutagen')
-source=("https://mat.boum.org/files/$pkgname-$pkgver.tar.xz")
-sha512sums=('bde5685a5ea1116cbffa823d7978abfcfc6db04ef47940fdddc8a17e5e8d660777e3b780336e4f9d753e1b1e7127a1cbda1a7e2174ea9351b108fdd1351a00c1')
+         'python2-cairo' 'hachoir-core' 'hachoir-parser' 'mutagen')
+source=("https://mat.boum.org/files/mat-${pkgver}.tar.xz")
+sha1sums=('9d1f802c2d500151e350f0e29edc73d088ea7a4e')
 
 build() {
   cd "$srcdir/mat-$pkgver"
@@ -27,12 +27,12 @@ build() {
 package() {
   cd "$srcdir/mat-$pkgver"
 
-  install -dm 755 "$pkgdir/usr/share/doc/mat"
+  mkdir -p "$pkgdir/usr/share/doc/mat"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" CHANGELOG README.md TODO \
-    TESTING README.security RELEASE
+  install -Dm644 -t "$pkgdir/usr/share/doc/mat" CHANGELOG README.md TESTING \
+    TODO README.security RELEASE
 
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/mat/LICENSE"
 
-  python2 setup.py install --root="$pkgdir" --optimize=1 --skip-build
+  python2 setup.py install --root="$pkgdir" --optimize=1
 }

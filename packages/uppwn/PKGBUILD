@@ -1,45 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=uppwn
-_pkgname=UpPwn
+pkgname='uppwn'
 pkgver=9.f69dec4
-pkgrel=4
+pkgrel=2
 pkgdesc="A script that automates detection of security flaws on websites' file upload systems'."
 groups=('blackarch' 'blackarch-webapp' 'blackarch-fuzzer')
 arch=('any')
 url='https://github.com/ferrery1/UpPwn'
 license=('custom:unknown')
-depends=('python2' 'python2-selenium' 'python2-xvfbwrapper' 'nodejs' 'phantomjs'
-         'python2-xvfbwrapper' 'xorg-server-xvfb' 'python2-pymiproxy')
+depends=('python2' 'python2-selenium' 'nodejs' 'phantomjs')
 makedepends=('git')
-source=('git+https://github.com/ferrery1/UpPwn.git')
-sha512sums=('SKIP')
+source=('git+https://github.com/ferrery1/UpPwn')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $_pkgname
+  cd "$srcdir/UpPwn"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $_pkgname
+  cd "$srcdir/UpPwn"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/uppwn"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/uppwn/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/uppwn/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/uppwn" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $_pkgname.py "\$@"
+cd /usr/share/uppwn
+exec python2 UpPwn.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/uppwn"
 }
-

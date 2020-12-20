@@ -1,49 +1,49 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=prads
-pkgver=1132.e631f4f
-pkgrel=2
-pkgdesc='A "Passive Real-time Asset Detection System".'
+pkgname='prads'
+pkgver=1128.407cf7c
+pkgrel=1
+pkgdesc='Is a "Passive Real-time Asset Detection System".'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-networking')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://gamelinux.github.io/prads/'
-license=('PerlArtistic')
+license=('Perl')
 depends=('python-docutils' 'libpcap')
 makedepends=('git')
-source=("git+https://github.com/gamelinux/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/gamelinux/prads.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/prads"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/prads"
 
   sed -i 's|/usr/local|/usr|g' Makefile
   sed -i 's|${PREFIX}/etc/prads|/etc/prads|' Makefile
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/prads"
 
   make PREFIX=/
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/prads"
 
-  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+  mkdir -p "$pkgdir/usr/share/doc/prads"
 
-  for i in doc/*.txt ; do
-    install -m 644 $i "$pkgdir/usr/share/doc/$pkgname"
+  for i in doc/*.txt
+  do
+    install -m644 $i "$pkgdir/usr/share/doc/prads"
   done
 
-  install -Dm 644 doc/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 doc/LICENSE "$pkgdir/usr/share/licenses/prads/LICENSE"
 
   make DESTDIR="$pkgdir" install
 }
-

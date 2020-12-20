@@ -1,41 +1,31 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ipv6toolkit
-pkgver=794.5bd7a39
+pkgname='ipv6toolkit'
+pkgver='2.0'
 pkgrel=1
-pkgdesc="SI6 Networks' IPv6 Toolkit."
-arch=('x86_64' 'aarch64')
-groups=('blackarch' 'blackarch-scanner' 'blackarch-recon'
-        'blackarch-networking')
+pkgdesc="SI6 Networks' IPv6 Toolkit"
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+groups=('blackarch' 'blackarch-scanner')
 url='http://www.si6networks.com/tools/ipv6toolkit/'
 license=('GPL')
 provides=('ipv6-toolkit-git')
 conflicts=('ipv6-toolkit-git')
 depends=('libpcap' 'perl')
-makedepends=('git')
-#source=("http://www.si6networks.com/tools/$pkgname/$pkgname-v$pkgver.tar.gz")
-source=("git+https://github.com/fgont/$pkgname.git")
-sha512sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+source=("http://www.si6networks.com/tools/ipv6toolkit/ipv6toolkit-v${pkgver}.tar.gz")
+sha1sums=('78e2a5ed3264cd5f5cedd26595c070442fa4379a')
 
 build() {
-  cd $pkgname
+  cd "$srcdir/ipv6toolkit-v$pkgver"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ipv6toolkit-v$pkgver"
 
-  install -dm 755 "$pkgdir/etc"
+  mkdir -p "$pkgdir/etc"
 
-  make PREFIX="/usr" ETCPATH="$pkgdir/etc/$pkgname" \
+  make PREFIX="/usr" ETCPATH="$pkgdir/etc/ipv6toolkit" \
     SBINPATH="$pkgdir/usr/bin" DESTDIR="$pkgdir/" install
 }
-

@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=make-pdf
-pkgver=0.1.7
-pkgrel=2
+pkgname='make-pdf'
+pkgver='0.1.7'
+pkgrel=1
 pkgdesc='This tool will embed javascript inside a PDF document.'
 arch=('any')
 url='http://blog.didierstevens.com/programs/pdf-tools/'
@@ -11,9 +11,11 @@ groups=('blackarch' 'blackarch-forensic')
 depends=('python2' 'dos2unix')
 license=('GPL')
 source=("http://www.didierstevens.com/files/software/make-pdf_V${pkgver//./_}.zip")
-sha512sums=('b1019e81c6d28c62c89b823f425235401855699e79e5ac1ccc8830047cb7665286ff0f91219664d7b30ae4241c5b04ea840b477bec07dbdcd8c96f96b3a54c6d')
+sha1sums=('c95947781ca1d157df1387dd4cb00c2eaec4bb0c')
 
 prepare(){
+  cd "$srcdir"
+
   grep -iRl 'python' "$srcdir" |
     xargs sed -i 's|#!.*/usr/bin/python|#!/usr/bin/python2|;s|#!.*/usr/bin/env python$|#!/usr/bin/env python2|'
 
@@ -21,7 +23,8 @@ prepare(){
 }
 
 package() {
-  install -Dm 755 make-pdf-javascript.py "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 mPDF.py "$pkgdir/usr/lib/python2.7/site-packages/mPDF.py"
-}
+  cd "$srcdir"
 
+  install -Dm644 mPDF.py "$pkgdir/usr/lib/python2.7/site-packages/mPDF.py"
+  install -Dm755 make-pdf-javascript.py "$pkgdir/usr/bin/make-pdf-javascript"
+}

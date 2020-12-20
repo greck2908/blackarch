@@ -1,45 +1,44 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=trusttrees
-pkgver=102.a9b7399
-pkgrel=2
+pkgname='trusttrees'
+pkgver=7.0665877
+pkgrel=1
 pkgdesc='A Tool for DNS Delegation Trust Graphing.'
 groups=('blackarch' 'blackarch-recon')
 arch=('any')
 url='https://github.com/mandatoryprogrammer/TrustTrees'
 license=('custom:unknown')
-depends=('python' 'python-dnspython' 'python-pygraphviz' 'python-idna'
-         'python-requests' 'python-requests-file' 'python-six' 'python-boto3'
-         'python-tldextract')
-makedepends=('git' 'python-setuptools')
-source=("$pkgname::git+https://github.com/mandatoryprogrammer/TrustTrees.git")
-sha512sums=('SKIP')
+depends=('python2' 'python2-dnspython' 'python2-pygraphviz' 'python2-idna'
+         'python2-requests' 'python2-requests-file' 'python2-six'
+         'python2-tldextract')
+makedepends=('git')
+source=('git+https://github.com/mandatoryprogrammer/TrustTrees.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "${srcdir}/TrustTrees"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  cd $pkgname
-
-  sed -i 's/==.*//' requirements.txt
-}
-
-build() {
-  cd $pkgname
-
-  python setup.py build
-}
-
 package() {
-  cd $pkgname
+  _app_name="trusttrees"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  cd "${srcdir}/TrustTrees"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/$pkgname/LICENSE"
+  mkdir -p "${pkgdir}/usr/share/doc/${_app_name}"
+  mkdir -p "${pkgdir}/usr/share/${_app_name}"
+  mkdir -p "${pkgdir}/usr/bin"
+
+  install -Dm755 -t "${pkgdir}/usr/share/${_app_name}/" "${_app_name}.py"
+  install -Dm644 -t "${pkgdir}/usr/share/doc/${_app_name}/" README.md
+
+  cat > "${pkgdir}/usr/bin/${_app_name}" << EOF
+#!/bin/sh
+
+exec python2 /usr/share/${_app_name}/${_app_name}.py "\${@}"
+EOF
+
+  chmod a+x "${pkgdir}/usr/bin/${_app_name}"
 }
-

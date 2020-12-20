@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=serialbrute
+pkgname='serialbrute'
 pkgver=3.111c217
 pkgrel=1
 pkgdesc='Java serialization brute force attack tool.'
@@ -11,34 +11,33 @@ url='https://github.com/NickstaDB/SerialBrute'
 license=('MIT')
 depends=('python2' 'python2-requests')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/NickstaDB/SerialBrute.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/NickstaDB/SerialBrute')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/SerialBrute"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/SerialBrute"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/serialbrute"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/serialbrute/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/serialbrute/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/serialbrute/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/serialbrute" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 SerialBrute.py "\$@"
+cd /usr/share/serialbrute
+exec python2 SerialBrute.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/serialbrute"
 }
-

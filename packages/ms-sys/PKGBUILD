@@ -1,37 +1,35 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ms-sys
-pkgver=2.6.0
+pkgname='ms-sys'
+pkgver='2.5.3'
 pkgrel=1
-pkgdesc='A tool to write Win9x- master boot records (mbr) under linux - RTM!'
-arch=('x86_64' 'aarch64')
+pkgdesc='A tool to write Win9x-.. master boot records (mbr) under linux - RTM!'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://ms-sys.sourceforge.net/'
 license=('GPL2')
 groups=('blackarch' 'blackarch-backdoor' 'blackarch-binary' 'blackarch-forensic')
-source=("http://downloads.sourceforge.net/sourceforge/ms-sys/$pkgname-$pkgver.tar.gz")
-sha512sums=('f49790813712b9fd9f63273a7571edbdacb855d93d26dfe1da94d35b656c0ec0574ec43b3cad0f363fa4ec18bd29b81a440d592dc8148b15b18bb8a28c35fbbe')
+source=("http://downloads.sourceforge.net/sourceforge/ms-sys/ms-sys-${pkgver}.tar.gz")
+sha1sums=('c13c0d5509dbfe7e4d3706bb22d7f1a37166c2b1')
 
 prepare() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/ms-sys-$pkgver"
 
-  install -dm 755 "$pkgdir/usr/{bin,share/man/man1}"
-
+  mkdir -p "$pkgdir/usr/{bin,share/man/man1}"
   sed -i "s|MANDIR =.*|MANDIR = /usr/share/man|g" Makefile
 }
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/ms-sys-$pkgver"
 
   make PREFIX="/usr"
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/ms-sys-$pkgver"
 
   make PREFIX="/usr" DESTDIR="$pkgdir" install
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README FAQ
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/ms-sys/COPYING"
+  install -Dm644 -t "$pkgdir/usr/share/doc/ms-sys/" README FAQ
 }
-

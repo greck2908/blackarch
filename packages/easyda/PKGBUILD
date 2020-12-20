@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=easyda
+pkgname='easyda'
 pkgver=7.0867f9b
-pkgrel=3
+pkgrel=2
 groups=('blackarch' 'blackarch-automation' 'blackarch-scanner'
         'blackarch-recon')
 pkgdesc='Easy Windows Domain Access Script.'
@@ -12,20 +12,19 @@ url='https://github.com/nccgroup/easyda'
 license=('GPL3')
 depends=('bash' 'metasploit')
 makedepends=('git')
-source=("git+https://github.com/nccgroup/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/nccgroup/easyda.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/easyda"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/easyda"
 
-  install -Dm 755 "$pkgname.sh" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 easyda.sh "$pkgdir/usr/bin/easyda"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/easyda/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/easyda/LICENSE"
 }
-

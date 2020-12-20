@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=snmpenum
-pkgver=1.7
+pkgname='snmpenum'
+pkgver='1.7'
 pkgrel=5
 pkgdesc='An snmp enumerator.'
 url='http://www.filip.waeytens.easynet.be/'
@@ -11,15 +11,18 @@ license=('GPL')
 arch=('any')
 depends=('perl' 'perl-net-snmp')
 source=('http://dl.packetstormsecurity.net/UNIX/scanners/snmpenum.zip')
-sha512sums=('7ad97c118872228a3243398b9ebde2a20cb1a2823669707479d3dd0c44ab8ffd650e232bee8ec28c6b5de6dd68fcc05936d382de6239381608c2fe423781c11b')
+sha1sums=('74be0662ca90b5ac39bc3f79323cc286019999f8')
 
 prepare() {
-  sed -ie "s|^#! /usr/local/bin/perl|#!/usr/bin/perl|" "$pkgname.pl"
+  cd "$srcdir"
+
+  sed -ie "s|^#! /usr/local/bin/perl|#!/usr/bin/perl|" snmpenum.pl
 }
 
 package() {
-  install -Dm 755 "$pkgname.pl" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.txt cisco.txt \
+  cd "$srcdir"
+
+  install -Dm755 snmpenum.pl "$pkgdir/usr/bin/snmpenum"
+  install -Dm644 -t "$pkgdir/usr/share/doc/snmpenum" README.txt cisco.txt \
     linux.txt windows.txt
 }
-

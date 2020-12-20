@@ -1,44 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=arpstraw
+pkgname='arpstraw'
 pkgver=27.ab40e13
-pkgrel=4
+pkgrel=1
 pkgdesc='Arp spoof detection tool.'
 groups=('blackarch' 'blackarch-defensive' 'blackarch-sniffer')
 arch=('any')
 url='https://github.com/he2ss/arpstraw'
 license=('MIT')
-depends=('python2' 'python2-pyshark' 'python2-netifaces' 'python2-scapy'
-         'python2-argparse' 'python2-gobject' 'python2-configparser')
+depends=('python2' 'python2-pyshark' 'python2-netifaces' 'scapy')
 makedepends=('git')
-source=("git+https://github.com/he2ss/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/he2ss/arpstraw.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/arpstraw"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/arpstraw"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/arpstraw"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/arpstraw/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/arpstraw/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/arpstraw" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 main.py "\$@"
+cd /usr/share/arpstraw
+exec python2 main.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/arpstraw"
 }
-

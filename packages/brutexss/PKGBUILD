@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=brutexss
+pkgname='brutexss'
 pkgver=54.ba753df
-pkgrel=2
+pkgrel=1
 pkgdesc='Cross-Site Scripting Bruteforcer.'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-fuzzer')
 arch=('any')
@@ -11,34 +11,33 @@ url='https://github.com/shawarkhanethicalhacker/BruteXSS'
 license=('GPL3')
 depends=('python2' 'python2-lxml')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/shawarkhanethicalhacker/BruteXSS.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/shawarkhanethicalhacker/BruteXSS.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/BruteXSS"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/BruteXSS"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/brutexss"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 License.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/brutexss/" README.md
+  install -Dm644 License.txt "$pkgdir/usr/share/licenses/brutexss/License.txt"
 
   rm README.md License.txt
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/brutexss"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/brutexss" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/brutexss
+exec python2 brutexss.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/brutexss"
 }
-

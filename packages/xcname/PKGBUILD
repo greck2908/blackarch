@@ -1,50 +1,48 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=xcname
+pkgname='xcname'
 pkgver=11.9c475a1
-pkgrel=4
+pkgrel=2
 groups=('blackarch' 'blackarch-scanner')
 pkgdesc='A tool for enumerating expired domains in CNAME records.'
 arch=('any')
 url='https://github.com/mandatoryprogrammer/xcname'
 license=('custom:unknown')
-depends=('python2' 'python2-pywhois' 'python2-python-whois' 'python2-ipwhois'
-         'python2-tldextract' 'python2-requests')
+depends=('python2' 'python2-pywhois' 'python2-python-whois' 'python2-ipwhois')
 makedepends=('git')
-source=("git+https://github.com/mandatoryprogrammer/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/mandatoryprogrammer/xcname.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/xcname"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/xcname"
 
-  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' "$pkgname.py"
+  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' xcname.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/xcname"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/xcname"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/xcname/README.md"
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/xcname"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/xcname" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/xcname
+exec python2 xcname.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/xcname"
 }
-

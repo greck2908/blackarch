@@ -1,34 +1,26 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=webenum
-pkgver=21.24b43b4
-pkgrel=1
-pkgdesc='Tool to enumerate http responses using dynamically generated queries and more.'
+pkgname='webenum'
+pkgver='0.1'
+pkgrel=3
+pkgdesc='Tool to enumerate http responses using dynamically generated queries and more. Useful for penetration tests against web servers.'
+depends=('python2')
+url='http://code.google.com/p/webenum/'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-webapp')
-url='https://github.com/sarthakpandit/webenum'
 license=('GPL')
 arch=('any')
-depends=('python2')
-makedepends=('git')
-source=("git+https://github.com/sarthakpandit/$pkgname.git")
-sha512sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+source=("http://webenum.googlecode.com/files/webenum-${pkgver}.py.gz")
+sha1sums=('13ea0084b952f4323dbc1e027826997fa90bc587')
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir"
 
-  sed -i 's|env python|env python2|' "$pkgname.py"
+  sed -i 's|env python|env python2|' webenum-${pkgver}.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir"
 
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
+  install -Dm755 webenum-${pkgver}.py "$pkgdir/usr/bin/webenum"
 }
-

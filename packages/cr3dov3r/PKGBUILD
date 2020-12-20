@@ -1,45 +1,44 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=cr3dov3r
-pkgver=46.99a1660
-pkgrel=3
+pkgname='cr3dov3r'
+pkgver=17.99c6d0c
+pkgrel=1
 pkgdesc='Search for public leaks for email addresses + check creds against 16 websites.'
-groups=('blackarch' 'blackarch-recon' 'blackarch-social')
+groups=('blackarch' 'blackarch-social' 'blackarch-recon')
 arch=('any')
 url='https://github.com/D4Vinci/Cr3dOv3r'
 license=('MIT')
-depends=('python' 'python-argparse' 'python-mechanicalsoup' 'python-pyopenssl'
-         'python-requests')
+depends=('python2' 'python2-requests' 'python2-argparse'
+         'python2-mechanicalsoup')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/D4Vinci/Cr3dOv3r.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/D4Vinci/Cr3dOv3r')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Cr3dOv3r"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Cr3dOv3r"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/cr3dov3r"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/cr3dov3r/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/cr3dov3r/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/cr3dov3r/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/cr3dov3r" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python Cr3d0v3r.py "\$@"
+cd /usr/share/cr3dov3r
+exec python2 Cr3d0v3r.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/cr3dov3r"
 }
-

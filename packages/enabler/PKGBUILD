@@ -1,24 +1,27 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=enabler
-pkgver=1
-pkgrel=7
+pkgname='enabler'
+pkgver='1'
+pkgrel=6
 pkgdesc='Attempts to find the enable password on a cisco system via brute force.'
-arch=('x86_64' 'aarch64')
 url='http://packetstormsecurity.org/cisco/enabler.c'
 groups=('blackarch' 'blackarch-cracker')
-license=('custom:unknown')
+license=('custom')
 makedepends=('gcc')
 depends=('glibc')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 source=('http://dl.packetstormsecurity.net/cisco/enabler.c')
-sha512sums=('d7242030ba722905db0757fdff281fae18001170eb8cde60aac3d0f65b93ce71f943b1d678d44fd2c5b41f369a58ce647325bbedbfcecdafc2486f5a3beafade')
+sha1sums=('4c32c7f7cf8ad2e99ba786f0b87c708a8e8498ba')
 
 build() {
-  gcc $CFLAGS "$pkgname.c" -o $pkgname
+  cd "$srcdir"
+
+  gcc $CFLAGS enabler.c -o enabler
 }
 
 package() {
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-}
+  cd "$srcdir"
 
+  install -Dm755 enabler $pkgdir/usr/bin/enabler
+}

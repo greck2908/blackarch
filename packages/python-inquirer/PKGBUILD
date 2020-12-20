@@ -1,38 +1,33 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=python-inquirer
-_pkgname=inquirer
-pkgver=2.7.0
-pkgrel=2
+pkgname='python-inquirer'
+pkgver='2.2.0'
+pkgrel=1
 pkgdesc='Collection of common interactive command line user interfaces, based on Inquirer.js.'
 arch=('any')
-url='https://github.com/magmax/python-inquirer'
+url='https://pypi.python.org/pypi/inquirer/'
 license=('MIT')
 depends=('python')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/84/c9/3d9b224fe0169c41170a3545ba557a9fe8cfe1c3d7f8d2d9a62a5550aa74/$_pkgname-$pkgver.tar.gz")
-sha512sums=('f2d2472fc58d553a874a04a662c15f598171b3a40547e31d6a908e1516991e6a405ff53892132bc40f51630150708768f6b229f9df0d7cd717978c973fd2d63b')
+source=("https://pypi.python.org/packages/1d/f0/0b109010458a1cef35a391f3748720e801c2e1e71899b5807a47aff5e5da/inquirer-${pkgver}.tar.gz")
+sha1sums=('43a64e3824d42c19b62da8f4adc40e04e6c133e7')
 
 prepare() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/inquirer-$pkgver"
 
-  # psst, temp fix!
-  touch requirements.txt
-  sed -i 's|long_description=read_description()|long_description=""|' setup.py
+ # psst, temp fix!
+ sed -i 's|long_description=read_description()|long_description=""|' setup.py
 }
 
 build() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/inquirer-$pkgver"
 
   python setup.py build
 }
 
 package() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/inquirer-$pkgver"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
-
-  rm -rf "$pkgdir/usr/lib/python3.9/site-packages/tests/"
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
 }
-

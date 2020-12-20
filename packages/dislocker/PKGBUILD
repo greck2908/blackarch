@@ -1,51 +1,39 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
-# PKGBUILD retrieved from AUR. Credits to: mrxx <mrxx at cyberhome dot at>
-# changes: psf
 
-pkgname=dislocker
-pkgver=541.c3d4cbc
-pkgrel=1
-pkgdesc='Read BitLocker encrypted volumes under Linux.'
-arch=('x86_64' 'aarch64')
-groups=('blackarch' 'blackarch-crypto')
-url='http://www.hsc.fr/ressources/outils/dislocker'
+pkgname='dislocker'
+pkgver='0.6.1'
+pkgrel=2
+pkgdesc='A tool to exploit the hash length extension attack in various hashing algorithms. With FUSE capabilities built in.'
+arch=('armv6h' 'armv7h' 'aarch64' 'x86_64')
+groups=('blackarch' 'blackarch-cracker' 'blackarch-crypto')
+url='http://www.hsc.fr/ressources/outils/dislocker/'
 license=('GPL2')
-depends=('fuse' 'mbedtls' 'ruby')
-makedepends=('git' 'make' 'cmake')
-conflicts=('dislocker-git')
-optdepends=('ntfs-3g: NTFS file system support')
-source=("git+https://github.com/Aorimn/$pkgname.git")
-sha512sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+depends=('fuse' 'mbedtls')
+makedepends=('cmake')
+source=("http://www.hsc.fr/ressources/outils/dislocker/download/dislocker-${pkgver}.tar.gz")
+sha1sums=('6e7ad789ec277eb4484742686cac1f69547abec5')
 
 build() {
-  cd $pkgname
+  cd "$srcdir/dislocker-$pkgver"
 
-  # Fix v0.7 upstream path error
-  sed -i 's/DIS_MAN \${PROJECT_SOURCE_DIR}/DIS_MAN ../' src/CMakeLists.txt
-
-  cmake -DCMAKE_INSTALL_PREFIX=/usr \
-        -Dlibdir=/usr/lib \
-        -D WARN_FLAGS:STRING="-Wall -Wextra" \
-        .
+  cmake -DCMAKE_INSTALL_PREFIX=/usr .
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/dislocker-$pkgver"
 
-  make DESTDIR="$pkgdir" install
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/lib"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" *.md
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/dislocker/" *.md
+  install -Dm644 -t "$pkgdir/usr/share/man/man1" man/linux/*.1
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/dislocker/LICENSE"
 
-  # temp fix
-  ln -sf /usr/lib/libmbedcrypto.so.3 "$pkgdir/usr/lib/libmbedcrypto.so.1"
+  make DESTDIR="$pkgdir" INSTALL_PATH="$pkgdir/usr" \
+    MAN_PATH="$pkgdir/usr/share/man/man1" install
+
+  mv "$pkgdir/usr/lib64/"* "$pkgdir/usr/lib/".
+  rmdir "$pkgdir/usr/lib64"
 }
-

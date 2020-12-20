@@ -1,41 +1,29 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=sploitctl
-pkgver=3.0.3
-pkgrel=2
-epoch=1
+pkgname='sploitctl'
+pkgver=70.907b405
+pkgrel=1
 groups=('blackarch' 'blackarch-automation' 'blackarch-exploitation')
 pkgdesc='Fetch, install and search exploit archives from exploit sites like exploit-db and packetstorm.'
 arch=('any')
 url='https://github.com/BlackArch/sploitctl'
-license=('GPL3')
-depends=('python' 'python-requests' 'python-termcolor' 'python-pygit2')
-source=("https://github.com/BlackArch/$pkgname/archive/v$pkgver.tar.gz")
-sha512sums=('7fda1768317cd844c5858e933275048650147ccfb516172767ec2202e08ba12fcacf7c0ab970274787dd82f64089f70d1973d113d7a7b6982c1cdfc47cd612b1')
+license=('custom:unknown')
+depends=('bash' 'curl' 'git')
+makedepends=('git')
+source=('git+https://github.com/BlackArch/sploitctl.git')
+sha1sums=('SKIP')
 
-package() {
-  cd "$pkgname-$pkgver"
+pkgver() {
+  cd "$srcdir/sploitctl"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
-
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-  install -Dm 644 "bash-completion/$pkgname" \
-    "$pkgdir/usr/share/bash-completion/completions/$pkgname"
-  install -Dm 644 "man/$pkgname.1" "$pkgdir/usr/share/man/man1/$pkgname.1"
-
-  rm -r README.md LICENSE bash-completion
-
-  cp -a * "$pkgdir/usr/share/$pkgname/"
-
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
-#!/bin/sh
-exec /usr/share/$pkgname/$pkgname.py "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname"
-  chmod 777 "$pkgdir/usr/share/$pkgname/repo.json"
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
+package() {
+  cd "$srcdir/sploitctl"
+
+  install -Dm755 sploitctl.sh "$pkgdir/usr/bin/sploitctl"
+  install -Dm644 web/url.lst "$pkgdir/usr/share/sploitctl/web/url.lst"
+  install -Dm644 bash-completion/sploitctl "$pkgdir/usr/share/bash-completion/completions/sploitctl"
+}

@@ -1,31 +1,33 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=pcapsipdump
-pkgver=0.2
-pkgrel=3
-pkgdesc="A tool for dumping SIP sessions (+RTP traffic, if available) to disk in a fashion similar to 'tcpdump -w' (format is exactly the same), but one file per sip session (even if there is thousands of concurrent SIP sessions)."
+pkgname='pcapsipdump'
+pkgver='0.2'
+pkgrel=2
+pkgdesc="A tool for dumping SIP sessions (+RTP traffic, if available) to disk in a fashion similar to 'tcpdump -w' (format is exactly the same), but one file per sip session (even if there is thousands of concurrect SIP sessions)."
 url='http://pcapsipdump.sourceforge.net/'
 groups=('blackarch' 'blackarch-voip')
 license=('GPL')
 depends=('libpcap' 'gcc-libs')
-arch=('x86_64' 'aarch64')
-source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz")
-sha512sums=('7bd1dd4508262ff5aa43b26ba382aa0b17d9f971b192f5f7b6e861a81f60a853e966abba0b8b688f3bf157a8a7b00790189748c2d29bc7e8c61c13e9cbfd37ac')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+source=("http://downloads.sourceforge.net/pcapsipdump/pcapsipdump-${pkgver}.tar.gz")
+sha1sums=('7a6d3317bcccb5e0430b6e30f866783957904684')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/pcapsipdump-$pkgver"
 
-  g++ -lpcap -lstdc++ "$pkgname.cpp" calltable.cpp -o $pkgname
+  g++ -lpcap -lstdc++ pcapsipdump.cpp calltable.cpp -o pcapsipdump
   #make CPPFLAGS="$CFLAGS"
 }
 
 package(){
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/pcapsipdump-$pkgver"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.txt ChangeLog \
+  mkdir -p "$pkgdir/usr/share/doc/pcapsipdump"
+
+  install -Dm755 pcapsipdump "$pkgdir/usr/bin/pcapsipdump"
+  install -Dm644 -t "$pkgdir/usr/share/doc/pcapsipdump" README.txt ChangeLog \
     README.solaris
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-}
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/pcapsipdump/LICENSE"
 
+}

@@ -1,28 +1,26 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=python2-click-plugins
-_pkgname=click-plugins
-pkgver=1.1.1
-pkgrel=5
+pkgname='python2-click-plugins'
+pkgver='1.0.3'
+pkgrel=2
 pkgdesc='An extension module for click to enable registering CLI commands via setuptools entry-points.'
-url='https://pypi.org/project/click-plugins/#files'
 arch=('any')
+url='https://pypi.python.org/pypi/click-plugins/'
 license=('BSD')
-depends=('python2' 'python2-click')
+depends=('python2')
 makedepends=('python2-setuptools')
-source=("https://files.pythonhosted.org/packages/5f/1d/45434f64ed749540af821fd7e42b8e4d23ac04b1eda7c26613288d6cd8a8/$_pkgname-$pkgver.tar.gz")
-sha512sums=('bbd838f50603ac4e76daf3535fd5d27a17e17549addbc8b582df6d6193b4f07d743101ce52f0b71f326995fdfeac159805025770350ca2e7697f212dce0c4b1a')
+source=("https://pypi.python.org/packages/77/05/da5c9e19457f20cadfe22c397cd3852577066066f63e40f2baa0831b1693/click-plugins-${pkgver}.tar.gz")
+sha1sums=('159f5f162da234071d6cbe5a87781137e658a410')
 
 build() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/click-plugins-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/click-plugins-$pkgver"
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
 }
-

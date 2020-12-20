@@ -1,14 +1,13 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=perl-netpacket
-_pkgname=NetPacket
-pkgver=1.7.2
-pkgrel=2
+pkgname='perl-netpacket'
+pkgver='1.6.0'
+pkgrel=5
 pkgdesc='Assemble/disassemble network packets at the protocol level.'
 arch=('any')
 url='http://search.cpan.org/dist/NetPacket/'
-license=('PerlArtistic')
+license=('artistic2')
 makedepends=('perl-module-build>=0.360.100')
 provides=('perl-netpacket-arp=0.43.1' 'perl-netpacket-ethernet=0.43.1'
           'perl-netpacket-icmp=0.43.1' 'perl-netpacket-icmpv6=0.43.1'
@@ -16,11 +15,11 @@ provides=('perl-netpacket-arp=0.43.1' 'perl-netpacket-ethernet=0.43.1'
           'perl-netpacket-ipv6=0.43.1' 'perl-netpacket-pflog=0.43.1'
           'perl-netpacket-tcp=0.43.1' 'perl-netpacket-udp=0.43.1')
 options=(!emptydirs)
-source=("http://search.cpan.org/CPAN/authors/id/Y/YA/YANICK/$_pkgname-$pkgver.tar.gz")
-sha512sums=('94fb9b99f8d5443cce76c943ab562b44ee07448b0fbdd86bea35e0dc1aeabbce3871d7115f68c8ca013ad71390c51f2d5233a8f4ad71d796920c3f286cecf4c5')
+source=("http://search.cpan.org/CPAN/authors/id/Y/YA/YANICK/NetPacket-${pkgver}.tar.gz")
+sha1sums=('7c8b931730c87b5538d98d4b5d717f1025ab60f7')
 
 build() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/NetPacket-$pkgver"
 
   ( export PERL_MM_USE_DEFAULT=1 PERL5LIB=""                 \
       PERL_AUTOINSTALL=--skipdeps                            \
@@ -35,11 +34,11 @@ build() {
 }
 
 package() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/NetPacket-$pkgver"
 
-  make DESTDIR="$pkgdir" install
+  make install destdir="$pkgdir"
 
-  find "$pkgdir" -name perllocal.pod -delete
-  find "$pkgdir" -name .packlist -delete
+  # Remove perllocal.pod and .packlist.
+  find ${pkgdir} -name perllocal.pod -delete
+  find ${pkgdir} -name .packlist -delete
 }
-

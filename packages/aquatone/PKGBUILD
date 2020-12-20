@@ -1,55 +1,44 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=aquatone
-pkgver=120.854a5d5
+pkgname='aquatone'
+pkgver=63.8d3496b
 pkgrel=2
-pkgdesc='A Tool for Domain Flyovers.'
-groups=('blackarch' 'blackarch-recon')
-arch=('x86_64' 'aarch64')
+groups=('blackarch' 'blackarch-recon' 'blackarch-scanner')
+pkgdesc='a set of tools for performing reconnaissance on domain names.'
+arch=('any')
 url='https://github.com/michenriksen/aquatone'
-license=('MIT')
-depends=('chromium')
-makedepends=('git' 'go-pie')
-source=("git+https://github.com/michenriksen/$pkgname.git")
-sha512sums=('SKIP')
+license=('custom:unknown')
+depends=('ruby')
+makedepends=('ruby' 'git')
+options=('!strip')
+source=('git+https://github.com/michenriksen/aquatone.git')
+install='aquatone.install'
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/aquatone"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  mkdir -p "gopath/src/github.com/michenriksen"
-
-  ln -rTsf $pkgname "gopath/src/github.com/michenriksen/$pkgname"
-
-  export GOPATH="$srcdir/gopath"
-
-  cd "$GOPATH/src/github.com/michenriksen/$pkgname"
-
-  go get -d ./...
-}
-
-build() {
-  export GOPATH="$srcdir/gopath"
-
-  cd "$GOPATH/src/github.com/michenriksen/$pkgname"
-
-  go install -v ./...
-}
-
 package() {
-  export GOPATH="$srcdir/gopath"
+  cd "$srcdir"
 
-  cd "$GOPATH/bin"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/aquatone"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  local _gemdir="$(ruby -e'puts Gem.default_dir')"
 
-  cd "$srcdir/$pkgname"
+  gem install --no-user-install -n "$pkgdir/usr/bin" -i "$pkgdir/$_gemdir" \
+    aquatone
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" *.md
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  cd aquatone
+
+  install -Dm644 -t "$pkgdir/usr/share/doc/aquatone/" README.md
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/LICENSE.txt"
+
+  rm README.md LICENSE.txt "$pkgdir/usr/bin/httparty"
+
+  cp -a * "$pkgdir/usr/share/aquatone"
 }
-

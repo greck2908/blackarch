@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=iosforensic
-pkgver=1.0
+pkgname='iosforensic'
+pkgver='1.0'
 pkgrel=2
 pkgdesc='iOS forensic tool https://www.owasp.org/index.php/Projects/OWASP_iOSForensic'
 groups=('blackarch' 'blackarch-forensic' 'blackarch-mobile')
@@ -10,24 +10,24 @@ arch=('any')
 url='https://github.com/Flo354/iOSForensic'
 license=('custom')
 depends=('python2' 'sshpass' 'sqlite3' 'python2-magic' 'libplist' 'openssh')
-source=("https://github.com/Flo354/iOSForensic/archive/$pkgver.tar.gz")
-sha512sums=('5034f5cdbd2f5facf45d67f769ade689ffa164eddb86eed7237955e2f2695f387a1af1da459dbc523b55a68d2ee62e30ab1fdb4e7ac388aee6977f724b2bad31')
+source=("https://github.com/Flo354/iOSForensic/archive/${pkgver}.tar.gz")
+sha1sums=('7473df679d13bf4e1abb9c620c0fcab299513e35')
 
 package(){
-  cd "iOSForensic-$pkgver"
+  cd "$srcdir/iOSForensic-$pkgver"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/iosforensic"
 
-  install -Dm 755 *.py "$pkgdir/usr/share/$pkgname/"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" changelog README.md
+  install -Dm755 *.py "$pkgdir/usr/share/iosforensic/"
+  install -Dm644 changelog "$pkgdir/usr/share/doc/iosforensic/changelog"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/iosforensic/README.md"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/iosforensic" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/iosforensic
 exec python2 iOSForensic.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/iosforensic"
 }
-

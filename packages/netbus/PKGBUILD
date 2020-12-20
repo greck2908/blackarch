@@ -1,10 +1,10 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=netbus
-pkgver=1.6
-pkgrel=4
-pkgdesc='NetBus remote administration tool'
+pkgname='netbus'
+pkgver='1.6'
+pkgrel=1
+pkgdesc='NetBus remote adminsitration tool'
 url='https://packetstormsecurity.com/files/10320/nb16_p04.zip.html'
 groups=('blackarch' 'blackarch-windows' 'blackarch-backdoor')
 license=('custom:unknown')
@@ -12,10 +12,12 @@ arch=('any')
 makedepends=('unzip')
 source=('https://dl.packetstormsecurity.net/trojans/nb16_p04.zip')
 noextract=('nb16_p04.zip')
-sha512sums=('f25e45a51d8823aa5f22424b1b70c3cb8d9c7233c420cbedf2b2d416fbe98e5637219e6042ec91fc198a22e8b1f16d220f00dc7b629627375a6623bc2f01c089')
+sha1sums=('c19931b82d1d9b2eecc7848cfbb970d06b7981aa')
 
 package() {
-  install -dm 755 "$pkgdir/usr/share/windows/netbus"
+  cd "$srcdir"
+
+  mkdir -p "$pkgdir/usr/share/windows/netbus"
 
   unzip -P p4ssw0rd nb16_p04.zip
 
@@ -23,4 +25,3 @@ package() {
 
   cp -a * "$pkgdir/usr/share/windows/netbus"
 }
-

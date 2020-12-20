@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=recuperabit
-pkgver=46.326ff6b
+pkgname='recuperabit'
+pkgver=36.f03f5e9
 pkgrel=1
 pkgdesc='A tool for forensic file system reconstruction.'
 groups=('blackarch' 'blackarch-forensic')
@@ -11,34 +11,33 @@ url='https://github.com/Lazza/RecuperaBit'
 license=('GPL3')
 depends=('python2')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/Lazza/RecuperaBit.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/Lazza/RecuperaBit.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/RecuperaBit"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/RecuperaBit"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/recuperabit"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/recuperabit/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/recuperabit/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/recuperabit"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/recuperabit" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 main.py "\$@"
+cd /usr/share/recuperabit
+exec python2 main.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/recuperabit"
 }
-

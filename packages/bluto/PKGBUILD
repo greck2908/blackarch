@@ -1,40 +1,38 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=bluto
-pkgver=142.25cad7a
+pkgname='bluto'
+pkgver=114.3a0dc02
 pkgrel=1
 epoch=1
 groups=('blackarch' 'blackarch-scanner' 'blackarch-recon')
 pkgdesc='Recon, Subdomain Bruting, Zone Transfers.'
 arch=('any')
-url='https://github.com/darryllane/Bluto'
+url='https://github.com/RandomStorm/Bluto'
 license=('GPL3')
-depends=('python2' 'python2-dnspython2' 'python2-beautifulsoup4' 'python2-lxml'
-         'python2-termcolor' 'python2-python2whois' 'python2-docopt'
-         'python2-requests' 'python2-pdfminer' 'python2-oletools')
+depends=('python2' 'python2-dnspython' 'python2-beautifulsoup4'
+         'python2-termcolor' 'python2-pythonwhois')
 makedepends=('git' 'python2-setuptools')
-source=("$pkgname::git+https://github.com/darryllane/Bluto")
-sha512sums=('SKIP')
+source=('git+https://github.com/darryllane/Bluto.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Bluto"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/Bluto"
 
   python2 setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Bluto"
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  python2 setup.py install --root="$pkgdir" --optimize=1
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/bluto/README.md"
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/bluto/LICENSE.txt"
 }
-

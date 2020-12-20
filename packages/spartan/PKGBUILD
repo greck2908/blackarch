@@ -1,44 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=spartan
-pkgver=23.babdd7d
-pkgrel=1
+pkgname='spartan'
+pkgver=16.6fd5fa7
+pkgrel=2
 pkgdesc='Frontpage and Sharepoint fingerprinting and attack tool.'
 groups=('blackarch' 'blackarch-fingerprint' 'blackarch-fuzzer')
 arch=('any')
 url='https://github.com/sensepost/SPartan'
-license=('custom:unknown')
+license=('Creative4.0')
 depends=('python2' 'python2-beautifulsoup4' 'python2-six' 'python2-requests'
          'python2-python-ntlm3' 'python2-requests-ntlm')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/sensepost/SPartan.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/sensepost/SPartan.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/SPartan"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/SPartan"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/spartan"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/spartan/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/spartan"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/spartan" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 SPartan.py "\$@"
+cd /usr/share/spartan
+exec python2 SPartan.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/spartan"
 }
-

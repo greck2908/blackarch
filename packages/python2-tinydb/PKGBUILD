@@ -1,0 +1,29 @@
+# This file is part of BlackArch Linux ( http://blackarch.org ).
+# See COPYING for license details.
+
+pkgname='python2-tinydb'
+pkgver='3.7.0'
+pkgrel=1
+pkgdesc='Lightweight document oriented database optimized for your happiness.'
+url='https://github.com/msiemens/tinydb'
+arch=('any')
+depends=('python2')
+makedepends=('python2-setuptools' 'unzip')
+license=('MIT')
+options=(!emptydirs)
+source=("https://pypi.python.org/packages/80/09/c855a0e0cdc3adfba4d3232a2792cd177bccd910c40a7b5319c9299a51ac/tinydb-${pkgver}.tar.gz")
+sha1sums=('a2b8c4f81a13cd9b3c77142ea91816bea40a3de7')
+
+build() {
+  cd "$srcdir/tinydb-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "$srcdir/tinydb-$pkgver"
+
+  python2 setup.py install --root="$pkgdir" --optimize=1
+
+  rm -rf "$pkgdir/usr/lib/python2.7/site-packages/tests"
+}

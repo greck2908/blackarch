@@ -1,38 +1,32 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dbd
-pkgver=61.8cf5350
+pkgname='dbd'
+pkgver='1.50'
 pkgrel=1
 groups=('blackarch' 'blackarch-misc')
 pkgdesc='A Netcat-clone, designed to be portable and offer strong encryption. It runs on Unix-like operating systems and on Microsoft Win32.'
 url='https://github.com/gitdurandal/dbd'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 license=('GPL3')
 makedepends=('git')
-source=("git+https://github.com/gitdurandal/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/gitdurandal/dbd.git')
+sha1sums=('SKIP')
 options=('!strip')
 
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
-
 build() {
-  cd $pkgname
+  cd "$srcdir/dbd"
 
   make unix
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/dbd"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/dbd"
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/dbd"
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  install -m755 dbd "$pkgdir/usr/bin"
 }
-

@@ -1,28 +1,26 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=python-pygdbmi
-_pkgname=pygdbmi
-pkgver=0.10.0.0
-pkgrel=2
+pkgname='python-pygdbmi'
+pkgver='0.7.4.4'
+pkgrel=1
 pkgdesc='Parse gdb machine interface output with Python.'
-url='https://pypi.org/project/pygdbmi/#files'
+url='https://pypi.python.org/pypi/pygdbmi/'
 arch=('any')
 license=('MIT')
 depends=('python')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/30/01/9523d5ed7bccf7f94927b3dc7a616c9b4a8dfe57df89e67571d32d87717a/$_pkgname-$pkgver.tar.gz")
-sha512sums=('ab848ca0a37a39ac6ba911782dba035c1be561deff5ed5d0e755052662ae7c2500c3e419575ca7fe810b5bf9f4f4a1bf67770ad26b140b0946a29babf067e377')
+source=("https://pypi.python.org/packages/bb/1c/8c8cbd0bb5cf513a905e3ca461cfad578e708a74417182f2a00943136f83/pygdbmi-${pkgver}.tar.gz")
+sha1sums=('42480e9169b4b17a8e9d3cff185991319bf06805')
 
 build() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/pygdbmi-$pkgver"
 
   python setup.py build
 }
 
 package() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/pygdbmi-$pkgver"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  python setup.py install --root="$pkgdir" --optimize=1
 }
-

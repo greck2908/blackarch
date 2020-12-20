@@ -1,40 +1,39 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=glue
-pkgver=380.8703380
-pkgrel=4
+pkgname='glue'
+pkgver=242.36b899e
+pkgrel=1
 groups=('blackarch' 'blackarch-automation')
 pkgdesc='A framework for running a series of tools.'
 arch=('any')
 url='https://github.com/OWASP/glue'
-license=('APACHE')
-depends=('ruby' 'ruby-bundler' 'libxslt')
+license=('Apache2')
+depends=('ruby' 'ruby-bundler')
 makedepends=('git')
+install='glue.install'
 options=(!strip)
-source=("git+https://github.com/OWASP/$pkgname.git")
-sha512sums=('SKIP')
-install="$pkgname.install"
+source=('git+https://github.com/OWASP/glue.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/glue"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/glue"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/glue"
 
-  cp -a * "$pkgdir/usr/share/$pkgname"
+  cp -a * "$pkgdir/usr/share/glue"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/glue" << EOF
 #!/bin/sh
-exec ruby /usr/share/$pkgname/bin/$pkgname "\$@"
+exec ruby /usr/share/glue/bin/glue "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/glue"
 }
-

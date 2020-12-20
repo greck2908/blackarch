@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=cloudfail
-pkgver=77.fcd9016
-pkgrel=3
+pkgname='cloudfail'
+pkgver=55.6757b1f
+pkgrel=1
 pkgdesc="Utilize misconfigured DNS and old database records to find hidden IP's behind the CloudFlare network."
 groups=('blackarch' 'blackarch-recon')
 arch=('any')
@@ -11,35 +11,34 @@ url='https://github.com/m0rtem/CloudFail'
 license=('custom:unknown')
 depends=('python' 'python-requests' 'python-argparse' 'python-colorama'
          'python-beautifulsoup4' 'python-pysocks' 'python-pyopenssl'
-         'python-win_inet_pton' 'python-dnspython')
+         'python-win_inet_pton')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/m0rtem/CloudFail.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/m0rtem/CloudFail.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/CloudFail"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/CloudFail"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/cloudfail"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/cloudfail/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/cloudfail/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/cloudfail" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python3 $pkgname.py "\$@"
+cd /usr/share/cloudfail
+exec python3 cloudfail.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/cloudfail"
 }
-

@@ -1,20 +1,20 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=bios_memimage
-pkgver=1.2
-pkgrel=3
+pkgname='bios_memimage'
+pkgver='1.2'
+pkgrel=2
 pkgdesc='A tool to dump RAM contents to disk (aka cold boot attack).'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://citp.princeton.edu/memory/code/'
 license=('BSD')
 groups=('blackarch' 'blackarch-cracker' 'blackarch-forensic')
 options=('!makeflags')
-source=("http://citpsite.s3-website-us-east-1.amazonaws.com/oldsite-htdocs/memory-content/src/bios_memimage-$pkgver.tar.gz")
-sha512sums=('af358cdb5a2e35cc3434ddfd74d10147c55483951f37c193513de29df50fba8be9817b21b65417dd5124de13007fd5f0e7805406ac3f4e9ac7da21f3864c506e')
+source=("http://citp.princeton.edu/memory-content/src/bios_memimage-$pkgver.tar.gz")
+sha1sums=('a3dba04cd7f1f282e72ea442251b0b749a2be401')
 
 build() {
-  cd $pkgname
+  cd "$srcdir/bios_memimage"
 
   machine="`uname -m`"
 
@@ -28,19 +28,18 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/bios_memimage"
 
-  install -Dm 755 "pxedump/pxedump" \
+  install -D -m755 "pxedump/pxedump" \
     "$pkgdir/usr/bin/pxedump"
-  install -Dm 755 "usbdump/usbdump" \
+  install -D -m755 "usbdump/usbdump" \
     "$pkgdir/usr/bin/usbdump"
-  install -Dm 644 "pxe/scraper.bin" \
-    "$pkgdir/usr/share/$pkgname/pxe/scraper.bin"
-  install -Dm 644 "usb/scraper.bin" \
-    "$pkgdir/usr/share/$pkgname/usb/scraper.bin"
-  install -Dm 644 "doc/readme.txt" \
-    "$pkgdir/usr/share/doc/$pkgname/readme.txt"
-  install -Dm 644 "doc/faq.txt" \
-    "$pkgdir/usr/share/doc/$pkgname/faq.txt"
+  install -D -m644 "pxe/scraper.bin" \
+    "$pkgdir/usr/share/bios_memimage/pxe/scraper.bin"
+  install -D -m644 "usb/scraper.bin" \
+    "$pkgdir/usr/share/bios_memimage/usb/scraper.bin"
+  install -D -m644 "doc/readme.txt" \
+    "$pkgdir/usr/share/doc/bios_memimage/readme.txt"
+  install -D -m644 "doc/faq.txt" \
+    "$pkgdir/usr/share/doc/bios_memimage/faq.txt"
 }
-

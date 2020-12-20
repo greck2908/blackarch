@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=express
-pkgver=4.17.1
+pkgname='express'
+pkgver='4.15.2'
 pkgrel=1
 epoch=1
 pkgdesc='High performance, high class web development for node.js.'
@@ -11,18 +11,17 @@ url='http://expressjs.com/'
 license=('MIT')
 depends=('nodejs')
 makedepends=('git' 'npm')
-source=("https://github.com/strongloop/express/archive/$pkgver.tar.gz")
-sha512sums=('9db5fee0dac6e67a6f9dfbd4507da26858530d0c6a40fcaa1c302053950b510765e9c6845265d4be4c44744a48f27d1d247badded3492ca6ccd2dfc6d98beb33')
+source=("https://github.com/strongloop/express/archive/${pkgver}.tar.gz")
+sha1sums=('dc01d6cb1f88653dda62ee0da037572ad5f97f73')
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/express-$pkgver"
 
-  _npmdir="$pkgdir/usr/lib/node_modules/"
+  local _npmdir="$pkgdir/usr/lib/node_modules/"
 
-  install -dm 755 $_npmdir
+  mkdir -p $_npmdir
 
   cd $_npmdir
 
-  npm install --user root -g --prefix "$pkgdir/usr" "express@$pkgver"
+  npm install --user root -g --prefix "$pkgdir/usr" express@$pkgver
 }
-

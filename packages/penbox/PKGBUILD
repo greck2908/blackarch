@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=penbox
+pkgname='penbox'
 pkgver=81.3b77c69
-pkgrel=5
+pkgrel=3
 groups=('blackarch' 'blackarch-automation')
 arch=('any')
 pkgdesc='A Penetration Testing Framework - The Tool With All The Tools.'
@@ -12,33 +12,32 @@ license=('MIT')
 depends=('python2' 'python2-requests' 'python2-lxml' 'git' 'python3' 'perl'
          'ruby')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/x3omdax/PenBox.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/x3omdax/PenBox.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/PenBox"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/PenBox"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/penbox"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/penbox/" README.md
+  install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/penbox/LICENSE.md"
 
   rm README.md LICENSE.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/penbox"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/penbox" << EOF
 #!/bin/sh
-exec python2 /usr/share/$pkgname/$pkgname.py "\$@"
+exec python2 /usr/share/penbox/penbox.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/penbox"
 }
-

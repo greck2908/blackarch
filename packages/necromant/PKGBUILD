@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=necromant
+pkgname='necromant'
 pkgver=3.acbc448
 pkgrel=2
 groups=('blackarch' 'blackarch-recon')
@@ -11,24 +11,23 @@ url='https://github.com/PentesterES/Necromant'
 license=('custom:unknown')
 makedepends=('git')
 depends=('python2' 'python2-httplib2')
-source=("$pkgname::git+https://github.com/PentesterES/Necromant.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/PentesterES/Necromant.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Necromant"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/Necromant"
 
   sed -i 's|bin/python|bin/python2|' Necromant.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Necromant"
 
-  install -Dm 755 Necromant.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm755 Necromant.py "$pkgdir/usr/bin/necromant"
 }
-

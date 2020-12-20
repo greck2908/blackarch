@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=noriben
-pkgver=147.d128833
-pkgrel=2
+pkgname='noriben'
+pkgver=125.4e6e2d4
+pkgrel=1
 pkgdesc='Portable, Simple, Malware Analysis Sandbox.'
 groups=('blackarch' 'blackarch-malware')
 arch=('any')
@@ -11,47 +11,46 @@ url='https://github.com/Rurik/Noriben'
 license=('custom:unknown')
 depends=('python' 'python-argparse' 'python-magic')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/Rurik/Noriben.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/Rurik/Noriben.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Noriben"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/Noriben"
 
   cp ProcmonConfiguration.pmc ProcmonConfiguration.PMC
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Noriben"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/noriben"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/noriben/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/noriben/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/noriben" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python3 Noriben.py "\$@"
+cd /usr/share/noriben
+exec python3 Noriben.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/noriben"
 
   cat > "$pkgdir/usr/bin/noriben-sandbox" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python3 NoribenSandbox.py "\$@"
+cd /usr/share/noriben
+exec python3 NoribenSandbox.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/noriben-sandbox"
+  chmod a+x "$pkgdir/usr/bin/noriben-sandbox"
 }
-

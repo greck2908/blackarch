@@ -1,54 +1,34 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=peframe
-pkgver=134.ad02a17
-pkgrel=2
+pkgname='peframe'
+pkgver=94.f3a4391
+pkgrel=1
 groups=('blackarch' 'blackarch-malware' 'blackarch-binary'
         'blackarch-reversing')
 pkgdesc='Tool to perform static analysis on (portable executable) malware.'
 arch=('any')
 url='https://github.com/guelfoweb/peframe'
 license=('custom:unknown')
-depends=('python' 'python-pefile' 'python-python-magic' 'python-oletools'
-         'python-yara' 'python-m2crypto' 'python-virustotal-api' 'python-magic'
-         'python-msoffcrypto-tool')
-makedepends=('git' 'python-setuptools')
-source=("git+https://github.com/guelfoweb/$pkgname.git")
-sha512sums=('SKIP')
+depends=('python2' 'python2-simplejson')
+makedepends=('git' 'python2-setuptools')
+source=('git+https://github.com/guelfoweb/peframe.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/peframe"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-build() {
-  cd $pkgname
-
-  python setup.py build
-}
-
 package() {
-  cd $pkgname
+  cd "$srcdir/peframe"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/peframe"
 
-  python setup.py install --root="$pkgdir" --skip-build
+  install -Dm644 -t "$pkgdir/usr/share/doc/peframe/README.md" README.rst \
+    CHANGELOG.rst
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/README.md" README.rst
-
-  rm README.rst
-
-#  cp -a * "$pkgdir/usr/share/$pkgname/"
-
-#  cat > "$pkgdir/usr/bin/$pkgname" << EOF
-#!/bin/sh
-#cd /usr/share/$pkgname
-#exec python3 $pkgname-cli.py "\$@"
-#EOF
-
-#  chmod a+x "$pkgdir/usr/bin/$pkgname"
+  python2 setup.py install --root="$pkgdir"
 }
-

@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=owasp-bywaf
+pkgname='owasp-bywaf'
 pkgver=26.e730d1b
 pkgrel=3
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
@@ -11,41 +11,41 @@ url='https://github.com/depasonico/OWASP-ByWaf'
 license=('custom')
 depends=('python2' 'python2-sqlalchemy')
 makedepends=('python2-setuptools' 'git')
-source=("$pkgname::git+https://github.com/depasonico/OWASP-ByWaf.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/depasonico/OWASP-ByWaf.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/OWASP-ByWaf"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/OWASP-ByWaf"
 
   sed -i 's|python$|python2|' "hostdb.py"
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/OWASP-ByWaf"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/doc/owasp-bywaf"
 
-  for i in *.py ; do
-    install -Dm 755 $i "$pkgdir/usr/share/$pkgname/$i"
+  for i in *.py
+  do
+    install -Dm755 $i "$pkgdir/usr/share/owasp-bywaf/$i"
   done
 
-  install -Dm 644 doc/* "$pkgdir/usr/share/doc/$pkgname"
-  install -Dm 644 copyright.txt \
-    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 doc/* "$pkgdir/usr/share/doc/owasp-bywaf"
+  install -Dm644 copyright.txt \
+    "$pkgdir/usr/share/licenses/owasp-bywaf/copyright.txt"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/owasp-bywaf" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname/
+cd /usr/share/owasp-bywaf/
 exec python2 ./bywaf.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/owasp-bywaf"
 }
-

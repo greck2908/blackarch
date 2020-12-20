@@ -1,43 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=sipi
-pkgver=13.58f0dcc
+pkgname='sipi'
+pkgver=10.10f087f
 pkgrel=2
 pkgdesc='Simple IP Information Tools for Reputation Data Analysis.'
 groups=('blackarch' 'blackarch-recon' 'blackarch-misc')
 arch=('any')
 url='https://github.com/ST2Labs/SIPI'
 license=('GPL2')
-depends=('python2' 'python2-requests' 'python2-shodan')
+depends=('python2' 'python2-requests' 'shodan')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/ST2Labs/SIPI.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/ST2Labs/SIPI.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/SIPI"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/SIPI"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/sipi"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/sipi/README.md"
 
   rm *.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/sipi/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/sipi" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/sipi
+exec python2 sipi.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/sipi"
 }
-

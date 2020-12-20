@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=vbrute
-pkgver=1.11dda8b
-pkgrel=4
+pkgname='vbrute'
+pkgver='1.11dda8b'
+pkgrel=2
 pkgdesc='Virtual hosts brute forcer.'
 arch=('armv6h' 'armv7h' 'aarch64' 'x86_64')
 groups=('blackarch' 'blackarch-recon' 'blackarch-scanner')
@@ -11,17 +11,17 @@ url='https://github.com/nccgroup/vbrute'
 license=('GPL3')
 depends=('libevent')
 makedepends=('git')
-source=("git+https://github.com/nccgroup/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/nccgroup/vbrute.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/vbrute"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/vbrute"
 
   autoreconf
 
@@ -29,11 +29,10 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/vbrute"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/vbrute/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/vbrute/LICENSE"
 
   make DESTDIR="$pkgdir" install
 }
-

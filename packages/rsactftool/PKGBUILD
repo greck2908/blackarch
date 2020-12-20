@@ -1,43 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=rsactftool
-pkgver=319.4a53907
+pkgname='rsactftool'
+pkgver=71.ca54ad7
 pkgrel=1
-pkgdesc='RSA tool for ctf - retrieve private key from weak public key and/or uncipher data.'
+pkgdesc='RSA tool for ctf - retreive private key from weak public key and/or uncipher data.'
 groups=('blackarch' 'blackarch-crypto' 'blackarch-cracker')
 arch=('any')
 url='https://github.com/Ganapati/RsaCtfTool'
 license=('custom:unknown')
-depends=('python' 'python-sympy' 'python-gmpy2' 'python-cryptography'
-         'python-requests' 'python-pycryptodome')
+depends=('python2' 'python2-sympy' 'python2-argparse' 'python2-gmpy'
+         'python2-libnum')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/Ganapati/RsaCtfTool.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/Ganapati/RsaCtfTool')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/RsaCtfTool"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/RsaCtfTool"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/rsactftool"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/rsactftool/" README.md
 
   rm README.md
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/rsactftool/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/rsactftool" << EOF
 #!/bin/sh
-exec python /usr/share/$pkgname/RsaCtfTool.py "\$@"
+cd /usr/share/rsactftool
+exec python2 RsaCtfTool.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/rsactftool"
 }
-

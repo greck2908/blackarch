@@ -1,31 +1,31 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ipba2
-pkgver=032013
-pkgrel=6
+pkgname='ipba2'
+pkgver='032013'
+pkgrel=5
 groups=('blackarch' 'blackarch-forensic')
-pkgdesc='IOS Backup Analyzer.'
-url='http://www.ipbackupanalyzer.com/'
+pkgdesc="IOS Backup Analyzer"
+url="http://www.ipbackupanalyzer.com/"
 arch=('any')
 license=('GPL2')
-depends=('python2' 'python2-pillow6' 'python2-pyside' 'qt4')
+depends=('python2' 'python2-pillow' 'python2-pyside' 'qt4')
 source=("http://www.ipbackupanalyzer.com/downloads/python-pre-assembled-files/python-pre-assembled-files-$pkgver/ipba2-python-build-$pkgver-zip")
-sha512sums=('3c1105ee267ae32842106db1df51a0ecad43f884')
+sha1sums=('3c1105ee267ae32842106db1df51a0ecad43f884')
 
 package() {
-  cd "iPBA2 python build $pkgver"
+  cd "$srcdir/iPBA2 python build $pkgver"
 
-  install -dm 755 "$pkgdir/usr/bin/"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  # Base directories.
+  mkdir -p "$pkgdir/usr/share/ipba2"
+  mkdir -p "$pkgdir/usr/bin/"
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/ipba2"
 
-cat > "$pkgdir/usr/bin/$pkgname" << EOF
+cat > "$pkgdir/usr/bin/ipba2" << EOF
 #!/bin/sh
-exec python2 /usr/share/$pkgname/main.py "\$@"
+exec python2 /usr/share/ipba2/main.py "\$@"
 EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+ chmod +x "$pkgdir/usr/bin/ipba2"
 }
 

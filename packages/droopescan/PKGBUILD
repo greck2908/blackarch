@@ -1,33 +1,33 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=droopescan
-pkgver=1.44.1
+pkgname='droopescan'
+pkgver='1.39.0'
 pkgrel=1
-groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
+groups=('blackarch' 'blackarch-scanner' 'blackarch-webapp')
 pkgdesc='A plugin-based scanner that aids security researchers in identifying issues with several CMSs, mainly Drupal & Silverstripe.'
 arch=('any')
 url='https://github.com/droope/droopescan'
-license=('AGPL')
-depends=('python' 'python-cement' 'python-requests' 'python-pystache'
-         'python-mock' 'python-lxml' 'python-nose' 'python-beautifulsoup4'
-         'python-simplejson' 'python-twisted' 'python-dateutil')
+license=('GPL3')
+depends=('python2' 'python2-cement' 'python2-requests' 'python2-pystache'
+         'python2-futures' 'python2-mock' 'python2-lxml' 'python2-nose'
+         'python2-beautifulsoup4' 'python2-simplejson')
 makedepends=('git')
-source=("https://github.com/droope/$pkgname/archive/$pkgver.tar.gz")
-sha512sums=('49ed25a4c0db17715293bda051d90344ef68c7f859b64c50c9dfa29d72275fa9fb48f46328a581081b9b6d37434ed6698d445676694033b95aeb916e82242d70')
+source=("https://github.com/droope/droopescan/archive/${pkgver}.tar.gz")
+sha1sums=('f3278dd5ed34db84ea55df722af0fcb74d57b82e')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/droopescan-$pkgver"
 
-  python setup.py build
+  python2 setup.py build
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/droopescan-$pkgver"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/droopescan/" README.md CHANGELOG \
+    requirements.txt requirements_test.txt
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/droopescan/LICENSE"
 }
-

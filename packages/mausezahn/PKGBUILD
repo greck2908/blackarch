@@ -1,20 +1,20 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=mausezahn
-pkgver=0.40
+pkgname='mausezahn'
+pkgver='0.40'
 pkgrel=3
 pkgdesc='A free fast traffic generator written in C which allows you to send nearly every possible and impossible packet.'
-arch=('x86_64' 'aarch64')
-groups=('blackarch' 'blackarch-dos' 'blackarch-networking')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://www.perihel.at/sec/mz/'
 license=('GPL')
 depends=('cmake' 'libnet' 'libpcap' 'libcli')
-source=("http://www.perihel.at/sec/mz/mz-$pkgver.tar.gz")
-sha512sums=('c1c73e93862dc96859159c7fc9daf61f64650c0b')
+source=("http://www.perihel.at/sec/mz/mz-${pkgver}.tar.gz")
+groups=('blackarch' 'blackarch-dos' 'blackarch-networking')
+sha1sums=('c1c73e93862dc96859159c7fc9daf61f64650c0b')
 
 build() {
-  cd "mz-$pkgver"
+  cd "mz-$pkgver/"
 
   cmake . -DCMAKE_INSTALL_PREFIX=/usr
 
@@ -24,11 +24,10 @@ build() {
 package() {
   cd "mz-$pkgver/src"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/mz"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/mz"
 
   cp -aR mz "$pkgdir/usr/share/mz/"
 
   ln -s /usr/share/mz/mz "$pkgdir/usr/bin/"
 }
-

@@ -1,47 +1,39 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=amoco
-pkgver=v2.4.1.r286.gd3c2fab
-pkgrel=2
-epoch=1
+pkgname='amoco'
+pkgver=310.5acf6c9
+pkgrel=1
 pkgdesc='Yet another tool for analysing binaries.'
 groups=('blackarch' 'blackarch-binary' 'blackarch-reversing')
 arch=('any')
 url='https://github.com/bdcht/amoco'
 license=('GPL2')
-depends=('python' 'python-pyqt5' 'python-grandalf' 'pygoocanvas' 'python-click'
-         'python-crysp' 'python-z3' 'pygtk' 'python-pytest' 'python-traitlets'
-         'python-pyparsing' 'pyside2' 'python-blessed')
-makedepends=('git' 'python-setuptools')
-source=("git+https://github.com/bdcht/$pkgname.git")
-sha512sums=('SKIP')
+depends=('python2' 'python2-pyqt5' 'python2-grandalf' 'pygoocanvas'
+         'python2-crysp')
+makedepends=('git' 'python2-setuptools')
+source=('git+https://github.com/bdcht/amoco.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/amoco"
 
-  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
-}
-
-prepare() {
-  cd $pkgname
-
-  sed -i 's|crysp>=1.0|crysp|g' setup.py
-  sed -i 's|grandalf>=0.6|grandalf|g' setup.py
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/amoco"
 
-  python setup.py build
+  python2 setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/amoco"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr --skip-build
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.rst doc/*
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  python2 setup.py install --root="$pkgdir" --optimize=1
+
+  install -Dm644 -t "$pkgdir/usr/share/doc/amoco/" README.rst doc/*
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/amoco/LICENSE"
 }
-

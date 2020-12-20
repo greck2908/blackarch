@@ -1,42 +1,41 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=zizzania
+pkgname='zizzania'
 pkgver=124.8f2062f
 pkgrel=1
 groups=('blackarch' 'blackarch-wireless' 'blackarch-dos' 'blackarch-sniffer')
 pkgdesc='Automated DeAuth attack.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/cyrus-and/zizzania'
 license=('custom:unknown')
 depends=('libpcap' 'uthash')
 makedepends=('git' 'scons')
-source=("git+https://github.com/cyrus-and/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/cyrus-and/zizzania.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/zizzania"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/zizzania"
 
   sed -i 's|/usr/local|/usr|g' Makefile
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/zizzania"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/zizzania"
 
-  install -Dm 755 "src/$pkgname" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 src/zizzania "$pkgdir/usr/bin/zizzania"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/zizzania/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/zizzania/LICENSE"
 }
-

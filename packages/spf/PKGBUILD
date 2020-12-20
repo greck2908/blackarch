@@ -1,58 +1,57 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=spf
-pkgver=85.344ac2f
-pkgrel=3
+pkgname='spf'
+pkgver=77.d93da93
+pkgrel=1
 groups=('blackarch' 'blackarch-social')
 pkgdesc='A python tool designed to allow for quick recon and deployment of simple social engineering phishing exercises.'
 arch=('any')
 url='https://github.com/tatanus/SPF'
 license=('custom:unknown')
-depends=('python' 'python-dnspython' 'python-twisted' 'phantomjs')
+depends=('python2' 'python2-dnspython' 'python2-twisted' 'phantomjs')
 optdepends=('beef' 'theharvester')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/tatanus/SPF.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/tatanus/SPF.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/SPF"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/SPF"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/spf"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md Install.txt \
+  install -Dm644 -t "$pkgdir/usr/share/doc/spf/" README.md Install.txt \
     Requirements.txt
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/spf/LICENSE"
 
   rm README.md LICENSE Install.txt Requirements.txt
 
-  cp -a spf/* "$pkgdir/usr/share/$pkgname/"
+  cp -a spf/* "$pkgdir/usr/share/spf/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/spf" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python $pkgname.py "\$@"
+cd /usr/share/spf
+exec python2 spf.py "\$@"
 EOF
 
-  cat > "$pkgdir/usr/bin/$pkgname-report" << EOF
+  cat > "$pkgdir/usr/bin/spf-report" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python report.py "\$@"
+cd /usr/share/spf
+exec python2 report.py "\$@"
 EOF
 
-  cat > "$pkgdir/usr/bin/$pkgname-web" << EOF
+  cat > "$pkgdir/usr/bin/spf-web" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python web.py "\$@"
+cd /usr/share/spf
+exec python2 web.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/"*
+  chmod a+x "$pkgdir/usr/bin/"*
 }
-

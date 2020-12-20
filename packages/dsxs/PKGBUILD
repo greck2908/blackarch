@@ -1,29 +1,34 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dsxs
-pkgver=130.3e628b6
+pkgname='dsxs'
+pkgver=119.f04f946
 pkgrel=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 pkgdesc='A fully functional Cross-site scripting vulnerability scanner (supporting GET and POST parameters) written in under 100 lines of code.'
 arch=('any')
 url='https://github.com/stamparm/DSXS'
 license=('custom:unknown')
-depends=('python')
+depends=('python2')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/stamparm/DSXS.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/stamparm/DSXS.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/DSXS"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-package() {
-  cd $pkgname
+prepare() {
+  cd "$srcdir/DSXS"
 
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  sed -i 's|bin/env python|bin/env python2|' dsxs.py
 }
 
+package() {
+  cd "$srcdir/DSXS"
+
+  install -Dm755 dsxs.py "$pkgdir/usr/bin/dsxs"
+  install -Dm644 -t "$pkgdir/usr/share/doc/dsxs/" README.md
+}

@@ -1,21 +1,20 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=lft
-pkgver=3.91
+pkgname='lft'
+pkgver='3.79'
 pkgrel=1
-epoch=1
 groups=('blackarch' 'blackarch-recon' 'blackarch-networking')
 pkgdesc='A layer four traceroute implementing numerous other features.'
-arch=('x86_64' 'aarch64')
-license=('custom:unknown')
-url='http://pwhois.org/lft/'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+license=('custom')
+url="http://pwhois.org/lft/"
 depends=('libpcap')
-source=("http://pwhois.org/get/$pkgname-$pkgver.tar.gz")
-sha512sums=('1d030e2def14330426eef4c81245c4cce5f09c560b65b319199b20d82e967b77a5d4e323e2e64a8c1bcf80d1f87ae871e3f24a7d9cbc19cd7a5be2d3204845e7')
+source=("http://pwhois.org/dl/index.who?file=lft-${pkgver}.tar.gz")
+sha1sums=('42346c9574d21cbe5db16b0e5a75938b43bb1cdb')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/lft-$pkgver"
 
   if [[ "$CARCH" == "x86_64" ]];
   then
@@ -28,10 +27,9 @@ build() {
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/lft-$pkgver"
 
   make prefix="$pkgdir/usr" install
 
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/lft/COPYING"
 }
-

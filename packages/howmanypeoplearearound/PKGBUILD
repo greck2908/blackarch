@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=howmanypeoplearearound
-pkgver=123.b05e06a
-pkgrel=2
+pkgname='howmanypeoplearearound'
+pkgver=115.e074d40
+pkgrel=1
 pkgdesc='Count the number of people around you by monitoring wifi signals.'
 groups=('blackarch' 'blackarch-recon' 'blackarch-wireless')
 arch=('any')
@@ -12,27 +12,31 @@ license=('MIT')
 depends=('python' 'python-pick' 'python-netifaces' 'python-click'
          'wireshark-cli')
 makedepends=('git' 'python-setuptools')
-source=("git+https://github.com/schollz/$pkgname.git")
+source=('git+https://github.com/schollz/howmanypeoplearearound.git')
 md5sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "${srcdir}/howmanypeoplearearound"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "${srcdir}/howmanypeoplearearound"
 
   python setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "${srcdir}/howmanypeoplearearound"
 
-  python setup.py install --prefix=/usr --root="$pkgdir" -O1 --skip-build
+  mkdir -p "${pkgdir}/usr/share/doc/howmanypeoplearearound"
+  mkdir -p "${pkgdir}/usr/share/licenses/howmanypeoplearearound"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "${pkgdir}/usr/share/doc/howmanypeoplearearound/" \
+    README.md
+  install -Dm644 -t "${pkgdir}/usr/share/licenses/howmanypeoplearearound/" \
+    LICENSE
+
+  python setup.py install --prefix=/usr --root="${pkgdir}"
 }
-

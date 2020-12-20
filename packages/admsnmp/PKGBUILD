@@ -1,31 +1,30 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=admsnmp
-_pkgname=ADMsnmp
-pkgver=0.1
+pkgname='admsnmp'
+pkgver='0.1'
 pkgrel=4
 groups=('blackarch' 'blackarch-scanner')
 pkgdesc='ADM SNMP audit scanner.'
 license=('GPL')
 depends=('glibc')
 makedepends=('gcc')
-arch=('x86_64' 'aarch64')
-source=("https://dl.packetstormsecurity.net/groups/ADM/ADMsnmp.$pkgver.tgz")
-sha512sums=('e861174206b87934ad14f686a5f0abc0d1350b94b535075b9d75d9c79411be6dd298cb2f496140541603025217d275fb80a6429f653bd3735e098b7cb6c0282e')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+source=("http://packetstorm.wowhacker.com/groups/ADM/ADMsnmp.0.1.tgz")
+sha1sums=('0e8cb98a47c7e473389d6cc512da76d021d0910d')
 
 build() {
-  cd $_pkgname
+  cd "$srcdir/ADMsnmp"
 
-  gcc $CFLAGS snmp.c -o $pkgname
+  gcc $CFLAGS snmp.c -o admsnmp
 }
 
 package() {
-  cd $_pkgname
+  cd "$srcdir/ADMsnmp"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  install -Dm755 admsnmp "$pkgdir/usr/bin/admsnmp"
+  mkdir -p "$pkgdir/usr/share/admsnmp"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t ADMsnmp.README snmp.passwd "$pkgdir/usr/share/$pkgname/"
+  cp ADMsnmp.README snmp.passwd "$pkgdir/usr/share/admsnmp/"
 }
 

@@ -1,27 +1,27 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=hulk
-pkgver=25.9670699
+pkgname='hulk'
+pkgver=21.d47030b
 pkgrel=1
 pkgdesc='A webserver DoS tool (Http Unbearable Load King) ported to Go with some additional features.'
 groups=('blackarch' 'blackarch-dos')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/grafov/hulk'
 license=('GPL3')
 depends=('glibc')
-makedepends=('git' 'go-pie')
-source=("git+https://github.com/grafov/$pkgname.git")
-sha512sums=('SKIP')
+makedepends=('git' 'go')
+source=('git+https://github.com/grafov/hulk.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/hulk"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/hulk"
 
   export GO386=387
   export GOOS=linux
@@ -29,19 +29,21 @@ build() {
   if [ "$CARCH" == "x86_64" ]
   then
     export GOARCH=amd64
+  elif [ "$CARCH" == "i686" ]
+  then
+    export GOARCH=386
   elif [ "$CARCH" == "armv6h" ] || [ "$CARCH" == "armv7h" ]
   then
     export GOARCH=arm
   fi
 
-  GOPATH="$srcdir" go build -v -o $pkgname
+  GOPATH="$srcdir" go build -v -o "hulk"
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/hulk"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 hulk "$pkgdir/usr/bin/hulk"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/hulk/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/hulk/LICENSE"
 }
-

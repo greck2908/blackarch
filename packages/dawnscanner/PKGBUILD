@@ -1,46 +1,29 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dawnscanner
-pkgver=v1.6.9.r6.gac3eba5
-pkgrel=6
-epoch=1
+pkgname='dawnscanner'
+pkgver='1.6.8'
+pkgrel=2
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 pkgdesc='A static analysis security scanner for ruby written web applications.'
-arch=('any')
-url='https://github.com/thesp0nge/dawnscanner'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://rubygems.org/gems/dawnscanner'
 license=('MIT')
-depends=('ruby' 'ruby-bundler' 'libxslt')
-makedepends=('git')
-source=("git+https://github.com/thesp0nge/$pkgname.git")
-sha512sums=('SKIP')
-install="$pkgname.install"
-
-pkgver() {
-  cd $pkgname
-
-  git describe --long | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
-}
+depends=('ruby')
+makedepends=('ruby')
+options=('!strip')
+source=("https://rubygems.org/downloads/dawnscanner-${pkgver}.gem")
+sha1sums=('7f56617eeab5f897c910d9bfbfd54425c4856fc1')
 
 package() {
-  cd $pkgname
+  cd "$srcdir"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" *.md
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  local _gemdir="$(ruby -e'puts Gem.default_dir')"
 
-  rm -rf *.md LICENSE.txt
+  gem install --no-user-install -n "$pkgdir/usr/bin" -i "$pkgdir/$_gemdir" \
+    dawnscanner*.gem
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
-
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname
-exec bundle exec ./bin/dawn "\$@"
-EOF
-
-  chmod a+x "$pkgdir/usr/bin/$pkgname"
+  rm "$pkgdir/usr/bin/"{cvss,haml,ruby_parse,ruby_parse_extract_error,tilt}
 }
-

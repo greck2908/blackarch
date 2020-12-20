@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=htrosbif
+pkgname='htrosbif'
 pkgver=134.9dc3f86
 pkgrel=5
 groups=('blackarch' 'blackarch-fingerprint' 'blackarch-recon')
@@ -11,34 +11,33 @@ url='https://github.com/lkarsten/htrosbif'
 license=('GPL3')
 depends=('perl' 'perl-json-xs' 'perl-list-moreutils' 'perl-test-deep')
 makedepends=('git')
-source=("git+https://github.com/lkarsten/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/lkarsten/htrosbif.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/htrosbif"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/htrosbif"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/htrosbif"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" REQUIREMENTS
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm644 REQUIREMENTS "$pkgdir/usr/share/doc/htrosbif/REQUIREMENTS"
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/htrosbif/COPYING"
 
   rm COPYING REQUIREMENTS
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/htrosbif"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/htrosbif" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec perl $pkgname "\$@"
+cd /usr/share/htrosbif
+exec perl htrosbif "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/htrosbif"
 }
-

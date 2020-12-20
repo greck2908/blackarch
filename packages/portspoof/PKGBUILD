@@ -1,27 +1,27 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=portspoof
-pkgver=128.8b5596a
+pkgname='portspoof'
+pkgver=122.ebac0d0
 pkgrel=1
 pkgdesc="This program's primary goal is to enhance OS security through a set of new techniques."
 url='http://portspoof.org/'
 groups=('blackarch' 'blackarch-defensive' 'blackarch-spoof')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 license=('GPL2')
 depends=('gcc-libs')
 makedepends=('git' 'automake')
-source=("git+https://github.com/drk1wi/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/drk1wi/portspoof.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/portspoof"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/portspoof"
 
   ./configure --prefix=/usr
 
@@ -29,20 +29,20 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/portspoof"
 
-  install -dm 755 "$pkgdir"/{usr/bin,etc/portspoof}
+  mkdir -p "$pkgdir"/{usr/bin,etc/portspoof}
 
-  install -Dm 755 "src/$pkgname" "$pkgdir/usr/bin/$pkgname"
+  install -Dm755 src/portspoof "$pkgdir/usr/bin/portspoof"
 
-  install -m 644 -t "$pkgdir/etc/$pkgname/" "tools/$pkgname.conf" \
+  install -m644 -t "$pkgdir/etc/portspoof/" "tools/portspoof.conf" \
     "tools/portspoof_signatures"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" AUTHORS CREDITS FAQ \
-  ChangeLog INSTALL README README.md NEWS
+  install -Dm644 AUTHORS "$pkgdir/usr/share/doc/portspoof/AUTHORS"
+  install -m644 -t "$pkgdir/usr/share/doc/portspoof/" \
+    CREDITS ChangeLog FAQ INSTALL README README.md NEWS
 
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
-  install -m 644 COPYRIGHT.GPL\
-    "$pkgdir/usr/share/licenses/$pkgname/COPYRIGHT.GPL"
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/portspoof/COPYING"
+  install -m644 COPYRIGHT.GPL\
+    "$pkgdir/usr/share/licenses/portspoof/COPYRIGHT.GPL"
 }
-

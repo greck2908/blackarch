@@ -1,55 +1,52 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=wpbrute-rpc
+pkgname='wpbrute-rpc'
 pkgver=3.e7d8145
-pkgrel=13
+pkgrel=5
 groups=('blackarch' 'blackarch-cracker' 'blackarch-webapp')
 pkgdesc='Tool for amplified bruteforce attacks on wordpress based website via xmlrcp API.'
 arch=('any')
-url='https://github.com/zendoctor/wpbrute-rpc'
 license=('custom:unknown')
-depends=('ruby' 'ruby-bundler' 'libxslt')
 makedepends=('git')
-source=("git+https://github.com/zendoctor/$pkgname.git")
-install="$pkgname.install"
-sha512sums=('SKIP')
+depends=('ruby' 'ruby-bundler')
+url='https://github.com/zendoctor/wpbrute-rpc'
+source=('git+https://github.com/zendoctor/wpbrute-rpc.git')
+install='wpbrute-rpc.install'
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/wpbrute-rpc"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/wpbrute-rpc"
 
   if [ -f GemFile ]
   then
     mv GemFile Gemfile
   fi
-
-  sed -i '1i\#!/usr/bin/env ruby' "$pkgname.rb"
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/wpbrute-rpc"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/wpbrute-rpc"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/wpbrute-rpc" README.md
 
-  cp --no-preserve=ownership -a * "$pkgdir/usr/share/$pkgname/"
+  cp --no-preserve=ownership -a * "$pkgdir/usr/share/wpbrute-rpc"
 
   rm README.md
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/wpbrute-rpc" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec bundle exec $pkgname.rb "\$@"
+cd /usr/share/wpbrute-rpc
+exec ruby /usr/share/wpbrute-rpc/wpbrute-rpc.rb "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir"/usr/bin/wpbrute-rpc
 }
-

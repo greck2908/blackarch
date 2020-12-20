@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=xxeinjector
-pkgver=55.604c39a
+pkgname='xxeinjector'
+pkgver=52.4190611
 pkgrel=1
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-webapp')
 pkgdesc='Tool for automatic exploitation of XXE vulnerability using direct and different out of band methods.'
@@ -11,21 +11,20 @@ url='https://github.com/enjoiz/XXEinjector'
 license=('custom:unknown')
 depends=('ruby')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/enjoiz/XXEinjector.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/enjoiz/XXEinjector.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/XXEinjector"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/XXEinjector"
 
-  install -dm 755 "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 755 XXEinjector.rb "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm755 XXEinjector.rb "$pkgdir/usr/bin/xxeinjector"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/xxeinjector/README.md"
 }
-

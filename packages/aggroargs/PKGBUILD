@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=aggroargs
+pkgname='aggroargs'
 pkgver=51.c032446
 pkgrel=1
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-fuzzer')
@@ -11,34 +11,33 @@ url='https://github.com/tintinweb/aggroArgs'
 license=('GPL2')
 depends=('python2')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/tintinweb/aggroArgs.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/tintinweb/aggroArgs.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/aggroArgs"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/aggroArgs"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/aggroargs"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/aggroargs/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/aggroargs/LICENSE"
 
   rm README.* LICENSE
 
-  cp -a src/* "$pkgdir/usr/share/$pkgname/"
+  cp -a src/* "$pkgdir/usr/share/aggroargs"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/aggroargs" << EOF
 #!/bin/sh
 cd /usr/share/aggroargs
-exec python2 __main__.py "\${@}"
+exec python2 __main__.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/aggroargs"
 }
-

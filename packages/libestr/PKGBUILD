@@ -1,26 +1,25 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=libestr
-pkgver=0.1.11
-pkgrel=1
+pkgname='libestr'
+pkgver=0.1.10
+pkgrel=2
 pkgdesc='Essentials for string handling (and a bit more).'
 url='http://libestr.adiscon.com/'
-arch=('x86_64' 'aarch64')
-license=('LGPL')
-source=("http://libestr.adiscon.com/files/download/$pkgname-$pkgver.tar.gz")
-sha512sums=('0ab98c2fa4b58cf6fee89c88602725b8b5e8e5a171a6976cdd8cff4dfc1cd3e5b747868da74fccd1bca66b9fa524ceae1c4f1ad5ee653a44ff81df6916ab5328')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+license=('LGPL2.1')
+source=("http://libestr.adiscon.com/files/download/libestr-${pkgver}.tar.gz")
+sha1sums=('35cc717f5ae737a28140dd1472e13ce2ec317c6c')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/libestr-${pkgver}"
 
   ./configure --prefix=/usr
 
   make
 }
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/libestr-${pkgver}"
 
   make install DESTDIR="$pkgdir"
 }
-

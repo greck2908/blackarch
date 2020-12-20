@@ -1,28 +1,20 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=python-asyncio
-pkgver=3.4.3
-pkgrel=5
+pkgname='python-asyncio'
+pkgver='3.4.3'
+pkgrel=2
 pkgdesc='Reference implementation of PEP 3156.'
 arch=('any')
-url='https://pypi.org/project/asyncio/#files'
+url='https://pypi.python.org/pypi/asyncio/'
 license=('Apache2')
 depends=('python')
 makedepends=('python-setuptools')
-source=("https://pypi.python.org/packages/source/a/asyncio/asyncio-$pkgver.tar.gz")
-sha512sums=('42077cbbae3d67e6e45224cc1996f1aaaff137cdc5c8679ba830fd66098d1e9d8c05e315c8d2ef1add2f504ab769bd339e5d8ae2f7532d423282baca2d383736')
-
-build() {
-  cd "asyncio-$pkgver"
-
-  python setup.py build
-}
+source=("https://pypi.python.org/packages/source/a/asyncio/asyncio-${pkgver}.tar.gz")
+sha1sums=('67447760f5e7454d5fa00ed1114efd2d863b65fa')
 
 package() {
-  cd "asyncio-$pkgver"
+  cd "$srcdir/asyncio-$pkgver"
 
-  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
-    --skip-build
+  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
 }
-

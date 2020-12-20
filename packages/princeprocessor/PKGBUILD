@@ -1,43 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=princeprocessor
-pkgver=132.bffda8c
-pkgrel=1
+pkgname='princeprocessor'
+pkgver=130.f0c101d
+pkgrel=2
 epoch=1
 groups=('blackarch' 'blackarch-misc')
 pkgdesc='Standalone password candidate generator using the PRINCE algorithm.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/jsteube/princeprocessor/'
 license=('MIT')
 depends=('lib32-glibc')
 makedepends=('git' 'gcc')
 source=('git+https://github.com/jsteube/princeprocessor.git')
-sha512sums=('SKIP')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/princeprocessor"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/princeprocessor/src"
 
   make pp64.bin
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/princeprocessor"
 
   cd src
 
-  install -Dm 755 pp64.bin "$pkgdir/usr/bin/$pkgname"
+  install -Dm755 pp64.bin "$pkgdir/usr/bin/princeprocessor"
 
   cd ..
 
-  install -Dm 644 -t "$pkgdir/usr/share/$pkgname" rules/*
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGES
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/princeprocessor" rules/*
+  install -Dm644 -t "$pkgdir/usr/share/doc/princeprocessor/" README.md CHANGES
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/princeprocessor/LICENSE"
 }
-

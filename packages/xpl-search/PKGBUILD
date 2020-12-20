@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=xpl-search
+pkgname='xpl-search'
 pkgver=42.d4dbc97
 pkgrel=2
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-misc')
@@ -11,25 +11,24 @@ url='https://github.com/CoderPirata/XPL-SEARCH'
 license=('custom:unknown')
 depends=('php' 'curl')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/CoderPirata/XPL-SEARCH.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/CoderPirata/XPL-SEARCH.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/XPL-SEARCH"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/XPL-SEARCH"
 
   sed -i '1 i\#!/usr/bin/env php' "xpl search.php"
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/XPL-SEARCH"
 
-  install -Dm 755 "xpl search.php" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm755 "xpl search.php" "$pkgdir/usr/bin/xpl-search"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/xpl-search/README.md"
 }
-

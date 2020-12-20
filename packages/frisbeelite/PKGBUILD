@@ -1,47 +1,53 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=frisbeelite
-pkgver=1.2
-pkgrel=4
+pkgname='frisbeelite'
+pkgver='1.2'
+pkgrel=3
 groups=('blackarch' 'blackarch-fuzzer')
 pkgdesc='A GUI-based USB device fuzzer.'
 arch=('any')
 url='https://github.com/nccgroup/FrisbeeLite'
 license=('GPL3')
-depends=('python2' 'libusb' 'python2-pyusb' 'wxgtk' 'python2-wxpython3')
+depends=('python2' 'libusb' 'python2-pyusb' 'wxgtk')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/nccgroup/FrisbeeLite.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/nccgroup/FrisbeeLite.git')
+sha1sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/FrisbeeLite"
+
+  ls FrisbeeLite_v*.py | cut -d 'v' -f 2 |  sed 's/\.py//'
+}
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/FrisbeeLite"
 
-  mv "FrisbeeLite_v$pkgver.py" "$pkgname.py"
+  mv FrisbeeLite_v${pkgver}.py frisbeelite.py
 
-  sed -i '/#!\/usr\/bin\/python/d' "$pkgname.py"
-  sed -i '1i\#!/usr/bin/python2' "$pkgname.py"
-  sed -i 's/.$//g' "$pkgname.py"
+  sed -i '/#!\/usr\/bin\/python/d' frisbeelite.py
+  sed -i '1i\#!/usr/bin/python2' frisbeelite.py
+  sed -i 's/.$//g' frisbeelite.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/FrisbeeLite"
 
-  install -dm 755 "$pkgdir/usr/bin/"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin/"
+  mkdir -p "$pkgdir/usr/share/frisbeelite"
 
-  cp -a "$pkgname.py" images dependencies "$pkgdir/usr/share/$pkgname"
+  cp -a frisbeelite.py images dependencies \
+    "$pkgdir/usr/share/frisbeelite"
 
-  install -Dm 644 Fuzzing_USB_devices_with_FrisbeeLite.pdf \
-    "$pkgdir/usr/share/doc/$pkgname/Fuzzing_USB_devices_with_FrisbeeLite.pdf"
-  install -Dm 644 README.md "$pkgdir/usr/share/doc/$pkgname/README.md"
+  install -Dm644 Fuzzing_USB_devices_with_FrisbeeLite.pdf \
+    "$pkgdir/usr/share/doc/frisbeelite/Fuzzing_USB_devices_with_FrisbeeLite.pdf"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/frisbeelite/README.md"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/frisbeelite" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/frisbeelite
+exec python2 frisbeelite.py
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/frisbeelite"
 }
-

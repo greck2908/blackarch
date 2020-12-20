@@ -4,9 +4,7 @@
 # override with -n
 do_release=true
 # override with -m
-mirror='https://arch.unixpeople.org/'
-#mirror="http://ftp.halifax.rwth-aachen.de/archlinux/"
-#mirror="http://mirror.archlinux.no"
+mirror="http://mirror.archlinux.no"
 #mirror_arm="http://us.mirror.archlinuxarm.org"
 # override with -s
 signatures=true
@@ -14,9 +12,6 @@ signatures=true
 out_dir=.
 
 base=${BASH_SOURCE[0]%/*}
-
-# default file type extension
-FEXT="zst"
 
 err() {
 	echo >&2 "baofficial: $*"
@@ -162,15 +157,6 @@ handle_package() {
 	repo=$(pkg_info $pkgname Repository)
 
 	# Download.
-  owd=$(pwd)
-  cd $tmp
-  curl -Os "$mirror/$repo/os/$arch/$pkgname-$pkgver-$pkg_arch.pkg.tar.$FEXT.sig" \
-    -o "$tmp/$pkgname-$pkgver-$pkg_arch.pkg.tar.$FEXT.sig"
-  ftype="$(file $pkgname-$pkgver-$pkg_arch.pkg.tar.$FEXT.sig | cut -d ' ' -f 2)"
-  if [[ "$ftype" == "HTML" ]]; then
-    FEXT="xz"
-  fi
-  cd $owd
 	(
 	cd "$tmp"
 	err "downloading files for $arch $pkgname..."
@@ -179,19 +165,19 @@ handle_package() {
 #    curl -Os "$mirror_arm/$arch/$repo/$pkgname-$pkgver-$pkg_arch.pkg.tar.xz"
 #    curl -Os "$mirror_arm/$arch/$repo/$pkgname-$pkgver-$pkg_arch.pkg.tar.xz.sig"
 #  else
-    curl -Os "$mirror/$repo/os/$arch/$pkgname-$pkgver-$pkg_arch.pkg.tar.$FEXT"
-    curl -Os "$mirror/$repo/os/$arch/$pkgname-$pkgver-$pkg_arch.pkg.tar.$FEXT.sig"
+    curl -Os "$mirror/$repo/os/$arch/$pkgname-$pkgver-$pkg_arch.pkg.tar.xz"
+    curl -Os "$mirror/$repo/os/$arch/$pkgname-$pkgver-$pkg_arch.pkg.tar.xz.sig"
 #  fi
 	)
 }
 
 handle_finale() {
 	if $do_release ; then
-    "$base/barelease" -o "$tmp"/*.pkg.tar.$FEXT
+		"$base/barelease" -o "$tmp"/*.pkg.tar.xz
 	else
-		cp -i "$tmp"/*.pkg.tar.$FEXT "$out_dir"
+		cp -i "$tmp"/*.pkg.tar.xz "$out_dir"
 		if $signatures ; then
-			cp -i "$tmp"/*.pkg.tar.$FEXT.sig "$out_dir"
+			cp -i "$tmp"/*.pkg.tar.xz.sig "$out_dir"
 		fi
 	fi
 }

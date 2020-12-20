@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=gef
-pkgver=1863.6846e50
+pkgname='gef'
+pkgver=1236.fa237e2
 pkgrel=1
 groups=('blackarch' 'blackarch-debugger' 'blackarch-exploitation')
 pkgdesc='Multi-Architecture GDB Enhanced Features for Exploiters & Reverse-Engineers.'
@@ -13,27 +13,26 @@ depends=('python' 'python-capstone' 'python-lxml' 'ropgadget' 'gdb'
          'python-keystone' 'keystone' 'capstone' 'ropper' 'python-ropper'
          'python-retdec-python' 'unicorn')
 makedepends=('git')
-source=("git+https://github.com/hugsy/$pkgname.git")
-sha512sums=('SKIP')
-install="$pkgname.install"
+source=('git+https://github.com/hugsy/gef.git')
+install='gef.install'
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/gef"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/gef"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/gef"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md docs/*.md
-  cp -r docs/commands "$pkgdir/usr/share/doc/$pkgname/"
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/gef" README.md docs/*.md
+  cp -r docs/commands "$pkgdir/usr/share/doc/gef/"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/gef/LICENSE"
 
   rm -rf README.md LICENSE docs/
 
-  cp --no-preserve=ownership -a * "$pkgdir/usr/share/$pkgname"
+  cp --no-preserve=ownership -a * "$pkgdir/usr/share/gef"
 }
-

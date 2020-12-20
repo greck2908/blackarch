@@ -1,23 +1,24 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=chromensics
-pkgver=1.0
-pkgrel=4
+pkgname='chromensics'
+pkgver='1.0'
+pkgrel=2
 groups=('blackarch' 'blackarch-windows' 'blackarch-forensic')
 pkgdesc='A Google chrome forensics tool.'
 arch=('any')
 url='https://sourceforge.net/projects/chromensics/'
 license=('custom:unknown')
 makedepends=('unzip')
-source=("$pkgname.zip::http://downloads.sourceforge.net/project/chromensics/Chromensics.zip")
-sha512sums=('a9f412ced4b7428a73e202150a784ae75f0ae9dfcffa6c44f7e24624a2452923db011ec9550cd1552e11fab1f71c4f8e526c6aef515a3f44538179ef280bd235')
+source=('http://downloads.sourceforge.net/project/chromensics/Chromensics.zip')
+sha1sums=('498f06696968c06f4427027e7998ae111a360882')
 
 package() {
-  install -dm 755 "$pkgdir/usr/share/windows/$pkgname"
+  cd "$srcdir"
 
-  rm "$pkgname.zip"
+  mkdir -p "$pkgdir/usr/share/windows/chromensics"
 
-  cp -a * "$pkgdir/usr/share/windows/$pkgname/"
+  rm Chromensics.zip
+
+  cp -a * "$pkgdir/usr/share/windows/chromensics"
 }
-

@@ -1,20 +1,20 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=vmap
-pkgver=0.3
+pkgname='vmap'
+pkgver='0.3'
 pkgrel=1
 groups=('blackarch' 'blackarch-exploitation')
 pkgdesc='A Vulnerability-Exploit desktop finder.'
 url='https://github.com/git-rep/vmap'
 license=('GPL')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 depends=('qt5-base' 'qt5-svg' 'libxml++' 'curl')
-source=("https://github.com/git-rep/vmap/archive/v$pkgver.tar.gz")
-sha512sums=('1c87654a60f85d4d4b6b548bac30284d9b801b0b')
+source=("https://github.com/git-rep/vmap/archive/v${pkgver}.tar.gz")
+sha1sums=('1c87654a60f85d4d4b6b548bac30284d9b801b0b')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/vmap-$pkgver"
 
   qmake
 
@@ -22,9 +22,8 @@ build() {
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/vmap-$pkgver"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 vmap "$pkgdir/usr/bin/vmap"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/vmap/LICENSE"
 }
-

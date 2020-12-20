@@ -1,36 +1,35 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ssh-user-enum
+pkgname='ssh-user-enum'
 pkgver=7.ae453c1
 pkgrel=4
 groups=('blackarch' 'blackarch-scanner')
 pkgdesc='SSH User Enumeration Script in Python Using The Timing Attack.'
 arch=('any')
-url='https://github.com/nccgroup/ssh_user_enum'
+url='https://github.com/nccgroup/ssh-user-enum'
 license=('GPL3')
 depends=('python2' 'python2-paramiko')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/nccgroup/ssh_user_enum.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/nccgroup/ssh_user_enum.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ssh_user_enum"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/ssh_user_enum"
 
   sed -i 's|/usr/bin/python|/usr/bin/python2|' ssh_enum.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ssh_user_enum"
 
-  install -Dm 755 ssh_enum.py "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 ssh_enum.py "$pkgdir/usr/bin/ssh-user-enum"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/ssh-user-enum/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/ssh-user-enum/LICENSE"
 }
-

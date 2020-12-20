@@ -1,28 +1,32 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=barmie
-pkgver=1.01
-pkgrel=2
+pkgname='barmie'
+pkgver='1.01'
+pkgrel=1
 pkgdesc='Java RMI enumeration and attack tool.'
 groups=('blackarch' 'blackarch-scanner')
 arch=('any')
 url='https://github.com/NickstaDB/BaRMIe'
 license=('MIT')
 depends=('java-environment')
-source=("https://github.com/NickstaDB/BaRMIe/releases/download/v1.01/BaRMIe_v$pkgver.jar")
-sha512sums=('2a600652e5827fb41484e04bed84f6ffe99da1709e3f72c20b20533ea22cffb253ac1ee5b0a5bfa76d4a27fd523bf177bbc0104703a12c982178870e254dc640')
+makedepends=('git')
+noextract=("BaRMIe_v${pkgver}.jar")
+source=("https://github.com/NickstaDB/BaRMIe/releases/download/v1.01/BaRMIe_v${pkgver}.jar")
+sha1sums=('SKIP')
 
 package() {
-  install -dm 755 "$pkgdir/usr/bin"
+  cd "$srcdir"
 
-  install -Dm 755 "BaRMIe_v$pkgver.jar" "$pkgdir/usr/share/$pkgname/BaRMIe_v$pkgver.jar"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/barmie"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cp -a * "$pkgdir/usr/share/barmie/"
+
+  cat > "$pkgdir/usr/bin/barmie" << EOF
 #!/bin/sh
-exec java -jar /usr/share/$pkgname/BaRMIe_v$pkgver.jar "\$@"
+exec java -jar /usr/share/barmie/BaRMIe_v${pkgver}.jar "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/barmie"
 }
-

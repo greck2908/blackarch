@@ -1,44 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=shodanhat
+pkgname='shodanhat'
 pkgver=13.e5e7e68
-pkgrel=4
+pkgrel=2
 pkgdesc='Search for hosts info with shodan.'
 groups=('blackarch' 'blackarch-recon')
 arch=('any')
 url='https://github.com/HatBashBR/ShodanHat'
 license=('MIT')
-depends=('python2' 'python2-python-nmap' 'python2-shodan')
+depends=('python2' 'python2-python-nmap' 'shodan')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/HatBashBR/ShodanHat.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/HatBashBR/ShodanHat.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ShodanHat"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ShodanHat"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/shodanhat"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/shodanhat/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/shodanhat/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/shodanhat/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/shodanhat" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/shodanhat
+exec python2 shodanhat.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/shodanhat"
 }
-

@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=snapception
+pkgname='snapception'
 pkgver=8.c156f9e
-pkgrel=7
+pkgrel=5
 groups=('blackarch' 'blackarch-sniffer' 'blackarch-crypto')
 pkgdesc='Intercept and decrypt all snapchats received over your network.'
 arch=('any')
@@ -12,29 +12,28 @@ license=('MIT')
 depends=('python2' 'ruby' 'python2-requests' 'python2-click'
          'python2-sortedcontainers'  'mitmproxy')
 makedepends=('git' 'python2-setuptools')
-source=("git+https://github.com/thebradbain/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/thebradbain/snapception.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/snapception"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/snapception"
 
   python2 setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/snapception"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/snapception"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/snapception/README.md"
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/snapception/LICENSE.txt"
 
-  python2 setup.py install --root="$pkgdir" --skip-build
+  python2 setup.py install --root="$pkgdir" --optimize=1
 }
-

@@ -1,29 +1,29 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ruby-mini_exiftool
-_gemname=mini_exiftool
-pkgver=2.10.0
-pkgrel=4
+pkgname='ruby-mini_exiftool'
+_gemname='mini_exiftool'
+pkgver='2.8.0'
+pkgrel=3
 pkgdesc='This library is wrapper for the Exiftool command-line application (http://www.sno.phy.queensu.ca/~phil/exiftool).'
 arch=('any')
 license=('custom:unknown')
-depends=('ruby')
-makedepends=('ruby-rdoc')
+makedepends=('ruby')
 url='http://gitorious.org/mini_exiftool'
-source=("https://rubygems.org/downloads/$_gemname-$pkgver.gem")
-sha512sums=('fcc8066b324bc3e79190919935ae9ba52426552b4ed6bd8dee7cddaafa6567cc7998b39ddc313e115b75cbf82564cb699f3e55c86f248ece696a29587b6a53e1')
-noextract=("$_gemname-$pkgver.gem")
+source=("http://rubygems.org/downloads/mini_exiftool-${pkgver}.gem")
+sha1sums=('978f6de0c3d74662501a43e501e9577da80a0afc')
+noextract=("mini_exiftool-${pkgver}.gem")
 
 package() {
-  _gemdir=$(ruby -e 'puts Gem.default_dir')
+  cd "$srcdir"
+
+  local _gemdir=$(ruby -e 'puts Gem.default_dir')
 
   if [[ $CARCH == arm* ]] ; then
     gem install --no-user-install --ignore-dependencies --no-rdoc --no-ri \
-      -i "$pkgdir$_gemdir" "$_gemname-$pkgver.gem"
+      -i "$pkgdir$_gemdir" mini_exiftool-$pkgver.gem
   else
     gem install --no-user-install --ignore-dependencies -i "$pkgdir$_gemdir" \
-      "$_gemname-$pkgver.gem"
+      mini_exiftool-$pkgver.gem
   fi
 }
-

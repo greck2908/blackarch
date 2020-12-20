@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=snarf-mitm
+pkgname='snarf-mitm'
 pkgver=41.bada142
 pkgrel=2
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-proxy')
@@ -11,34 +11,33 @@ url='https://github.com/purpleteam/snarf'
 license=('GPL2')
 depends=('nodejs')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/purpleteam/snarf.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/purpleteam/snarf.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/snarf"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/snarf"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/snarf-mitm"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" docs/* CHANGELOG
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/snarf-mitm/" docs/* CHANGELOG
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/snarf-mitm/LICENSE"
 
   rm -rf docs CHANGELOG LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/snarf-mitm"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/snarf-mitm" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/snarf-mitm
 exec node ./snarf.js "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/snarf-mitm"
 }
-

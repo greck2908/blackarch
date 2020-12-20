@@ -1,66 +1,37 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgbase=exrex
-pkgname=('python2-exrex' 'exrex')
-_pkgname=exrex
-pkgver=142.fd1e21f
-pkgrel=2
+pkgname='exrex'
+pkgver=121.de883b0
+pkgrel=1
 pkgdesc='Irregular methods on regular expressions.'
 groups=('blackarch' 'blackarch-misc')
 arch=('any')
 url='https://github.com/asciimoo/exrex'
-license=('AGPL3')
-makedepends=('git' 'python2-setuptools' 'python-setuptools')
-source=("git+https://github.com/asciimoo/$_pkgname.git")
-sha512sums=('SKIP')
+license=('custom:unknown')
+depends=('python2')
+makedepends=('git' 'python2-setuptools')
+source=('git+https://github.com/asciimoo/exrex.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $_pkgname
+  cd "$srcdir/exrex"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  cd "$_pkgname"
-
-  sed -i '1 i # -*- coding: UTF-8 -*-' setup.py
-
-  cd $srcdir
-
-  cp -a "$_pkgname"{,-2}
-}
-
 build() {
-  cd "$_pkgname-2"
+  cd "$srcdir/exrex"
 
   python2 setup.py build
-
-  cd "$srcdir/$_pkgname"
-
-  python setup.py build
 }
 
-package_python2-exrex() {
-  depends=('python2')
+package() {
+  cd "$srcdir/exrex"
 
-  cd "$_pkgname-2"
+  python2 setup.py install --root="$pkgdir"
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  mv "$pkgdir/usr/bin/exrex.py" "$pkgdir/usr/bin/exrex"
 
-  mv "$pkgdir/usr/bin/$_pkgname"{,2}
-  rm "$pkgdir/usr/bin/$_pkgname.py"
+  install -Dm644 README.markdown "$pkgdir/usr/share/doc/exrex/README.md"
 }
-
-package_exrex() {
-  depends=('python')
-
-  cd "$_pkgname"
-
-  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
-
-  rm "$pkgdir/usr/bin/$_pkgname.py"
-
-  install -Dm 644 README.md "$pkgdir/usr/share/doc/$_pkgname/README.md"
-}
-

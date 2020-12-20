@@ -1,0 +1,37 @@
+# This file is part of BlackArch Linux ( http://blackarch.org ).
+# See COPYING for license details.
+
+pkgname='netsniff-ng'
+pkgver='0.6.3'
+pkgrel=1
+groups=('blackarch' 'blackarch-sniffer')
+pkgdesc='A high performance Linux network sniffer for packet inspection.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='http://netsniff-ng.org/'
+license=('GPL2')
+depends=('libpcap' 'ncurses' 'geoip' 'libsodium' 'libnetfilter_conntrack'
+        'liburcu' 'libnl' 'libcli' 'libnet')
+makedepends=('cmake' 'bison' 'flex')
+source=("http://pub.netsniff-ng.org/netsniff-ng/netsniff-ng-${pkgver}.tar.gz")
+sha1sums=('fe27c70b27359c066cfba50585e4b230949823a3')
+
+build() {
+  cd "$srcdir/netsniff-ng-$pkgver"
+
+  ./configure --prefix=/usr
+
+  make PREFIX="/usr"
+}
+
+package() {
+  cd "$srcdir/netsniff-ng-$pkgver"
+
+  mkdir -p "$pkgdir/usr/share/doc/netsniff-ng"
+
+  install -Dm644 -t "$pkgdir/usr/share/doc/netsniff-ng" README INSTALL \
+    AUTHORS REPORTING-BUGS
+
+  make PREFIX="/usr" DESTDIR="$pkgdir" install
+
+  mv "$pkgdir/usr/sbin" "$pkgdir/usr/bin"
+}

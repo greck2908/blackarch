@@ -1,45 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=treasure
-pkgver=2.b3249be
-pkgrel=1
-epoch=1
+pkgname='treasure'
+pkgver=6.a91d52b
+pkgrel=2
 groups=('blackarch' 'blackarch-recon')
 pkgdesc='Hunt for sensitive information through githubs code search.'
 arch=('any')
 url='https://github.com/GuerrillaWarfare/Treasure'
 license=('custom:unknown')
 depends=('python2' 'python2-beautifulsoup4' 'python2-requests')
-makedepends=('git')
-#source=("$pkgname::git+https://github.com/GuerrillaWarfare/Treasure.git")
-source=("git+https://github.com/BlackArch/$pkgname.git")
-sha512sums=('SKIP')
+makedepends=('git' 'python2-setuptools')
+source=('git+https://github.com/GuerrillaWarfare/Treasure.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Treasure"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Treasure"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/treasure"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/treasure/README.md"
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/treasure"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/treasure" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname "\$@"
+cd /usr/share/treasure
+python2 treasure.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/treasure"
 }
-

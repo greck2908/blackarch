@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=wordpot
-pkgver=44.e96889b
-pkgrel=2
+pkgname='wordpot'
+pkgver=38.ca12cb5
+pkgrel=3
 groups=('blackarch' 'blackarch-honeypot' 'blackarch-defensive')
 pkgdesc='A Wordpress Honeypot.'
 arch=('any')
@@ -11,33 +11,32 @@ url='https://github.com/gbrindisi/wordpot'
 license=('GPL2')
 depends=('python2' 'python2-flask')
 makedepends=('git')
-source=("git+https://github.com/gbrindisi/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/gbrindisi/wordpot.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/wordpot"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/wordpot"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/wordpot"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/licenses/wordpot/LICENSE"
 
   rm README.md
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/wordpot"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/wordpot" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/wordpot
+exec python2 wordpot.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/wordpot"
 }
-

@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=neglected
+pkgname='neglected'
 pkgver=8.68d02b3
 pkgrel=2
 epoch=1
@@ -12,33 +12,32 @@ url='https://github.com/GuerrillaWarfare/neglected'
 license=('custom:unknown')
 depends=('python2' 'python2-requests')
 makedepends=('git')
-source=("git+https://github.com/GuerrillaWarfare/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/GuerrillaWarfare/neglected.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/neglected"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/neglected"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/neglected"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/neglected/README.md"
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/neglected"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/neglected" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-python2 $pkgname "\$@"
+cd /usr/share/neglected
+python2 neglected "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/neglected"
 }
-

@@ -5,8 +5,7 @@
 do_release=true
 # override with -m
 #mirror="http://mirror.archlinux.no"
-#mirror_arm="http://ftp.halifax.rwth-aachen.de/archlinux-arm/"
-mirror_arm="http://de.mirror.archlinuxarm.org"
+mirror_arm="http://us.mirror.archlinuxarm.org"
 # override with -s
 signatures=true
 # override with -o
@@ -161,18 +160,24 @@ handle_package() {
 	(
 	cd "$tmp"
 	err "downloading files for $arch $pkgname..."
-  curl -Os "$mirror_arm/$arch/$repo/$pkgname-$pkgver-$pkg_arch.pkg.tar.zst"
-  curl -Os "$mirror_arm/$arch/$repo/$pkgname-$pkgver-$pkg_arch.pkg.tar.zst.sig"
+#  if [[ $arch == "armv6h" || $arch == "armv7h" || $arch == "aarch64" ]];
+#  then
+    curl -Os "$mirror_arm/$arch/$repo/$pkgname-$pkgver-$pkg_arch.pkg.tar.xz"
+    curl -Os "$mirror_arm/$arch/$repo/$pkgname-$pkgver-$pkg_arch.pkg.tar.xz.sig"
+#  else
+#    curl -Os "$mirror/$repo/os/$arch/$pkgname-$pkgver-$pkg_arch.pkg.tar.xz"
+#    curl -Os "$mirror/$repo/os/$arch/$pkgname-$pkgver-$pkg_arch.pkg.tar.xz.sig"
+#  fi
 	)
 }
 
 handle_finale() {
 	if $do_release ; then
-		"$base/barelease" -o "$tmp"/*.pkg.tar.zst
+		"$base/barelease" -o "$tmp"/*.pkg.tar.xz
 	else
-		cp -i "$tmp"/*.pkg.tar.zst "$out_dir"
+		cp -i "$tmp"/*.pkg.tar.xz "$out_dir"
 		if $signatures ; then
-			cp -i "$tmp"/*.pkg.tar.zst.sig "$out_dir"
+			cp -i "$tmp"/*.pkg.tar.xz.sig "$out_dir"
 		fi
 	fi
 }
@@ -183,9 +188,17 @@ main() {
 	parse_args "$@"
 	check_args
 
+#	pacman_init i686
+#	pacman_init x86_64
+  pacman_init armv6h
+  pacman_init armv7h
   pacman_init aarch64
 
 	for pkgname in "${pkgnames[@]}" ; do
+#		handle_package "$pkgname" i686
+#		handle_package "$pkgname" x86_64
+    handle_package "$pkgname" armv6h
+    handle_package "$pkgname" armv7h
     handle_package "$pkgname" aarch64
 	done
 

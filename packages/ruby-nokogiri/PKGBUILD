@@ -1,30 +1,31 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ruby-nokogiri
-_pkgname=nokogiri
-pkgver=1.10.10
-pkgrel=1
+pkgname='ruby-nokogiri'
+_gemname='nokogiri'
+pkgver='1.6.8.1'
+pkgrel=3
 pkgdesc='An HTML, XML, SAX, and Reader parser.'
 arch=('any')
-license=('MIT')
+license=('')
+makedepends=('ruby')
 depends=('ruby-mini_portile2')
-makedepends=('ruby-rdoc')
 options=('!distcc')
 url='http://nokogiri.org'
-source=("https://rubygems.org/gems/$_pkgname-$pkgver.gem")
-sha512sums=('b4628df47dbd8b9123a6f0625829e745a19d26539d54b2748c985d6fdda978072bdcd136df2f47535984186eae7fb318b67d59f1ea413777f1a146bc78e0dae2')
-noextract=("$_pkgname-$pkgver.gem")
+source=("http://rubygems.org/downloads/nokogiri-${pkgver}.gem")
+sha1sums=('63111f6eda5a7cbe442e2b6ec6c492250da9fa39')
+noextract=("nokogiri-${pkgver}.gem")
 
 package() {
-  _gemdir=$(ruby -e 'puts Gem.default_dir')
+  cd "$srcdir"
+
+  local _gemdir=$(ruby -e 'puts Gem.default_dir')
 
   if [[ $CARCH == arm* ]] ; then
     gem install --no-user-install --ignore-dependencies --no-rdoc --no-ri \
-      -i "$pkgdir$_gemdir" "$_pkgname-$pkgver.gem"
+      -i "${pkgdir}${_gemdir}" nokogiri-${pkgver}.gem
   else
-    gem install --no-user-install --ignore-dependencies -i "$pkgdir$_gemdir" \
-      "$_pkgname-$pkgver.gem"
+    gem install --no-user-install --ignore-dependencies -i "$pkgdir${_gemdir}" \
+      nokogiri-${pkgver}.gem
   fi
 }
-

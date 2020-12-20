@@ -1,28 +1,26 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=auto-xor-decryptor
+pkgname='auto-xor-decryptor'
 pkgver=7.2eb176d
-pkgrel=3
+pkgrel=2
 groups=('blackarch' 'blackarch-crypto')
-pkgdesc='Automatic XOR decryptor tool.'
+pkgdesc="Automatic XOR decryptor tool."
 arch=('any')
-url='https://github.com/MRGEffitas/scripts'
+url="http://www.blog.mrg-effitas.com/publishing-of-mrg-effitas-automatic-xor-decryptor-tool/"
 license=('GPL')
 makedepends=('git')
 depends=('python')
 source=("git+https://github.com/MRGEffitas/scripts")
-sha512sums=('SKIP')
+sha1sums=('SKIP')
 
 pkgver() {
   cd scripts
-
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd scripts
+  cd "$srcdir/scripts"
 
-  install -Dm 755 auto_xor_decryptor.py "$pkgdir/usr/bin/$pkgname"
+  install -Dm755 auto_xor_decryptor.py "$pkgdir/usr/bin/auto_xor_decrypter"
 }
-

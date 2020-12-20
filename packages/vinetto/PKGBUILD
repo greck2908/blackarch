@@ -1,25 +1,24 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=vinetto
-pkgver=0.07beta
-pkgrel=13
+pkgname='vinetto'
+pkgver='0.07beta'
+pkgrel=12
 groups=('blackarch' 'blackarch-forensic')
 pkgdesc="A forensics tool to examine Thumbs.db files"
 url='http://vinetto.sourceforge.net'
 license=('GPL2')
 arch=('any')
-depends=('python2' 'python2-pillow6')
-source=("$pkgname-hashlib.patch"
-        "http://downloads.sourceforge.net/$pkgname/$pkgname-beta-0.07.tar.gz")
-sha512sums=('edc0991c98aa1dfeed85a1b59bdd83f7e06ccdc557631d45cb39690a610bbe2ded14ad35df0311026c5d20a0e6bcea0ce7a081bdb813e37903120354c4c04b09'
-            '6d182fd0fd4532869a1df9376a9365707140e59374866c00f279a18d1fb0e85dc3a9e2188e995338e849931d170ee2c165a3704ee5b4cee0c2e245b5c4072c96')
+depends=('python2' 'python2-pillow')
+source=("vinetto-hashlib.patch"
+        "http://downloads.sourceforge.net/vinetto/vinetto-beta-0.07.tar.gz")
+sha1sums=('3341f15439a68c549ece778bed6b09c429ee6aea'
+          '5f53a4ce6985a7d6a387c09d79038124d88b796e')
 
 package() {
-  cd "$pkgname-beta-0.07"
+  cd "$srcdir/vinetto-beta-0.07"
 
   patch -i ../vinetto-hashlib.patch $srcdir/vinetto-beta-0.07/vinetto
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr
+  python2 setup.py install --root=$pkgdir/ --prefix=/usr
 }
-

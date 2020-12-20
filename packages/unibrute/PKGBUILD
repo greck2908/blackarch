@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=unibrute
+pkgname='unibrute'
 pkgver=1.b3fb4b7
 pkgrel=3
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-database')
@@ -12,24 +12,23 @@ license=('custom:unknown')
 depends=('python2')
 makedepends=('git')
 source=('git+https://github.com/GDSSecurity/Unibrute.git')
-sha512sums=('SKIP')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd Unibrute
+  cd "$srcdir/Unibrute"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd Unibrute
+  cd "$srcdir/Unibrute"
 
   sed -i 's|#!/bin/sh|#!/usr/bin/python2|' unibrute.py
 }
 
 package() {
-  cd Unibrute
+  cd "$srcdir/Unibrute"
 
-  install -Dm 755 unibrute.py "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 README "$pkgdir/usr/share/doc/$pkgname/README"
+  install -Dm755 unibrute.py "$pkgdir/usr/bin/unibrute"
+  install -Dm644 README "$pkgdir/usr/share/doc/unibrute/README"
 }
-

@@ -1,34 +1,25 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=bgrep
-pkgver=15.5ca1302
-pkgrel=2
+pkgname='bgrep'
+pkgver=0.2
+pkgrel=1
 pkgdesc='Binary grep.'
-groups=('blackarch' 'blackarch-binary')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/tmbinc/bgrep'
 license=('BSD')
-makedepends=('git')
-source=("git+https://github.com/tmbinc/$pkgname.git")
-sha512sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+source=("https://github.com/tmbinc/bgrep/archive/bgrep-$pkgver.tar.gz")
+sha1sums=('37f29f95397730dcd8760a0bac33ba167ac7d998')
 
 build() {
-	cd $pkgname
+	cd "$srcdir/bgrep-bgrep-$pkgver"
 
 	make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/bgrep-bgrep-$pkgver"
 
-	install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 README "$pkgdir/usr/share/doc/$pkgname/README"
+	install -Dm755 bgrep "$pkgdir/usr/bin/bgrep"
+  install -Dm644 README "$pkgdir/usr/share/doc/bgrep/README"
 }
-

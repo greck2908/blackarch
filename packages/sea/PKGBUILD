@@ -1,44 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=sea
+pkgname='sea'
 pkgver=103.9aca1c8
-pkgrel=2
+pkgrel=1
 groups=('blackarch' 'blackarch-malware' 'blackarch-binary')
 pkgdesc='A tool to help to create exploits of binary programs.'
 arch=('any')
 url='https://github.com/neuromancer/SEA'
 license=('GPL3')
-depends=('python2' 'python2-z3' 'z3')
+depends=('python2' 'z3')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/neuromancer/SEA.git")
-sha512sums=('SKIP')
+source=("git+https://github.com/neuromancer/SEA.git")
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/SEA"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/SEA"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/sea"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm644 -t "$pkgdir/usr/share/doc/sea" README.md
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/sea/COPYING"
 
   rm COPYING README.md
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/sea/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/sea" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 SEA.py "\$@"
+cd /usr/share/sea
+exec python2 SEA.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/sea"
 }
-

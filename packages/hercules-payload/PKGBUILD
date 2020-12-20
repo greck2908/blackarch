@@ -1,33 +1,35 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=hercules-payload
-pkgver=222.2607a3a
+pkgname='hercules-payload'
+pkgver=220.958541e
 pkgrel=1
 groups=('blackarch' 'blackarch-binary' 'blackarch-windows' 'blackarch-backdoor')
 pkgdesc='A special payload generator that can bypass all antivirus software.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/EgeBalci/HERCULES'
 license=('MIT')
-depends=('glibc')
-makedepends=('git' 'go-pie')
-source=("$pkgname::git+https://github.com/EgeBalci/HERCULES.git"
+depends=('go')
+makedepends=('git')
+source=('git+https://github.com/EgeBalci/HERCULES.git'
         'hercules.patch')
-sha512sums=('SKIP'
-            'f44544865d813b1d778d8863bd4a995ca9866e52c7e88e7462f6b8829b8a6dc2b2b08c444298bf336812e379466731021a6ea57296387e244385259563fc1dde')
+sha1sums=('SKIP'
+          '2c3204d7d567ca306022c2282dd4265b762cec0d')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/HERCULES"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
+  cd "$srcdir"
+
   patch -p1 < hercules.patch
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/HERCULES"
 
   export GOPATH="$srcdir"
 
@@ -37,24 +39,23 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/HERCULES"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/hercules-payload"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/hercules-payload/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/hercules-payload/LICENSE"
 
   rm LICENSE README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/hercules-payload"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/hercules-payload" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname/SOURCE
-exec ./HERCULES "\$@"
+cd /usr/share/hercules-payload/SOURCE
+exec ./HERCULES "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/hercules-payload"
 }
-

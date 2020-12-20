@@ -1,22 +1,23 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=x64dbg
-pkgver=2020.12.16
+pkgname='x64dbg'
+pkgver='2017.11.20'
 pkgrel=1
 pkgdesc='An open-source x64/x32 debugger for windows.'
-url='https://github.com/x64dbg/x64dbg/releases'
+url='http://www.sniperx.net/'
 groups=('blackarch' 'blackarch-windows' 'blackarch-debugger')
 license=('GPL3')
 arch=('any')
-source=("$pkgname.zip::https://github.com/x64dbg/x64dbg/releases/download/snapshot/snapshot_${pkgver//./-}_05-02.zip")
-sha512sums=('0bc2df088ee605a5ac46546731dcd2a0f3d136fc0ca3cdc95a8cd69f7ae6e8e47bc9033d5b3b55b7e4c2f5f16f5c6633ccbec833fe100cd1c395d2191eda15bb')
+source=('https://github.com/x64dbg/x64dbg/releases/download/snapshot/snapshot_2017-11-20_00-19.zip')
+sha1sums=('4afed1e2dda0d8cf2d9e174a14c8a20a026ee049')
 
 package() {
-  install -dm 755 "$pkgdir/usr/share/windows/$pkgname"
+  cd "$srcdir"
 
-  rm "$pkgname.zip"
+  mkdir -p "$pkgdir/usr/share/windows/x64dbg"
 
-  cp -a * "$pkgdir/usr/share/windows/$pkgname"
+  rm snapshot_2017-11-20_00-19.zip
+
+  cp -a * "$pkgdir/usr/share/windows/x64dbg"
 }
-

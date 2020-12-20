@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=sb0x
+pkgname='sb0x'
 pkgver=19.04f40fe
 pkgrel=2
 pkgdesc='A simple and Lightweight framework for Penetration testing.'
@@ -12,35 +12,32 @@ arch=('any')
 license=('GPL3')
 depends=('python2')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/levi0x0/sb0x-project.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/levi0x0/sb0x-project.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/sb0x-project"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/sb0x-project"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin/"
+  mkdir -p "$pkgdir/usr/share/sb0x"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 doc/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/sb0x/README.md"
+  install -Dm644 doc/LICENSE "$pkgdir/usr/share/licenses/sb0x/LICENSE"
 
-  rm doc/LICENSE
+  cp -a doc/* "$pkgdir/usr/share/doc/sb0x"
+  cp -a * "$pkgdir/usr/share/sb0x/"
 
-  cp -a doc/* "$pkgdir/usr/share/doc/$pkgname/"
-  cp -a * "$pkgdir/usr/share/$pkgname/"
-
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/sb0x" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/sb0x
+exec python2 sb0x.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/sb0x"
 }
-

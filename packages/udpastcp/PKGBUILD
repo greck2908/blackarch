@@ -1,36 +1,37 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=udpastcp
-pkgver=29.683b5e3
+pkgname='udpastcp'
+pkgver=28.86479c0
 pkgrel=1
 pkgdesc='This program hides UDP traffic as TCP traffic in order to bypass certain firewalls.'
 groups=('blackarch' 'blackarch-networking')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/Hello71/udpastcp'
 license=('GPL2')
 depends=('libev')
 makedepends=('git')
-source=("git+https://github.com/Hello71/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/Hello71/udpastcp.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/udpastcp"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/udpastcp"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/udpastcp"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README doc/*
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 udpastcp "$pkgdir/usr/bin/udpastcp"
+  install -Dm644 -t "$pkgdir/usr/share/doc/udpastcp/" README doc/*
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/udpastcp/LICENSE"
+
+  rm -rf doc README LICENSE
 }
-

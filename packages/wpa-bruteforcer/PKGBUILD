@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=wpa-bruteforcer
+pkgname='wpa-bruteforcer'
 pkgver=4.d5f8586
 pkgrel=3
 groups=('blackarch' 'blackarch-wireless')
@@ -11,26 +11,25 @@ url='https://github.com/SYWorks/wpa-bruteforcer'
 license=('GPL2')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/SYWorks/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/SYWorks/wpa-bruteforcer.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/wpa-bruteforcer"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/wpa-bruteforcer"
 
-  sed -i 's|! /usr/bin/python|!/usr/bin/python2|' "$pkgname.py"
+  sed -i 's|! /usr/bin/python|!/usr/bin/python2|' wpa-bruteforcer.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/wpa-bruteforcer"
 
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 wpa-bruteforcer.py "$pkgdir/usr/bin/wpa-bruteforcer"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/wpa-bruteforcer/README"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/wpa-bruteforcer/LICENSE"
 }
-

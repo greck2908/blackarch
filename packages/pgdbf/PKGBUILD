@@ -1,26 +1,26 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=pgdbf
+pkgname='pgdbf'
 pkgver=113.4e84775
 pkgrel=1
 groups=('blackarch' 'blackarch-database')
 pkgdesc='Convert XBase / FoxPro databases to PostgreSQL'
 url='https://github.com/kstrauser/pgdbf'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 license=('GPL3')
 makedepends=('git')
-source=("git+https://github.com/kstrauser/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/kstrauser/pgdbf')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/pgdbf"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/pgdbf"
 
   aclocal
   autoconf
@@ -37,8 +37,7 @@ build() {
 }
 
 package() {
-  cd "$pkgname/src"
+  cd "$srcdir/pgdbf/src"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
+  install -Dm755 pgdbf "$pkgdir/usr/bin/pgdbf"
 }
-

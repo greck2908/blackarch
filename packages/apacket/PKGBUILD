@@ -1,44 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=apacket
-pkgver=374.16e7036
-pkgrel=2
+pkgname='apacket'
+pkgver=123.223af9d
+pkgrel=1
 groups=('blackarch' 'blackarch-networking' 'blackarch-sniffer')
 pkgdesc='Sniffer syn and backscatter packets.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/Acey9/apacket'
 license=('custom:unknown')
-depends=('glibc' 'libpcap')
-makedepends=('git' 'go-pie')
-source=("git+https://github.com/Acey9/$pkgname.git")
-sha512sums=('SKIP')
-_url='github.com/Acey9/apacket'
-_url2='github.com/Acey9/sapacket'
+depends=('glibc' 'go' 'libpcap')
+makedepends=('go' 'git')
+source=('git+https://github.com/Acey9/apacket.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/apacket"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  mkdir -p "src/$_url" && rm -rf "src/$_url" && mv apacket "src/$_url" &&
-    cd "src/$_url"
+  cd "$srcdir"
 
-  GOPATH="$srcdir" go get -d -t $_url
-  GOPATH="$srcdir" go get -d -t $_url2
+  mkdir -p src/$url && rm -rf src/$url && mv apacket src/$url && cd src/$url
+
+  GOPATH="$srcdir" go get -d -t github.com/Acey9/apacket
+  GOPATH="$srcdir" go get -d -t github.com/Acey9/sapacket
 }
 
 package() {
-  install -dm 755 "$pkgdir/usr/bin"
+  cd "$srcdir"
 
-  GOPATH="$srcdir" go build -v $_url
-  GOPATH="$srcdir" go build -v $_url2
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 755 "$srcdir/$pkgname" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 755 "$srcdir/sapacket" "$pkgdir/usr/bin/sapacket"
-  install -Dm 644 "src/$_url/README.md" \
-    "$pkgdir/usr/share/doc/$pkgname/README.md"
+  GOPATH="$srcdir" go build -v github.com/Acey9/apacket
+  GOPATH="$srcdir" go build -v github.com/Acey9/sapacket
+
+  install -Dm755 "$srcdir/apacket" "$pkgdir/usr/bin/apacket"
+  install -Dm755 "$srcdir/sapacket" "$pkgdir/usr/bin/sapacket"
+  install -Dm644 src/$url/README.md "$pkgdir/usr/share/doc/apacket/README.md"
 }
-

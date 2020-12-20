@@ -1,28 +1,25 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=python-archinfo
-_pkgname=archinfo
-pkgver=9.0.4940
+pkgname='python-archinfo'
+pkgver='7.7.9.14'
 pkgrel=1
 pkgdesc='UNKNOWN'
 arch=('any')
-url='https://pypi.org/project/archinfo/#files'
+url='http://pypi.python.org/pypi/archinfo'
 license=('custom:unknown')
 depends=('python' 'capstone' 'python-pyelftools')
-source=("https://files.pythonhosted.org/packages/7f/23/369e1bbcd4f4017d116fde2e8cd097e425e41266cc643db59c3e60e5a4a3/$_pkgname-$pkgver.tar.gz")
-sha512sums=('5dada38b345c431af4c1dd10ffddf2680f545e79fd023dcc56b61253af6e555036e920956ea9247d5c0d461fc75226b85922b17e6057fc5aee06dd63b202da5e')
+source=("https://pypi.python.org/packages/a3/57/9a5c99efc258fd053d71412cfaccdd1752e446cc0aa2edd0d1bd2fc901f4/archinfo-${pkgver}.tar.gz")
+sha1sums=('4005156ee9355939dfa24a6f444ca49ea1eb0725')
 
 build() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/archinfo-$pkgver"
 
   python setup.py build
 }
 
 package() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/archinfo-$pkgver"
 
-  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
-    --skip-build
+  python setup.py install --root="$pkgdir" --optimize=1
 }
-

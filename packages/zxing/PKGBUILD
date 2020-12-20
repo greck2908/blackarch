@@ -1,32 +1,31 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=zxing
-pkgver=3.4.0
+pkgname='zxing'
+pkgver='3.3.0'
 pkgrel=1
 pkgdesc='Multi-format 1D/2D barcode image processing library (C++ version).'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://code.google.com/p/zxing/'
 license=('Apache')
 makedepends=('scons')
 depends=('imagemagick')
-source=("https://github.com/zxing/zxing/archive/$pkgname-$pkgver.tar.gz")
-sha512sums=('0948ab0135a864eb47e574f255c482374172f983d6b8d185d00dc42d584ab46c77a8096982a7018e9bc4742d8d639e61e2320d9bf56929a0f0d3a20f8ccdf8e8')
+source=("https://github.com/zxing/zxing/archive/zxing-${pkgver}.tar.gz")
+sha1sums=('ac79615abd687517a656526498789bf9dc3b898c')
 
 build() {
-  cd "$pkgname-$pkgname-$pkgver/cpp"
+  cd "$srcdir/zxing-zxing-${pkgver}/cpp"
 
-  scons DEBUG=0 -j1 $pkgname
+  scons DEBUG=0 -j1 zxing
 }
 
 package() {
-  cd "$pkgname-$pkgname-$pkgver/cpp"
+  cd "$srcdir/zxing-zxing-${pkgver}/cpp"
 
-  install -Dm 755 "build/$pkgname" "$pkgdir/usr/bin/$pkgname"
+  install -Dm755 build/zxing "$pkgdir/usr/bin/zxing"
 
   cd ..
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" CHANGES NOTICE AUTHORS
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm644 -t "$pkgdir/usr/share/doc/zxing" CHANGES NOTICE AUTHORS
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/zxing/COPYING"
 }
-

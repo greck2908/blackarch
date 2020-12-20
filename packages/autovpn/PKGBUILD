@@ -1,36 +1,35 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=autovpn
-pkgver=18.28b1a87
-pkgrel=2
+pkgname='autovpn'
+pkgver=16.72dd7f6
+pkgrel=1
 pkgdesc='Easily connect to a VPN in a country of your choice.'
 groups=('blackarch' 'blackarch-automation' 'blackarch-misc')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/adtac/autovpn'
 license=('GPL3')
-depends=('openvpn')
-makedepends=('git' 'go-pie')
-source=("git+https://github.com/adtac/$pkgname.git")
-sha512sums=('SKIP')
+depends=('go' 'openvpn')
+makedepends=('git')
+source=('git+https://github.com/adtac/autovpn.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/autovpn"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/autovpn"
 
-  go build "$pkgname.go"
+  go build autovpn.go
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/autovpn"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 autovpn "$pkgdir/usr/bin/autovpn"
+  install -Dm644 -t "$pkgdir/usr/share/doc/autovpn/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/autovpn/LICENSE"
 }
-

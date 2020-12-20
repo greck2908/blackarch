@@ -1,54 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=beeswarm
-pkgver=1183.db51ea0
-pkgrel=6
+pkgname='beeswarm'
+pkgver=1182.9f39f33
+pkgrel=1
 groups=('blackarch' 'blackarch-honeypot')
 pkgdesc='Honeypot deployment made easy http://www.beeswarm-ids.org/'
 arch=('any')
 url='https://github.com/honeynet/beeswarm/'
 license=('GPL3')
-depends=('python2' 'python2-pyzmq' 'python2-pycryptodome' 'python2-ecdsa'
+depends=('python2' 'python2-pyzmq' 'python2-crypto' 'python2-ecdsa'
          'python2-cssselect' 'python2-nose' 'python2-gevent' 'python2-requests'
          'python2-telnetsrv' 'python2-paramiko' 'python2-ntplib'
          'python2-pysendfile' 'python2-pydes' 'python2-flask'
          'python2-flask-login' 'python2-sqlalchemy' 'python2-pyopenssl'
          'python2-lxml' 'python2-mock' 'python2-enum34' 'python2-netifaces'
-         'python2-fs' 'python2-flask-wtf' 'python2-typing' 'python2-future'
-         'python2-backports-os' 'python2-tornado')
+         'python2-fs')
 makedepends=('git')
-source=("git+https://github.com/honeynet/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/honeynet/beeswarm.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/beeswarm"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/beeswarm"
 
   python2 setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/beeswarm"
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.rst changelog.txt \
+  install -Dm644 -t "$pkgdir/usr/share/doc/beeswarm/" README.rst changelog.txt \
     requirements.txt
-  install -Dm 644 COPYING.txt "$pkgdir/usr/share/licenses/$pkgname/COPYING"
-
-  sed 's|except ResourceNotFoundError:|except Exception:|g' -i \
-     "$pkgdir/usr/lib/python2.7/site-packages/beeswarm/drones/honeypot/capabilities/shared/shell.py"
-  sed 's|from fs.errors import ResourceNotFoundError||g' -i \
-     "$pkgdir/usr/lib/python2.7/site-packages/beeswarm/drones/honeypot/capabilities/shared/shell.py"
-  sed 's|from fs.utils import isdir||g' -i \
-     "$pkgdir/usr/lib/python2.7/site-packages/beeswarm/drones/honeypot/capabilities/shared/shell.py"
-  sed 's|if isdir|if os.path.isdir|g' -i \
-     "$pkgdir/usr/lib/python2.7/site-packages/beeswarm/drones/honeypot/capabilities/shared/shell.py"
+  install -Dm644 COPYING.txt "$pkgdir/usr/share/licenses/beeswarm/COPYING.txt"
 }
-

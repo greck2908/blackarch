@@ -1,43 +1,36 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=hasher
+pkgname='hasher'
 pkgver=48.40173c5
-pkgrel=4
+pkgrel=2
 groups=('blackarch' 'blackarch-cracker' 'blackarch-crypto')
 pkgdesc='A tool that allows you to quickly hash plaintext strings, or compare hashed values with a plaintext locally.'
 arch=('any')
 url='https://github.com/ChrisTruncer/Hasher'
-depends=('python2' 'python2-passlib' 'python2-bcrypt')
+depends=('python2' 'python2-passlib' 'python2-py-bcrypt')
 makedepends=('git' 'python2-setuptools')
 license=('GPL3')
-source=("$pkgname::git+https://github.com/ChrisTruncer/Hasher.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/ChrisTruncer/Hasher.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Hasher"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  cd $pkgname
-
-  sed -i 's|py-bcrypt>=0.4|bcrypt|' setup.py
-}
-
 build() {
-  cd $pkgname
+  cd "$srcdir/Hasher"
 
   python2 setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Hasher"
 
-  python2 setup.py install --root="$pkgdir" --optimize=1 --skip-build
+  python2 setup.py install --root="$pkgdir" --optimize=1
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/hasher/" README.md CHANGELOG
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/hasher/LICENSE"
 }
-

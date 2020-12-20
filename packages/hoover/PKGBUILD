@@ -1,35 +1,28 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=hoover
+pkgname='hoover'
 pkgver=4.9bda860
-pkgrel=4
+pkgrel=2
 groups=('blackarch' 'blackarch-wireless' 'blackarch-sniffer')
 pkgdesc='Wireless Probe Requests Sniffer.'
 arch=('any')
 url='https://github.com/xme/hoover/'
 license=('custom:unknown')
-depends=('perl' 'perl-getopt-long' 'wireless_tools' 'wireshark-cli' 'net-tools')
+depends=('perl' 'perl-getopt-long' 'wireless_tools' 'wireshark-cli')
 makedepends=('git')
-source=("git+https://github.com/xme/$pkgname.git"
-        "$pkgname.pl.patch")
-sha512sums=('SKIP'
-            'b71ff0c272f2377c8c55b29dff2de00e5f1bd25a53bfae3ecab2ffac24d72e9cd491c826a5e2c2f82e85ac288758fdcc748cd12f1aeb4206d7b78b381413c156')
+source=('git+https://github.com/xme/hoover.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/hoover"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  patch -p1 < "$pkgname.pl.patch"
-}
-
 package() {
-  cd $pkgname
+  cd "$srcdir/hoover"
 
-  install -Dm 755 "$pkgname.pl" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README
+  install -Dm755 hoover.pl "$pkgdir/usr/bin/hoover"
+  install -Dm644 README "$pkgdir/usr/share/doc/hoover/README.md"
 }
-

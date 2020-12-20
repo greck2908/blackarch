@@ -1,39 +1,36 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=deen
-pkgver=595.b1a5e25
-pkgrel=2
+pkgname='deen'
+pkgver=241.3762fda
+pkgrel=1
 groups=('blackarch' 'blackarch-crypto' 'blackarch-misc')
 arch=('any')
 pkgdesc='Generic data encoding/decoding application built with PyQt5.'
 url='https://github.com/takeshixx/deen'
 license=('Apache')
-depends=('python' 'python-lxml' 'python-pyqt5' 'python-jsbeautifier'
-         'python-pyopenssl' 'python-jose' 'python-bcrypt' 'python-xmltodict'
-         'python-dicttoxml')
+depends=('python' 'python-lxml' 'python-pyqt5')
 makedepends=('git' 'python-setuptools')
-source=("git+https://github.com/takeshixx/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/takeshixx/deen.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/deen"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/deen"
 
   python setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/deen"
 
   python setup.py install --root="$pkgdir" --optimize=1 --skip-build
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/deen/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/deen/LICENSE"
 }
-

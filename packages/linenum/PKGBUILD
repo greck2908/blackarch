@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=linenum
-pkgver=75.c47f9b2
+pkgname='linenum'
+pkgver=32.c5a1316
 pkgrel=1
 groups=('blackarch' 'blackarch-scanner' 'blackarch-recon')
 arch=('any')
@@ -12,26 +12,26 @@ license=('GPL3')
 # todo: add tools from script as dependencies
 depends=()
 makedepends=('git')
-source=("$pkgname::git+https://github.com/rebootuser/LinEnum.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/rebootuser/LinEnum.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/LinEnum"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/LinEnum"
 
-  install -dm 755 "$pkgdir/usr/bin/"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin/"
+  mkdir -p "$pkgdir/usr/share/linenum"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG.md \
-    CONTRIBUTORS.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/linenum/README.md"
+  install -Dm644 CONTRIBUTORS.md "$pkgdir/usr/share/doc/linenum/CONTRIBUTORS.md"
+  install -Dm644 CHANGELOG.md "$pkgdir/usr/share/doc/linenum/CHANGELOG.md"
 
-  cp -a *.sh "$pkgdir/usr/share/$pkgname/"
+  cp -a *.sh "$pkgdir/usr/share/linenum"
 
-  ln -s "/usr/share/linenum/LinEnum.sh" "$pkgdir/usr/bin/$pkgname"
+  ln -s "/usr/share/linenum/LinEnum.sh" "$pkgdir/usr/bin/linenum"
 }
-

@@ -1,44 +1,50 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ptf
-pkgver=1432.68f1909
+pkgname='ptf'
+pkgver=938.0efe70b
 pkgrel=1
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-scanner'
         'blackarch-recon' 'blackarch-automation')
-pkgdesc='The Penetration Testers Framework: Way for modular support for up-to-date tools.'
+pkgdesc='The Penetration Testers Framework is a way for modular support for up-to-date tools.'
 arch=('any')
 url='https://github.com/trustedsec/ptf'
 license=('custom:unknown')
-depends=('python' 'python-pexpect')
+depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/trustedsec/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/trustedsec/ptf.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ptf"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
+prepare() {
+  cd "$srcdir/ptf"
+
+  find . -type f -name '*.py' -exec sed -i 's|/env python|/env python2|' {} \;
+}
+
 package() {
-  cd $pkgname
+  cd "$srcdir/ptf"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/ptf"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md readme/*
+  install -Dm644 -t "$pkgdir/usr/share/doc/ptf/" README.md \
+    readme/*
 
   rm -rf readme README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/ptf"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/ptf" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python $pkgname "\$@"
+cd /usr/share/ptf
+exec python2 ptf "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/ptf"
 }
-

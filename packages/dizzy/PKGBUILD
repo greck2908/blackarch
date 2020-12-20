@@ -1,32 +1,35 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dizzy
-pkgver=2.0
-pkgrel=4
+pkgname='dizzy'
+pkgver='0.8.3'
+pkgrel=2
 groups=('blackarch' 'blackarch-fuzzer' 'blackarch-networking')
 pkgdesc='A Python based fuzzing framework with many features.'
 arch=('any')
 url='http://www.c0decafe.de/'
-license=('custom:unknown')
-depends=('python' 'python-pcapy' 'exrex')
-makedepends=('python-setuptools')
-source=("https://c0decafe.de/tools/$pkgname-$pkgver.tar.gz")
-sha512sums=('687cb05f59d0c05f23c4d09e27a6f15733ae229b78f4f8d24dfc56b398a1935dadac05949337cd1748d87c6b45d3f4b52043ba1df8a517f8be932f9f606242c0')
-
-build() {
-  cd "$pkgname-$pkgver"
-
-  python setup.py build
-}
+license=('custom')
+depends=('python')
+source=("http://c0decafe.de/tools/dizzy-${pkgver}.tar.bz2")
+sha1sums=('bb9869fcba32b0c3408721da757d456f78e9b422')
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/dizzy-$pkgver"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/dizzy"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/dizzy/README.md"
 
-  mv "$pkgdir/usr/bin/dizzy_cmd" "$pkgdir/usr/bin/$pkgname"
+  rm README.md
+
+  cp -a * "$pkgdir/usr/share/dizzy"
+
+  cat > "$pkgdir/usr/bin/dizzy" << EOF
+#!/bin/sh
+cd /usr/share/dizzy
+exec python dizzy.py "\$@"
+EOF
+
+  chmod +x "$pkgdir/usr/bin/dizzy"
 }
-

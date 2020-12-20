@@ -1,49 +1,46 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=changeme
-pkgver=266.89f59d4
-pkgrel=3
+pkgname='changeme'
+pkgver=219.987c6b6
+pkgrel=1
 groups=('blackarch' 'blackarch-scanner')
 pkgdesc='A default credential scanner.'
 arch=('any')
 url='https://github.com/ztgrace/changeme'
 license=('GPL3')
-depends=('python' 'python-python-libnmap' 'python-lxml' 'python-netaddr'
-         'python-requests' 'python-nose' 'python-schema' 'python-logutils'
-         'python-cerberus' 'python-tabulate' 'python-paramiko' 'python-yaml'
-         'python-sqlalchemy' 'python-mock' 'python-pysnmp' 'python-shodan'
-         'python-memcached' 'python-redis' 'python-pymongo' 'python-jinja'
-         'python-selenium' 'python-pyodbc')
+depends=('python2' 'python2-python-libnmap' 'python2-lxml' 'python2-netaddr'
+         'python2-requests' 'python2-nose' 'python2-schema' 'python2-logutils'
+         'python2-cerberus' 'python2-tabulate' 'python2-paramiko' 'python2-yaml'
+         'python2-sqlalchemy' 'python2-mock')
 makedepends=('git')
-source=("git+https://github.com/ztgrace/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/ztgrace/changeme.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/changeme"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/changeme"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/changeme"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm644 -t "$pkgdir/usr/share/doc/changeme/" README.md
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/changeme/COPYING"
 
   rm README.* COPYING
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/changeme"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/changeme" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python $pkgname.py "\$@"
+cd /usr/share/changeme
+exec python2 changeme.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/changeme"
 }
-

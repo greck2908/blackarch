@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=mptcp-abuse
+pkgname='mptcp-abuse'
 pkgver=6.b0eeb27
 pkgrel=2
 groups=('blackarch' 'blackarch-networking' 'blackarch-recon' 'blackarch-scanner')
@@ -12,42 +12,41 @@ license=('GPL2')
 depends=('python2')
 makedepends=('git')
 source=('git+https://github.com/Neohapsis/mptcp-abuse.git')
-sha512sums=('SKIP')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/mptcp-abuse"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/mptcp-abuse"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/mptcp-abuse"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md \
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/mptcp-abuse/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/mptcp-abuse" README.md \
     "MPTCP Cheatsheet.pdf"
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
 
   rm -rf README.md "MPTCP Cheatsheet.pdf"
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/mptcp-abuse"
 
   cat > "$pkgdir/usr/bin/mptcp-fragmenter" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/mptcp-abuse
 exec python2 mptcp_fragmenter.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/mptcp-fragmenter"
+  chmod a+x "$pkgdir/usr/bin/mptcp-fragmenter"
 
   cat > "$pkgdir/usr/bin/mptcp-scanner" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/mptcp-abuse
 exec python2 mptcp_scanner.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/mptcp-scanner"
+  chmod a+x "$pkgdir/usr/bin/mptcp-scanner"
 }
-

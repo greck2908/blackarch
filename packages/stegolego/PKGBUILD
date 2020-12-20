@@ -1,35 +1,34 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=stegolego
+pkgname='stegolego'
 pkgver=8.85354f6
-pkgrel=3
+pkgrel=2
 groups=('blackarch' 'blackarch-stego')
 pkgdesc='Simple program for using stegonography to hide data within BMP images.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/razc411/StegoLeggo'
 license=('custom:unknown')
 depends=('')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/razc411/StegoLeggo.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/razc411/StegoLeggo')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/StegoLeggo"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/StegoLeggo"
 
   gcc *.c -o stegolego
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/StegoLeggo"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README
+  install -Dm755 stegolego "$pkgdir/usr/bin/stegolego"
+  install -Dm644 -t "$pkgdir/usr/share/doc/StegoLeggo/" README
 }
-

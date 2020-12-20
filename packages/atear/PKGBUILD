@@ -1,47 +1,45 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=atear
+pkgname='atear'
 pkgver=139.245ec8d
-pkgrel=3
+pkgrel=1
 pkgdesc='Wireless Hacking, WiFi Security, Vulnerability Analyzer, Pentestration.'
 groups=('blackarch' 'blackarch-wireless' 'blackarch-recon' 'blackarch-scanner')
 arch=('any')
 url='https://github.com/NORMA-Inc/AtEar'
-license=('Apache')
-depends=('nmap' 'wireshark-cli' 'aircrack-ng' 'hostapd' 'python2-scapy' 'python2'
+license=('Apache2')
+depends=('nmap' 'wireshark-cli' 'aircrack-ng' 'hostapd' 'scapy' 'python2'
          'python2-requests' 'python2-flask' 'python2-paramiko'
-         'python2-smartencoding' 'python2-python-libnmap' 'python2-psycopg2'
-         'python2-pyodbc')
+         'python2-smartencoding' 'python2-python-libnmap')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/NORMA-Inc/AtEar.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/NORMA-Inc/AtEar.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/AtEar"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/AtEar"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/atear"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/atear/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/atear/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/atear"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/atear" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 run.py "\$@"
+cd /usr/share/atear
+exec python2 run.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/atear"
 }
-

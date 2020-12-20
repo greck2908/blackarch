@@ -1,23 +1,24 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=rifiuti2
-pkgver=0.7.0
-pkgrel=1
-epoch=1
+pkgname='rifiuti2'
+pkgver='0.6.1'
+pkgrel=2
 groups=('blackarch' 'blackarch-forensic' 'blackarch-recon')
-pkgdesc='A rewrite of rifiuti, a great tool from Foundstone folks for analyzing Windows Recycle Bin INFO2 file.'
-url='https://github.com/abelcheung/rifiuti2'
-arch=('x86_64' 'aarch64')
+pkgdesc='A rewrite of rifiuti, a great tool from Foundstone folks for analyzing
+Windows Recycle Bin INFO2 file.'
+url="https://code.google.com/p/rifiuti2/"
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 license=('custom:BSD')
 conflicts=('rifiuti')
 depends=('glib2')
-makedepends=('git')
-source=("https://github.com/abelcheung/$pkgname/releases/download/$pkgver/$pkgname-$pkgver.tar.xz")
-sha512sums=('1f538b70fa405f84d41f84e8f9d9f1d9e6c6badc1d50859a994bac0462b9bdba96f24c4fa16522f0f3ab4d4f95ca8fd9bbfee9477a324630542e2ebe92a835cc')
+source=("https://github.com/abelcheung/rifiuti2/archive/${pkgver}.tar.gz")
+sha1sums=('173b45cf67ac769b9f66832fc0f21a083bad88a6')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/rifiuti2-$pkgver"
+
+  ./autogen.sh
 
   ./configure --prefix=/usr
 
@@ -25,12 +26,11 @@ build() {
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/rifiuti2-$pkgver"
 
   make DESTDIR="$pkgdir" install
 
-  install -Dm 644 docs/LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-  rm docs/LICENSE.md
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" NEWS.md ChangeLog docs/*
+  install -Dm644 docs/LICENSE "$pkgdir/usr/share/licenses/rifiuti2/LICENSE"
+  rm docs/LICENSE
+  install -Dm644 -t "$pkgdir/usr/share/doc/rifiuti2/" NEWS.md ChangeLog docs/*
 }
-

@@ -1,0 +1,26 @@
+# This file is part of BlackArch Linux ( http://blackarch.org ).
+# See COPYING for license details.
+
+pkgname='python2-json2html'
+pkgver='1.2.1'
+pkgrel=1
+pkgdesc='JSON to HTML Table Representation.'
+arch=('any')
+url='https://pypi.python.org/pypi/json2html/'
+license=('MIT')
+depends=('python2')
+makedepends=('python2-setuptools')
+source=("https://pypi.python.org/packages/23/33/e6367858c5da6795d3277e9ea4e58a70a7fd55f97f4bcc90b1ecec1c1410/json2html-${pkgver}.tar.gz")
+sha1sums=('063789b7361c37a120f314d7cff24c1be5d28092')
+
+build() {
+  cd "$srcdir/json2html-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "$srcdir/json2html-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+}

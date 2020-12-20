@@ -1,35 +1,34 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=perl-net-write
-_pkgname=Net-Write
-pkgver=1.10
-pkgrel=9
+pkgname='perl-net-write'
+pkgver='1.10'
+pkgrel=5
 pkgdesc='A portable interface to open and send raw data to network.'
 arch=('any')
-url='https://metacpan.org/release/Net-Write'
+url="http://search.cpan.org/~gomor/Net-Write-${pkgver}/lib/Net/Write.pm"
 license=('GPL' 'PerlArtistic')
 depends=('perl-class-gomor' 'perl-socket6' 'perl-net-pcap>=0.12')
 options=('!emptydirs')
-source=("http://search.cpan.org/CPAN/authors/id/G/GO/GOMOR/$_pkgname-$pkgver.tar.gz")
-sha512sums=('d0e665b277ee6c6857b1cfad0dc6fd3227d54d5df4be131ad586e853d46c81e5e93aa0e515cdde7cc9fcc7d08feb46bc58c81c1028fcc138d312c6708cc47df2')
+source=("http://search.cpan.org/CPAN/authors/id/G/GO/GOMOR/Net-Write-${pkgver}.tar.gz")
+sha1sums=('6a01fd05b4bd822952ea64739debef2757584716')
 
 prepare() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/Net-Write-$pkgver"
 
   PERL_MM_USE_DEFAULT=1 perl Makefile.PL INSTALLDIRS=vendor
 }
 
 build() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/Net-Write-$pkgver"
 
   make
 }
 
 package() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/Net-Write-$pkgver"
 
-  make DESTDIR="$pkgdir" install
+  make install DESTDIR="$pkgdir"
 
   find "$pkgdir" -name '.packlist' -o -name '*.pod' -delete
 }

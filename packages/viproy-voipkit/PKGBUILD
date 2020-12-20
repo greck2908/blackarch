@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=viproy-voipkit
-pkgver=81.427f26e
+pkgname='viproy-voipkit'
+pkgver=78.54542b3
 pkgrel=1
 epoch=1
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-fuzzer'
@@ -14,32 +14,31 @@ arch=('any')
 url='http://viproy.com/'
 license=('custom')
 options=('!strip')
+install='viproy-voipkit.install'
 source=('git+https://github.com/fozavci/viproy-voipkit.git')
-sha512sums=('SKIP')
-install="$pkgname.install"
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/viproy-voipkit"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/viproy-voipkit"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname/"
-  install -dm 755 "$pkgdir/usr/share/$pkgname/modules/auxiliary/spoof/cisco"
-  install -dm 755 "$pkgdir/usr/share/$pkgname/lib/msf/core/auxiliary"
-  install -dm 755 "$pkgdir/usr/share/$pkgname/modules/auxiliary/voip"
+  mkdir -p "$pkgdir/usr/share/viproy-voipkit"
+  mkdir -p "$pkgdir/usr/share/viproy-voipkit/modules/auxiliary/spoof/cisco"
+  mkdir -p "$pkgdir/usr/share/viproy-voipkit/lib/msf/core/auxiliary"
+  mkdir -p "$pkgdir/usr/share/viproy-voipkit/modules/auxiliary/voip"
 
-  install -dm 755 "$pkgdir/usr/share/metasploit/lib/rex/proto/sip"
-  install -dm 755 "$pkgdir/usr/share/metasploit/lib/msf/core/auxiliary"
-  install -dm 755 "$pkgdir/usr/share/metasploit/modules/auxiliary/scanner/sip"
-  install -dm 755 "$pkgdir/usr/share/doc/metasploit/$pkgname"
+  mkdir -p "$pkgdir/usr/share/metasploit/lib/rex/proto/sip"
+  mkdir -p "$pkgdir/usr/share/metasploit/lib/msf/core/auxiliary"
+  mkdir -p "$pkgdir/usr/share/metasploit/modules/auxiliary/scanner/sip"
+  mkdir -p "$pkgdir/usr/share/doc/metasploit/viproy-voipkit"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/viproy-voipkit/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/viproy-voipkit/LICENSE"
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/viproy-voipkit/"
 }
-

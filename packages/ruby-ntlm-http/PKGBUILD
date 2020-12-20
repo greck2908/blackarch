@@ -1,28 +1,29 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ruby-ntlm-http
-_gemname=ntlm-http
-pkgver=0.1.1
-pkgrel=14
+pkgname='ruby-ntlm-http'
+_gemname='ntlm-http'
+pkgver='0.1.1'
+pkgrel=10
 pkgdesc='Ruby/NTLM HTTP library.'
 arch=('any')
-license=('custom:uknown')
+license=('uknown')
 makedepends=('ruby')
 url='http://www.mindflowsolutions.net'
-source=("http://rubygems.org/downloads/$_gemname-$pkgver.gem")
-sha512sums=('1d2868582a194fb3a3dcb48a7dfb031014e51a93d57afb83aaef98be8e57789506b71e6440770ca7bc48979d9dd730f398d01d554d6d0575ff01046a227c7669')
-noextract=("$_gemname-$pkgver.gem")
+source=("http://rubygems.org/downloads/ntlm-http-${pkgver}.gem")
+sha1sums=('ac1ddb3a3a8b3f7075729a2b2d1a31821c7b3d48')
+noextract=("ntlm-http-${pkgver}.gem")
 
 package() {
-  _gemdir=$(ruby -e 'puts Gem.default_dir')
+  cd "$srcdir"
+
+  local _gemdir=$(ruby -e 'puts Gem.default_dir')
 
   if [[ $CARCH == arm* ]] ; then
     gem install --no-user-install --ignore-dependencies --no-rdoc --no-ri \
-      -n "$pkgdir/usr/bin" -i "$pkgdir$_gemdir" "$_gemname-$pkgver.gem"
+      -n "$pkgdir/usr/bin" -i "$pkgdir$_gemdir" ntlm-http-$pkgver.gem
   else
     gem install --no-user-install --ignore-dependencies -i "$pkgdir$_gemdir" \
-      -n "$pkgdir/usr/bin" "$_gemname-$pkgver.gem"
+      -n "$pkgdir/usr/bin" ntlm-http-${pkgver}.gem
   fi
 }
-

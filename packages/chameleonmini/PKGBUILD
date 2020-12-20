@@ -1,28 +1,28 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=chameleonmini
-pkgver=393.b7fa288
+pkgname='chameleonmini'
+pkgver=157.a9ab6c0
 pkgrel=1
 pkgdesc='Official repository of ChameleonMini, a freely programmable, portable tool for NFC security analysis that can emulate and clone contactless cards, read RFID tags and sniff/log RF data.'
 groups=('blackarch' 'blackarch-social' 'blackarch-hardware' 'blackarch-nfc')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/emsec/ChameleonMini'
 license=('custom:unknown')
 depends=('python' 'python-argparse' 'python-colorama' 'python-pyserial')
 makedepends=('git' 'avr-gcc' 'avr-libc')
-source=("$pkgname::git+https://github.com/emsec/ChameleonMini.git")
-install="$pkgname.install"
-sha512sums=('SKIP')
+source=('git+https://github.com/emsec/ChameleonMini.git')
+install='chameleonmini.install'
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ChameleonMini"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/ChameleonMini"
 
   # build firmware
   cd Firmware/Chameleon-Mini
@@ -31,32 +31,32 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ChameleonMini"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/chameleonmini"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/chameleonmini/" README.md
+  install -Dm644 LICENSE.txt \
+    "$pkgdir/usr/share/licenses/chameleonmini/LICENSE.txt"
 
   rm README.md LICENSE.txt
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/chameleonmini/"
 
   cat > "$pkgdir/usr/bin/chamtool" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname/Software
-exec python chamtool.py "\$@"
+cd /usr/share/chameleonmini/Software
+exec python chamtool.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/chamtool"
+  chmod a+x "$pkgdir/usr/bin/chamtool"
 
   cat > "$pkgdir/usr/bin/chamlog" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname/Software
-exec python chamlog.py "\$@"
+cd /usr/share/chameleonmini/Software
+exec python chamlog.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/chamlog"
+  chmod a+x "$pkgdir/usr/bin/chamlog"
 }
-

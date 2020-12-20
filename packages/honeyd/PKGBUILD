@@ -1,30 +1,24 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=honeyd
-pkgver=337.a0f3d64
-pkgrel=2
+# TODO: check license
+pkgname='honeyd'
+pkgver='1.6.7'
+pkgrel=8
 groups=('blackarch' 'blackarch-honeypot')
 pkgdesc='A small daemon that creates virtual hosts on a network.'
 url='https://github.com/DataSoft/Honeyd/'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 license=('GPL')
 depends=('libdnet' 'libevent' 'libedit' 'libpcap' 'pcre' 'zlib' 'tcl' 'python2')
-makedepends=('git')
 options=('!makeflags')
-source=("$pkgname::git+https://github.com/DataSoft/Honeyd.git"
+source=("https://github.com/DataSoft/Honeyd/archive/honeyd-${pkgver}.tar.gz"
         'python.patch')
-sha512sums=('SKIP'
-            '7fbb69ff6d68a87f0a1a574375bc685c5a62221d059df32fbe2129ca81bac03080e8539811f099c34c572bbe2eecf98acb32c58ce9e1cf6ba92a2f206137ed98')
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+sha1sums=('a036409d59e92c0903b41ba4e8392aed499f6867'
+          '85a76a6b8e05f22a243f62774343ed0a08ceb157')
 
 build() {
-  cd $pkgname
+  cd "$srcdir/Honeyd-honeyd-$pkgver"
 
   ./autogen.sh
 
@@ -38,16 +32,16 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Honeyd-honeyd-$pkgver"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/honeyd"
 
   make prefix="$pkgdir/usr" install
 
   for dir in webserver webserver/htdocs webserver/htdocs/graphs \
     webserver/htdocs/images webserver/htdocs/styles \
-    webserver/htdocs/templates webserver/htdocs/templates/inc ; do
-    chmod 755 "$pkgdir/usr/share/$pkgname/$dir"
+    webserver/htdocs/templates webserver/htdocs/templates/inc
+  do
+    chmod 755 "$pkgdir/usr/share/honeyd/$dir"
   done
 }
-

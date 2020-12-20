@@ -1,39 +1,46 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=apkid
-pkgver=2.1.1
+pkgname='apkid'
+pkgver=145.8363303
 pkgrel=1
-epoch=2
 pkgdesc='Android Application Identifier for Packers, Protectors, Obfuscators and Oddities.'
 groups=('blackarch' 'blackarch-mobile')
 arch=('any')
 url='https://github.com/rednaga/APKiD'
 license=('GPL3')
-depends=('python' 'python-argparse' 'python-yara-rednaga')
-makedepends=('python-setuptools' 'python-yara-rednaga')
-source=("https://github.com/rednaga/APKiD/releases/download/v$pkgver/$pkgname-$pkgver.tar.gz")
-sha512sums=('02355685e7f169219ef7e5a1dda91eeff4641d81c0fe6cdfc1c3dc5cf155d1e70d42fd55428935a77e2c9ee73c5159d6f4fedca44edb7e9cb5a340f66ba6293c')
+depends=('python2' 'python2-yara' 'python2-argparse')
+makedepends=('git' 'python2-setuptools')
+source=('git+https://github.com/rednaga/APKiD.git')
+sha1sums=('SKIP')
+
+pkgver() {
+  cd "$srcdir/APKiD"
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
 
 prepare() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/APKiD"
 
-  sed -i 's|yara-python==3.11.0|yara-python|' setup.py
+  sed -i 's|yara-python==3.5.0.999|yara-python|' setup.py
 }
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/APKiD"
 
-  python setup.py build
+  python2 setup.py build
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/APKiD"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  python2 setup.py install --root="$pkgdir" --optimize=1
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.*
-  install -Dm 644 -t "$pkgdir/usr/share/licenses/$pkgname" LICENSE.GPL \
+  cp -a apkid/rules "$pkgdir/usr/lib/python2.7/site-packages/apkid/rules"
+
+  install -Dm644 -t "$pkgdir/usr/share/doc/apkid/" README.md README.rst \
+    AUTHORS.txt
+  install -Dm644 -t "$pkgdir/usr/share/licenses/apkid" LICENSE.GPL \
     LICENSE.COMMERCIAL
 }
-

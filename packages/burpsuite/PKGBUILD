@@ -1,48 +1,41 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=burpsuite
-pkgver=2020.12.1
+pkgname='burpsuite'
+pkgver='1.7.30'
 pkgrel=1
-epoch=1
 groups=('blackarch' 'blackarch-fuzzer' 'blackarch-proxy' 'blackarch-scanner'
         'blackarch-webapp')
-pkgdesc='An integrated platform for attacking web applications (community edition) + SHELLING plugin.'
+pkgdesc='An integrated platform for attacking web applications (free edition).'
 arch=('any')
 url='http://portswigger.net/burp/'
-license=('custom:unknown')
-depends=('java-runtime>=9' 'giflib')
-makedepends=('git')
-noextract=("$pkgname.jar")
-source=("$pkgname.jar::https://portswigger.net/burp/releases/download?product=community&version=$pkgver&type=jar"
+depends=('java-environment' 'giflib')
+license=('custom')
+noextract=('burpsuite.jar')
+source=('burpsuite.jar::http://portswigger.net/DownloadUpdate.ashx?Product=Free'
         'LICENSE'
-        "$pkgname.desktop"
-        'icon64.png'
-        'git+https://github.com/PortSwigger/command-injection-attacker.git')
-sha512sums=('6009727281ae8f273042cb6136fea831ac4adb8c9a51694fee3e4e640ce65735587fcdafff7e534b4229d68ae8bfd2be46f93037ee8b66c7a544bbf4ec1ae886'
-            '07f646ce79e4e259c8da4a16ecd9b0149f09cd047ab42bfb758dc1cd4871710866e4dae6cda572f96fb49d0b156e64dd7b0a78904d9d367d41136214de5488a2'
-            '87790fac549e165f93f4e1dcaff93484957f20e7530e8b51586a22f4db594f6bfae730e4748e809c9b127571d764b026432cdaf47c282469a4ab42b037245895'
-            '928083e0189ce50304c4b32f8f6ef56be79881090bffdaddb5e990a59186ed2596c03293255693d488a47519e6da4e969e74e9bfe22a0f6ca53491a4e0749575'
-            'SKIP')
+        'burpsuite.desktop'
+        'icon64.png')
+sha1sums=('0f8eb04b4b009e6b943e08867fc46f731585db79'
+          'db90b32d4197b3c4a9e35f0aa2e49a9dc493c5f7'
+          'c87e811ff37d63e5a206516967926b3d6e4e991f'
+          'fbd3e7d3e70d817d017899ed71bc69ae7066804c')
 
 package() {
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/"{applications,pixmaps,burpsuite,licenses/burpsuite}
+  cd ${srcdir}
 
-  install -Dm 644 "$pkgname.jar" "$pkgdir/usr/share/$pkgname/$pkgname.jar"
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
-  install -Dm 644 "$pkgname.desktop" "$pkgdir/usr/share/applications/"
-  install -Dm 644 icon64.png "$pkgdir/usr/share/pixmaps/$pkgname.png"
+  mkdir -p ${pkgdir}/usr/bin
+  mkdir -p ${pkgdir}/usr/share/{applications,pixmaps,burpsuite,licenses/burpsuite}
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  install -Dm644 burpsuite.jar ${pkgdir}/usr/share/burpsuite/burpsuite.jar
+  install -Dm644 LICENSE ${pkgdir}/usr/share/licenses/burpsuite/LICENSE
+  install -Dm644 burpsuite.desktop ${pkgdir}/usr/share/applications/
+  install -Dm644 icon64.png ${pkgdir}/usr/share/pixmaps/burpsuite.png
+
+  cat > ${pkgdir}/usr/bin/burpsuite << EOF
 #!/bin/sh
-exec \$JAVA_HOME/bin/java -jar /usr/share/$pkgname/$pkgname.jar "\$@"
+exec \$JAVA_HOME/bin/java -jar /usr/share/burpsuite/burpsuite.jar "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
-
-  # SHELLING plugin
-  cd command-injection-attacker
-  install -Dm 644 SHELLING.jar "$pkgdir/usr/share/$pkgname/SHELLING.jar"
+  chmod +x ${pkgdir}/usr/bin/burpsuite
 }
-

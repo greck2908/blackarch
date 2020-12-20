@@ -1,36 +1,35 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=mosca
-pkgver=112.7d33611
+pkgname='mosca'
+pkgver=109.e9bc968
 pkgrel=1
 groups=('blackarch' 'blackarch-code-audit')
 pkgdesc='Static analysis tool to find bugs like a grep unix command.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/CoolerVoid/Mosca'
 license=('GPL3')
 depends=('pcre')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/CoolerVoid/Mosca.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/CoolerVoid/Mosca.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Mosca"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/Mosca"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Mosca"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md TODO
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 mosca "$pkgdir/usr/bin/mosca"
+  install -Dm644 -t "$pkgdir/usr/share/doc/mosca/" README.md TODO
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/mosca/LICENSE.txt"
 }
-

@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=tomcatwardeployer
-pkgver=91.a1a4453
+pkgname='tomcatwardeployer'
+pkgver=66.524ab11
 pkgrel=1
 pkgdesc='Apache Tomcat auto WAR deployment & pwning penetration testing tool.'
 groups=('blackarch' 'blackarch-exploitation' 'blackarch-automation'
@@ -10,33 +10,31 @@ groups=('blackarch' 'blackarch-exploitation' 'blackarch-automation'
 arch=('any')
 url='https://github.com/mgeeky/tomcatWarDeployer'
 license=('GPL3')
-depends=('python2' 'python2-beautifulsoup3' 'python2-beautifulsoup4'
-         'python2-mechanize')
+depends=('python2' 'python2-beautifulsoup3' 'python2-beautifulsoup4')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/mgeeky/tomcatWarDeployer.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/mgeeky/tomcatWarDeployer.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/tomcatWarDeployer"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/tomcatWarDeployer"
 
   sed -i 's|/bin/python|/bin/python2|' tomcatWarDeployer.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/tomcatWarDeployer"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/tomcatwardeployer"
 
-  install -Dm 755 tomcatWarDeployer.py "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" screen1.png
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 tomcatWarDeployer.py "$pkgdir/usr/bin/tomcatwardeployer"
+  install -Dm644 -t "$pkgdir/usr/share/tomcatwardeployer/" screen1.png
+  install -Dm644 README.md "$pkgdir/usr/share/doc/tomcatwardeployer/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/tomcatwardeployer/LICENSE"
 }
-

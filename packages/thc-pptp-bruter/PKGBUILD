@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=thc-pptp-bruter
-pkgver=0.1.4
+pkgname='thc-pptp-bruter'
+pkgver='0.1.4'
 pkgrel=7
 groups=('blackarch' 'blackarch-cracker')
 pkgdesc='A brute force program that works against pptp vpn endpoints (tcp port 1723).'
@@ -10,12 +10,12 @@ url='http://www.thc.org'
 license=('GPL')
 makedepends=('gcc' 'git')
 depends=('openssl')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 source=('git+https://github.com/BlackArch/thc-pptp-bruter.git')
-sha512sums=('SKIP')
+sha1sums=('SKIP')
 
 build() {
-  cd $pkgname
+  cd "$srcdir/thc-pptp-bruter"
 
   if [[ "$CARCH" == "i686" || "$CARCH" == "x86_64" ]];
   then
@@ -28,8 +28,7 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/thc-pptp-bruter"
 
-  make DESTDIR="$pkgdir" install
+  make DESTDIR="$pkgdir/" install
 }
-

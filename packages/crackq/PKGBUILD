@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=crackq
+pkgname='crackq'
 pkgver=48.89b7318
 pkgrel=2
 groups=('blackarch' 'blackarch-cracker')
@@ -11,32 +11,31 @@ url='https://github.com/vnik5287/Crackq'
 license=('custom:unknown')
 makedepends=('git')
 depends=('python2' 'python2-simplejson')
-source=("$pkgname::git+https://github.com/vnik5287/Crackq.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/vnik5287/Crackq.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Crackq"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Crackq"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/crackq"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/crackq/README.md"
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/crackq"
 
   cat > "$pkgdir/usr/bin/crackqcli" << EOF
 #!/bin/sh
-exec python2 /usr/share/$pkgname/crackqcli.py "\$@"
+exec python2 /usr/share/crackq/crackqcli.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/crackqcli"
+  chmod a+x "$pkgdir/usr/bin/crackqcli"
 }
-

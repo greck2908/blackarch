@@ -1,44 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=whatsmyname
-pkgver=587.1f076fd
+pkgname='whatsmyname'
+pkgver=213.cff764e
 pkgrel=1
 pkgdesc='Tool to perform user and username enumeration on various websites.'
-groups=('blackarch' 'blackarch-social' 'blackarch-recon')
+groups=('blackarch' 'blackarch-webapp' 'blackarch-recon')
 arch=('any')
 url='https://github.com/WebBreacher/WhatsMyName'
 license=('MIT')
-depends=('python' 'python-requests')
+depends=('python2' 'python2-requests')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/WebBreacher/WhatsMyName.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/WebBreacher/WhatsMyName.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/WhatsMyName"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/WhatsMyName"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/whatsmyname"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
+  install -Dm644 -t "$pkgdir/usr/share/doc/whatsmyname/" README.md
+  install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/whatsmyname/LICENSE.md"
 
   rm *.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/whatsmyname"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/whatsmyname" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python3 web_accounts_list_checker.py "\$@"
+cd /usr/share/whatsmyname
+exec python2 web_accounts_list_checker.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/whatsmyname"
 }
-

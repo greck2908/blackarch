@@ -1,44 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=nfsshell
-pkgver=19980519
-pkgrel=6
+pkgname='nfsshell'
+pkgver='19980519'
+pkgrel=5
 groups=('blackarch' 'blackarch-automation' 'blackarch-networking')
 pkgdesc='Userland NFS command tool.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://www.paramecium.org/~leendert/'
-license=('custom:unknown')
-depends=('readline' 'libtirpc' 'libtirpc-compat')
+license=('any:custom')
+depends=('readline')
 makedepends=('make' 'gcc')
-source=("http://www.cs.vu.nl/pub/leendert/$pkgname.tar.gz"
-        'gcc.patch'
-        'LICENSE')
-sha512sums=('3d47c36b9769d0f077ddce3b979ebcfac279f40366e9e9d96e7d9356d199b92ce3363454c81064d07ab780c1c312d5b3615c0d7fd69bf8830b64442edd12347f'
-            'edb4035cede02be82ed33d01a0b7cfc6853d72ee2a0436fd5a492fb4bcc0c2ae0e9295e0273e8f12bab2fc9f34345f13deb069be56520005b6b6d73c28ed8cec'
-            'ea74975a2ee809d5172d0badb9674144cdac510f43336c8cf105df16dfac8619961fdebdd61d8bf2ccd9ae41dabd8607d202a1ad2fd26d024e89c05def65e6f9')
+source=("http://www.cs.vu.nl/pub/leendert/nfsshell.tar.gz"
+        "gcc.patch"
+        "LICENSE")
+sha1sums=('3939bb683bb29cde3b47344251cce57a2eff1a5e'
+          '11749c22eb38bf2d9fcdc833ff506566efb7a304'
+          'e8fd7ba82fd4e0440c5b92bc3c3a78c99ec6a407')
 
 build() {
-  cd nfs
+  cd "${srcdir}/nfs"
 
-  patch -Np1 -i "$srcdir/gcc.patch"
-
+  patch -Np1 -i "${srcdir}/gcc.patch"
   make
 }
 
 package() {
-  cd nfs
+  cd "${srcdir}/nfs"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  #install -D -m755 nfs "${pkgdir}/usr/bin/nfsshell"
+  mkdir -p "${pkgdir}/usr/bin"
+  mkdir -p "${pkgdir}/usr/share/nfsshell"
+  cp -r * "${pkgdir}/usr/share/nfsshell/"
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
-
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "${pkgdir}/usr/bin/nfsshell" << EOF
 #!/bin/sh
-exec /usr/share/$pkgname/nfs "\$@"
+
+exec /usr/share/nfsshell/nfs "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "${pkgdir}/usr/bin/nfsshell"
 }
-

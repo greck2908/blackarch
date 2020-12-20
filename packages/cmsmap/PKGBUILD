@@ -1,54 +1,45 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=cmsmap
-pkgver=8.59dd0e2
-pkgrel=6
+pkgname='cmsmap'
+pkgver=3.37b64be
+pkgrel=2
 epoch=1
-pkgdesc='A python open source Content Management System scanner that automates the process of detecting security flaws of the most popular CMSs.'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-automation'
         'blackarch-webapp' 'blackarch-exploitation')
+pkgdesc='A python open source Content Management System scanner that automates the process of detecting security flaws of the most popular CMSs.'
 arch=('any')
 url='https://www.dionach.com/blog/cmsmap-%E2%80%93-a-simple-cms-vulnerability-scanner'
 license=('GPL3')
-depends=('python' 'python-argparse' 'exploitdb')
-makedepends=('git' 'python-setuptools')
-source=("$pkgname::git+https://github.com/Dionach/CMSmap.git")
-sha512sums=('SKIP')
+depends=('python2')
+makedepends=('git')
+source=('git+https://github.com/Dionach/CMSmap.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/CMSmap"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  cd $pkgname
-
-  sed 's|wp_plugins_small = data/wp_plugins_small.txt|wp_plugins_small = data/wp_plugins.txt|g' \
-    -i cmsmap/cmsmap.conf
-  sed 's|edbtype = apt|edbtype = GIT|g' -i cmsmap/cmsmap.conf
-  sed 's|edbpath = /usr/share/exploitdb/|edbpath = /opt/exploitdb/|g' -i cmsmap/cmsmap.conf
-}
-
-build() {
-  cd $pkgname
-
-  python setup.py build
-}
-
 package() {
-  cd $pkgname
+  cd "$srcdir/CMSmap"
 
-  install -dm 755 "$pkgdir/opt/"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/cmsmap"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr --skip-build
+  install -Dm644 -t "$pkgdir/usr/share/doc/cmsmap" README.md DISCLAIMER.txt
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/cmsmap/LICENSE.txt"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md DISCLAIMER.txt
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  rm README.md DISCLAIMER.txt LICENSE.txt
 
-  cd "$pkgdir/opt"
+  cp -a * "$pkgdir/usr/share/cmsmap"
 
-  git clone https://github.com/offensive-security/exploit-database exploitdb
+  cat > "$pkgdir/usr/bin/cmsmap" << EOF
+#!/bin/sh
+cd /usr/share/cmsmap
+exec python2 cmsmap.py "\$@"
+EOF
+
+  chmod a+x "$pkgdir/usr/bin/cmsmap"
 }
-

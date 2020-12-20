@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=thefuzz
-pkgver=160.b4c2c80
+pkgname='thefuzz'
+pkgver=158.9857c2d
 pkgrel=1
 pkgdesc='CLI fuzzing tool.'
 groups=('blackarch' 'blackarch-fuzzer')
@@ -11,34 +11,33 @@ url='https://github.com/droberson/thefuzz'
 license=('MIT')
 depends=('python2' 'python2-argparse' 'python2-subprocess32')
 makedepends=('git')
-source=("git+https://github.com/droberson/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/droberson/thefuzz.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/thefuzz"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/thefuzz"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/thefuzz"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md ABSTRACT.md
-  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE.md"
+  install -Dm644 -t "$pkgdir/usr/share/doc/thefuzz/" README.md ABSTRACT.md
+  install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/thefuzz/LICENSE.md"
 
   rm *.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/thefuzz/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/thefuzz" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 fuzz_cli.py "\$@"
+cd /usr/share/thefuzz
+exec python2 fuzz_cli.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/thefuzz"
 }
-

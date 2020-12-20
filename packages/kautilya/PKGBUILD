@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=kautilya
-pkgver=52.1c9d5b0
-pkgrel=8
+pkgname='kautilya'
+pkgver='0.5.5'
+pkgrel=5
 groups=('blackarch' 'blackarch-hardware')
 pkgdesc='Pwnage with Human Interface Devices using Teensy++2.0 and Teensy 3.0 devices.'
 arch=('any')
@@ -11,35 +11,28 @@ url='https://github.com/samratashok/Kautilya/releases'
 license=('GPL3')
 makedepends=('git')
 depends=('ruby' 'ruby-bundler' 'libpcap')
-source=("$pkgname::git+https://github.com/samratashok/Kautilya.git")
-sha512sums=('SKIP')
-install="$pkgname.install"
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+source=("https://github.com/samratashok/Kautilya/archive/v${pkgver}.tar.gz")
+install='kautilya.install'
+sha1sums=('866305978d1fc3ae1c3e5b031180d89ed26e1856')
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Kautilya-$pkgver"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname/output"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/kautilya/output"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" CHANGELOG README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/kautilya" CHANGELOG README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/kautilya/LICENSE"
 
   rm CHANGELOG README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/kautilya"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/kautilya" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec ruby /usr/share/$pkgname/$pkgname.rb "\$@"
+cd /usr/share/kautilya
+exec ruby /usr/share/kautilya/kautilya.rb "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/kautilya"
 }
-

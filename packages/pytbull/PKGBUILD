@@ -1,42 +1,40 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=pytbull
-pkgver=2.1
-pkgrel=2
+pkgname='pytbull'
+pkgver='2.0'
+pkgrel=3
 groups=('blackarch' 'blackarch-scanner' 'blackarch-fuzzer')
 pkgdesc='A python based flexible IDS/IPS testing framework shipped with more than 300 tests.'
 arch=('any')
 url='http://pytbull.sourceforge.net/'
 license=('GPL2')
-depends=('python2' 'python2-scapy' 'python2-feedparser' 'python2-cherrypy')
-source=("https://downloads.sourceforge.net/project/$pkgname/$pkgname-$pkgver.tar.bz2")
-sha512sums=('5ac642ded4f772299966950d7255bc67562f95fa92c7b58321623aae6efc3655abddbc94211f11098a53d5544ef3e172fb73634df3a449e97c1d7f6dd5789430')
+depends=('python2' 'scapy' 'python2-feedparser')
+source=("https://downloads.sourceforge.net/project/pytbull/pytbull-${pkgver}.tar.bz2")
+sha1sums=('87218120d58e88ec9e5c2e8340ca71dec3faf877')
 
 prepare() {
-  cd $pkgname
-
-  sed -i 's/self.checkNewVersionAvailable()/False/' $pkgname
+  cd "$srcdir/pytbull"
+  sed -i 's/self.checkNewVersionAvailable()/False/' pytbull
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/pytbull"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
-  install -dm 755 "$pkgdir/usr/share/doc"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/pytbull"
+  mkdir -p "$pkgdir/usr/share/doc/"
 
-  install -Dm 644 docs/COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm644 docs/COPYING "$pkgdir/usr/share/licenses/pytbull/COPYING"
 
-  cp -a docs "$pkgdir/usr/share/doc/$pkgname/"
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/pytbull"
+  cp -a docs "$pkgdir/usr/share/doc/pytbull"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/pytbull" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-python2 $pkgname "\$@"
+cd /usr/share/pytbull
+python2 pytbull "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/pytbull"
 }
-

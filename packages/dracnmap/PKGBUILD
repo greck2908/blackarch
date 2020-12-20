@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dracnmap
+pkgname='dracnmap'
 pkgver=69.09d3945
 pkgrel=1
 pkgdesc='Tool to exploit the network and gathering information with nmap help.'
@@ -11,22 +11,21 @@ url='https://github.com/screetsec/Dracnmap'
 license=('MIT')
 depends=('nmap' 'firefox' 'nano' 'xterm')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/screetsec/Dracnmap.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/screetsec/Dracnmap.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Dracnmap"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Dracnmap"
 
-  install -Dm 755 dracnmap-v2.2.sh "$pkgdir/usr/bin/$pkgname"
-  install -Dm 755 dracnmap-v2.2-dracOs.sh  "$pkgdir/usr/bin/dracnmap-drac0s"
-  install -Dm 755 Output/log "$pkgdir/usr/share/$pkgname/Output/log"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 dracnmap-v2.2.sh "$pkgdir/usr/bin/dracnmap"
+  install -Dm755 dracnmap-v2.2-dracOs.sh  "$pkgdir/usr/bin/dracnmap-drac0s"
+  install -Dm755 Output/log "$pkgdir/usr/share/dracnmap/Output/log"
+  install -Dm644 -t "$pkgdir/usr/share/doc/dracnmap/" README.md CHANGELOG.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/dracnmap/LICENSE"
 }
-

@@ -1,57 +1,55 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=morpheus
-pkgver=165.5d81c9e
+pkgname='morpheus'
+pkgver=44.8499b1c
 pkgrel=1
 pkgdesc='Automated Ettercap TCP/IP Hijacking Tool.'
 groups=('blackarch' 'blackarch-automation')
 arch=('any')
 url='https://github.com/r00t-3xp10it/morpheus'
 license=('custom:unknown')
+#TODO: add metasploit as dep once the fucking ruby issues are solved
 depends=('bash' 'xterm' 'zenity' 'ettercap' 'dsniff' 'apache' 'nmap' 'driftnet'
-         'sudo' 'metasploit')
+         'sudo')
 makedepends=('git')
-source=("git+https://github.com/r00t-3xp10it/$pkgname.git"
-        'settings.patch')
-sha512sums=('SKIP'
-            '8c9eb573da48f245e1710de9c338a1c097cc934f7db8b8f2f1d758a11a6ce62c7d2809a21cc83aef3af3fa10714206bd1795f22045908769b19a54148ac79e5f')
+source=('git+https://github.com/r00t-3xp10it/morpheus.git'
+        'settings.patch'
+        'morpheus.sh.patch')
+sha1sums=('SKIP'
+          '6877635a82d1eefa2bcf0cf0c0548c9c6de1e2b0'
+          'f54ea548532236a855ed320b29efa14366f5dc99')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/morpheus"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir"
 
-  patch -p0 < "$srcdir/settings.patch"
-
-  sed 's/echo/echo\ -e/g' -i "$pkgname.sh"
-  sed 's/which\ apache2/which\ httpd/g' -i "$pkgname.sh"
-  sed 's/\/etc\/init.d\/apache2\ start/systemctl\ start\ httpd/g' -i morpheus.sh
-  sed 's/\/etc\/init.d\/apache2\ stop/systemctl\ stop\ httpd/g' -i morpheus.sh
+  patch -p1 < settings.patch
+  patch -p1 < morpheus.sh.patch
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/morpheus"
 
-  install -dm 755 "$pkgdir/usr/bin/"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin/"
+  mkdir -p "$pkgdir/usr/share/morpheus"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/morpheus/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/morpheus"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/morpheus" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec bash ./$pkgname.sh "\$@"
+cd /usr/share/morpheus
+exec bash ./morpheus.sh "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/morpheus"
 }
-

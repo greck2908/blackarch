@@ -1,54 +1,45 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=xerosploit
-pkgver=33.2a65f3d
-pkgrel=5
+pkgname='xerosploit'
+pkgver=28.b5dad87
+pkgrel=3
 pkgdesc='Efficient and advanced man in the middle framework.'
 groups=('blackarch' 'blackarch-networking' 'blackarch-exploitation'
         'blackarch-sniffer')
 arch=('any')
 url='https://github.com/LionSec/xerosploit'
 license=('GPL3')
-depends=('python2' 'bettercap' 'nmap' 'hping' 'ruby' 'iproute2' 'net-tools'
-         'wireless_tools' 'python2-terminaltables' 'python2-tabulate'
-         'python2-sphinx_rtd_theme' 'python2-recommonmark')
+depends=('python2' 'bettercap' 'nmap' 'hping' 'python2-terminaltables'
+         'python2-tabulate' 'python2-sphinx_rtd_theme' 'python2-recommonmark')
 makedepends=('git')
-source=("git+https://github.com/LionSec/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/LionSec/xerosploit.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/xerosploit"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  cd $pkgname
-
-  sed 's|("hostname -I").read()|("hostname -i").read().split()[0]|g' \
-    -i "$pkgname.py"
-}
-
 package() {
-  cd $pkgname
+  cd "$srcdir/xerosploit"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/opt/$pkgname/tools"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/opt/xerosploit/tools"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/xerosploit/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/xerosploit/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/opt/$pkgname/"
+  cp -a * "$pkgdir/opt/xerosploit"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/xerosploit" << EOF
 #!/bin/sh
-cd /opt/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /opt/xerosploit
+exec python2 xerosploit.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/xerosploit"
 }
-

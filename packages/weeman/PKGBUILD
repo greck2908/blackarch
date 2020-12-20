@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=weeman
+pkgname='weeman'
 pkgver=91.53c2efa
 pkgrel=1
 groups=('blackarch' 'blackarch-social')
@@ -12,40 +12,39 @@ license=('GPL3')
 depends=('python2' 'python2-beautifulsoup4' 'python2-html5lib' 'python2-lxml'
          'python2-pdb')
 makedepends=('git')
-source=("git+https://github.com/Hypsurus/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/Hypsurus/weeman.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/weeman"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/weeman"
 
   find . -type f -name '*.py' -exec \
     sed -i 's|history.log|/tmp/history.log|' {} \;
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/weeman"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/weeman"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md ChangeLog
+  install -Dm644 -t "$pkgdir/usr/share/doc/weeman/" README.md ChangeLog
 
   rm README.md ChangeLog
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/weeman/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/weeman" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/weeman
+exec python2 weeman.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/weeman"
 }
-

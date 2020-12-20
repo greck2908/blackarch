@@ -1,19 +1,19 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=sslcat
-pkgver=1.0
+pkgname='sslcat'
+pkgver='1.0'
 pkgrel=2
 pkgdesc='A simple Unix utility that reads and writes data across an SSL enable network connection.'
 url='http://www.bindshell.net/tools/sslcat'
 license='GPL'
 groups=('blackarch' 'blackarch-misc')
-arch=('x86_64' 'aarch64')
-source=("http://www.bindshell.net/tools/sslcat/$pkgname.tgz")
-sha512sums=('ff5acb99399cdf8627059f0c957db15409198916')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+source=('http://www.bindshell.net/tools/sslcat/sslcat.tgz')
+sha1sums=('ff5acb99399cdf8627059f0c957db15409198916')
 
 build() {
-  cd $pkgname
+  cd "$srcdir/sslcat"
 
   ./configure --prefix=/usr --mandir=/usr/share/man/
 
@@ -21,8 +21,8 @@ build() {
 }
 
 package(){
-  cd $pkgname
+  cd "$srcdir/sslcat"
 
   make prefix="$pkgdir/usr" mandir="$pkgdir/usr/share/man" install
-}
 
+}

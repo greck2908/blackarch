@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=striptls
+pkgname='striptls'
 pkgver=53.eff1d59
 pkgrel=1
 groups=('blackarch' 'blackarch-proxy')
@@ -11,33 +11,33 @@ url='https://github.com/tintinweb/striptls'
 license=('custom:unknown')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/tintinweb/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/tintinweb/striptls.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/striptls"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/striptls"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/striptls"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md README.rst
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/striptls/" README.md README.rst
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/striptls/LICENSE"
 
   rm README.* LICENSE
 
-  cp -a striptls/* "$pkgdir/usr/share/$pkgname/"
+  cp -a striptls/* "$pkgdir/usr/share/striptls"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/striptls" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/striptls
+exec python2 striptls.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/striptls"
 }

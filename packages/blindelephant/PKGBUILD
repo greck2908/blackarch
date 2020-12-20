@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=blindelephant
-pkgver=8
+pkgname='blindelephant'
+pkgver='8'
 pkgrel=2
 groups=('blackarch' 'blackarch-fingerprint' 'blackarch-webapp')
 pkgdesc='A web application fingerprinter. Attempts to discover the version of a (known) web application by comparing static files at known locations'
@@ -12,19 +12,12 @@ makedepends=('svn')
 depends=('python2')
 license=('LGPL')
 source=('svn+https://blindelephant.svn.sourceforge.net/svnroot/blindelephant/trunk')
-sha512sums=('SKIP')
-
-build() {
-  cd trunk/src
-
-  python2 setup.py build
-}
+sha1sums=('SKIP')
 
 package() {
-  cd trunk/src
+  cd "$srcdir/trunk/src"
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  python2 setup.py install --prefix=/usr "--root=$pkgdir" --optimize=1
 
-  mv "$pkgdir/usr/bin/BlindElephant.py" "$pkgdir/usr/bin/$pkgname"
+  mv "$pkgdir/usr/bin/BlindElephant.py" "$pkgdir/usr/bin/blindelephant"
 }
-

@@ -1,36 +1,31 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=graudit
-pkgver=498.52a8ff8
+pkgname='graudit'
+pkgver=305.6afe845
 pkgrel=1
 pkgdesc='Grep rough source code auditing tool.'
 arch=('any')
-groups=('blackarch' 'blackarch-code-audit')
 makedepends=('git')
 url='https://github.com/wireghoul/graudit'
 license=('GPL')
-source=("git+https://github.com/wireghoul/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/wireghoul/graudit.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/graudit"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/graudit"
 
-  #./configure --prefix "$pkgdir/usr/bin" --dbdir "$pkgdir/usr/share/graudit"
-  #make
+  make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/graudit"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
-
-  make prefix="$pkgdir/usr" dataroot="$pkgdir/usr/share/" install
+  make install
 }
-

@@ -1,41 +1,25 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=xsser
-pkgver=1.8
-pkgrel=4
+pkgname='xsser'
+pkgver='1.7'
+pkgrel=3
 epoch=2
 groups=('blackarch' 'blackarch-webapp' 'blackarch-fuzzer'
         'blackarch-exploitation')
 pkgdesc='A penetration testing tool for detecting and exploiting XSS vulnerabilites.'
 arch=('any')
-url='https://xsser.03c8.net/'
+url='http://xsser.sourceforge.net/'
 license=('GPL3')
-depends=('orbited' 'python' 'python-beautifulsoup4' 'python-pycurl' 'pygtk'
-         'python-twisted' 'python-geoip' 'python-cairo' 'python-gobject'
-         'python-cffi')
-makedepends=('python-setuptools')
+depends=('orbited' 'python2' 'python2-beautifulsoup3' 'python2-pycurl' 'pygtk'
+         'python2-twisted' 'pygtk')
+makedepends=('subversion' 'python2-setuptools')
 optdepends=('pygtkmoz')
-source=("https://github.com/epsylon/xsser/releases/download/1.8.3/${pkgname}_${pkgver}-3.tar.gz")
-sha512sums=('841b580b998d5339def8c9001f71282f4238fbda79c679f4e68554fa95a8be1fdc74dee37860bd57caa4ca2b0b1ab2bb9840b247237bfb5fbcaeb00d97b80160')
+source=("https://xsser.03c8.net/xsser/xsser_${pkgver}-1.tar.gz")
+sha1sums=('4a21c9383caaba7fd6ccc9bda81829be164ad75a')
 
 package() {
-  cd $pkgname
+  cd "$srcdir/xsser_${pkgver}-1/xsser-public"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
-
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" doc/*
-  rm -rf doc
-
-  cp -a * "$pkgdir/usr/share/$pkgname/"
-
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname
-exec python $pkgname "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  python2 setup.py install --prefix=/usr --root="$pkgdir"
 }
-

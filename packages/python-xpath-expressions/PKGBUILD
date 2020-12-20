@@ -1,29 +1,26 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=python-xpath-expressions
-_pkgname=xpath-expressions
-pkgver=1.0.2
-pkgrel=2
+pkgname='python-xpath-expressions'
+pkgver='0.2.2'
+pkgrel=1
 pkgdesc='Treat XPath expressions as Python objects.'
-url='https://pypi.org/project/xpath-expressions/#files'
+url='https://pypi.python.org/pypi/xpath-expressions/'
 arch=('any')
 license=('MIT')
 depends=('python' 'python-lxml')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/2d/c8/46e6efccaef9ed5b76077ec6ee0e97163b11a4b87d8c2a85b23294dc76a3/$_pkgname-$pkgver.tar.gz")
-sha512sums=('e3d12a72c6d5cd5147aa5de19bf41cc0611701e6a69919ee6c0af9b3cf41188534fabf1f3b5120febf32dda60859c051d451ea518ad25f38d755c8518c933146')
+source=("https://pypi.python.org/packages/34/5e/0623e770113a404d6bea8d24d9678fb8a020010a9d96b604c6f4935ab794/xpath-expressions-${pkgver}.tar.gz")
+sha1sums=('9a7646030393c01d4b99971bc30d032e2b68494f')
 
 build() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/xpath-expressions-$pkgver"
 
   python setup.py build
 }
 
 package() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/xpath-expressions-$pkgver"
 
-  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
-    --skip-build
+  python setup.py install --root="$pkgdir" --optimize=1
 }
-

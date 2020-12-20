@@ -1,10 +1,10 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=spiga
-pkgver=623.8bc1ddc
+pkgname='spiga'
+pkgver=528.42d8685
 pkgrel=1
-epoch=2
+epoch=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 pkgdesc='Configurable web resource scanner.'
 arch=('any')
@@ -12,25 +12,24 @@ url='https://github.com/getdual/scripts-n-tools/blob/master/spiga.py'
 license=('custom:unknown')
 depends=('python2')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/WSTNPHX/scripts-n-tools.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/WSTNPHX/scripts-n-tools.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/scripts-n-tools"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/scripts-n-tools"
 
-  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' "$pkgname.py"
+  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' spiga.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/scripts-n-tools/"
 
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 "$pkgname.conf" "$pkgdir/usr/share/$pkgname/$pkgname.conf"
+  install -Dm755 spiga.py "$pkgdir/usr/bin/spiga"
+  install -Dm644 spiga.conf "$pkgdir/usr/share/spiga/spiga.conf"
 }
-

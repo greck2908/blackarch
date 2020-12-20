@@ -1,30 +1,28 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=agafi
-_pkgname=Agafi
-pkgver=1.1
-pkgrel=3
-epoch=1
+pkgname='agafi'
+pkgver=13.8007d3d
+pkgrel=1
 pkgdesc='A gadget finder and a ROP-Chainer tool for x86 platforms.'
 groups=('blackarch' 'blackarch-windows' 'blackarch-exploitation')
 arch=('any')
 url='https://github.com/CoreSecurity/Agafi'
 license=('custom:unknown')
-makedepends=('unrar')
-source=("https://github.com/SecureAuthCorp/Agafi/releases/download/v$pkgver/$_pkgname.v$pkgver.rar")
-sha512sums=('a7131ee576fffebb595968e885554f1b563486a99d64e9444887a3f5ff5e84b67d9256b047aa2729008c9ee1da672a39b794f68e78f28a6d3bdcc8e9f614bfec')
-noextract=("$_pkgname.v$pkgver.rar")
+makedepends=('git')
+source=('git+https://github.com/CoreSecurity/Agafi.git')
+sha1sums=('SKIP')
 
-prepare() {
-  unrar x "$_pkgname.v$pkgver.rar"
+pkgver() {
+  cd "$srcdir/Agafi"
+
+  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd "$_pkgname v$pkgver"
+  cd "$srcdir/Agafi"
 
-  install -dm 755 "$pkgdir/usr/share/windows/$pkgname"
+  mkdir -p "$pkgdir/usr/share/windows/agafi"
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/windows/$pkgname/"
+  cp -a * "$pkgdir/usr/share/windows/agafi/"
 }
-

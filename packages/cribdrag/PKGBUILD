@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=cribdrag
-pkgver=5.2d27dbf
+pkgname='cribdrag'
+pkgver=4.476feaa
 pkgrel=1
 pkgdesc='An interactive crib dragging tool for cryptanalysis on ciphertext generated with reused or predictable stream cipher keys.'
 groups=('blackarch' 'blackarch-crypto')
@@ -11,42 +11,41 @@ url='https://github.com/SpiderLabs/cribdrag'
 license=('GPL3')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/SpiderLabs/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/SpiderLabs/cribdrag')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/cribdrag"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/cribdrag"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/cribdrag"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/cribdrag/" README.md
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/cribdrag/LICENSE.txt"
 
   rm README.md LICENSE.txt
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/cribdrag/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/cribdrag" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/cribdrag
+exec python2 cribdrag.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/cribdrag"
 
   cat > "$pkgdir/usr/bin/cribdrag-xorstrings" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/cribdrag
 exec python2 xorstrings.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/cribdrag-xorstrings"
+  chmod a+x "$pkgdir/usr/bin/cribdrag-xorstrings"
 }
-

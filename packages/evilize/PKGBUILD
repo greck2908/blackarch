@@ -1,31 +1,30 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=evilize
-pkgver=0.2
+pkgname='evilize'
+pkgver='0.2'
 pkgrel=1
 groups=('blackarch' 'blackarch-cracker' 'blackarch-binary' 'blackarch-crypto')
 pkgdesc='Tool to create MD5 colliding binaries.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://www.mathstat.dal.ca/~selinger/md5collision/'
 license=('GPL2')
 depends=('')
 makedepends=('')
-source=("http://www.mathstat.dal.ca/~selinger/md5collision/downloads/$pkgname-$pkgver.tar.gz")
-sha512sums=('8762b5e3961d3f7e53f5aa05777bf510110552c444ead872aa2df289a125fefaaf3badcb56c59333ff9a10f5e697df862ef1b8ce48c3a65c903250dad6a79ee7')
+source=("http://www.mathstat.dal.ca/~selinger/md5collision/downloads/evilize-${pkgver}.tar.gz")
+sha1sums=('2d1440821549e70a55923dae47f6b0937c8fa67a')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/evilize-$pkgver"
 
   make
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/evilize-$pkgver"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  install -Dm 755 md5coll "$pkgdir/usr/bin/evilize-md5coll"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README AUTHORS ChangeLog
-  install -Dm 644 -t "$pkgdir/usr/share/licenses/$pkgname/" COPYING MBSD-LICENSE
+  install -Dm755 evilize "$pkgdir/usr/bin/evilize"
+  install -Dm755 md5coll "$pkgdir/usr/bin/evilize-md5coll"
+  install -Dm644 -t "$pkgdir/usr/share/doc/evilize/" README AUTHORS ChangeLog
+  install -Dm644 -t "$pkgdir/usr/share/licenses/evilize/" COPYING MBSD-LICENSE
 }
-

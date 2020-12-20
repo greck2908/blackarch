@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=honssh
-pkgver=202.7adbf1b
-pkgrel=2
+pkgname='honssh'
+pkgver=194.ec13b58
+pkgrel=1
 groups=('blackarch' 'blackarch-honeypot')
 pkgdesc='A high-interaction Honey Pot solution designed to log all SSH communications between a client and server.'
 arch=('any')
@@ -11,24 +11,23 @@ url='https://code.google.com/p/honssh/'
 license=('BSD')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/tnich/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/tnich/honssh.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/honssh"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/honssh"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/honssh"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README
+  install -Dm644 README "$pkgdir/usr/share/doc/honssh/README"
 
   rm -rf README
 
-  cp -a * "$pkgdir/usr/share/$pkgname"
+  cp -a * "$pkgdir/usr/share/honssh"
 }
-

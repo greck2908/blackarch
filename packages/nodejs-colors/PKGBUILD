@@ -1,26 +1,27 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=nodejs-colors
-pkgver=1.2.5
-pkgrel=1
+pkgname='nodejs-colors'
+pkgver='1.1.2'
+pkgrel=2
 pkgdesc='Get colors in your node.js console.'
 arch=('any')
 url='https://github.com/marak/colors.js/'
 license=('custom:unknown')
 depends=('nodejs')
 makedepends=('npm')
-source=("https://github.com/Marak/colors.js/archive/v$pkgver.tar.gz")
+source=("https://github.com/Marak/colors.js/archive/v${pkgver}.tar.gz")
 noextract=("colors.js-${pkgver}.tar.gz")
-sha512sums=('a71573ee00daeb5ea6ed58f829831c4652e0084a5732d3cdfcd2e217b6714b9362942e48dd2c57af858b5a86eeb646668535c1672e1fed42ecddb69d61f495b7')
+sha1sums=('ba549283337cc329995c3070b8bb96da40ff47c4')
 
 package() {
-  _npmdir="$pkgdir/usr/lib/node_modules/"
+  cd "$srcdir"
 
-  install -dm 755 "$_npmdir"
+  local _npmdir="$pkgdir/usr/lib/node_modules/"
 
-  cd $_npmdir
+  mkdir -p "$_npmdir"
+
+  cd "$_npmdir"
 
   npm install -g --prefix "$pkgdir/usr" colors.js@${pkgver}
 }
-

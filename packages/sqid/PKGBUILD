@@ -1,40 +1,37 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=sqid
-pkgver=0.3
-pkgrel=9
+pkgname='sqid'
+pkgver='0.3'
+pkgrel=6
 pkgdesc='A SQL injection digger.'
 arch=('any')
 url='http://sqid.rubyforge.org/'
 license=('GPL')
 depends=('ruby')
 groups=('blackarch' 'blackarch-webapp')
-source=("http://dl.packetstormsecurity.net/UNIX/scanners/$pkgname-$pkgver.tar.gz")
-sha512sums=('2aa3e9be50da915bf04c22858fef5bc012a3c15552eaed494e786f8dad91143d963b1e38e3ed83fdc0c14e0a4e08209b85389e9098788fee0d86f77bb763e68b')
+source=("http://dl.packetstormsecurity.net/UNIX/scanners/sqid-${pkgver}.tar.gz")
+sha1sums=('efc86e946c99e52262e2d3f75c430c7e42162e0e')
 
 prepare() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/sqid-$pkgver"
 
-  sed -i -e 's|sqid.db|/usr/share/sqid/sqid.db|g' "$pkgname.rb"
+  sed -i -e 's|sqid.db|/usr/share/sqid/sqid.db|g' "sqid.rb"
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/sqid-$pkgver"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/sqid"
 
-  install -Dm 755 "$pkgname.rb" "$pkgdir/usr/share/$pkgname/$pkgname.rb"
-  install -m 644 "$pkgname.db" "$pkgdir/usr/share/$pkgname/"
-  install -Dm 644 -t "$pkgname/usr/share/doc/$pkgname/" readme
+  install -Dm755 sqid.rb "$pkgdir/usr/share/sqid"
+  install -m644 "readme" "sqid.db" "$pkgdir/usr/share/sqid"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/sqid" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec ruby $pkgname.rb "\$@"
+cd /usr/share/sqid/
+exec ruby sqid.rb "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/sqid"
 }
-

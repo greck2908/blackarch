@@ -1,23 +1,26 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=base64dump
-pkgver=0.0.12
+pkgname='base64dump'
+pkgver='0.0.8'
 pkgrel=1
 groups=('blackarch' 'blackarch-misc')
 pkgdesc='Extract and decode base64 strings from files.'
 arch=('any')
-url='https://blog.didierstevens.com/my-software/#base64dump'
+url='http://blog.didierstevens.com/2015/10/12/update-base64dump-py-version-0-0-3/'
 license=('custom:unknown')
 depends=('python2')
 source=("http://didierstevens.com/files/software/base64dump_V${pkgver//./_}.zip")
-sha512sums=('f9960dee35b6cfb5878d23e67e19e9b82bcaf4dded6388bcf03b3c8eb4b69917af60b6296179304b04822895ee1832253192edd93ca8c7518216930cffcaa97d')
+sha1sums=('83480d126dcaf90c75654a12e94bde1c2103828e')
 
 prepare() {
-  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' "$pkgname.py"
+  cd "$srcdir"
+
+  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' base64dump.py
 }
 
 package() {
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
-}
+  cd "$srcdir"
 
+  install -Dm755 base64dump.py "$pkgdir/usr/bin/base64dump"
+}

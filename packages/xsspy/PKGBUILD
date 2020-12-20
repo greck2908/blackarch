@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=xsspy
-pkgver=60.b10d336
+pkgname='xsspy'
+pkgver=52.5d66c3d
 pkgrel=1
 pkgdesc='Web Application XSS Scanner.'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
@@ -11,25 +11,24 @@ url='https://github.com/faizann24/XssPy'
 license=('custom:unknown')
 depends=('python2' 'python2-mechanize')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/faizann24/XssPy.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/faizann24/XssPy.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/XssPy"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/XssPy"
 
   sed -i '1 i\#!/usr/bin/python2' XssPy.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/XssPy"
 
-  install -Dm 755 XssPy.py "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm755 XssPy.py "$pkgdir/usr/bin/xsspy"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/xsspy/README.md"
 }
-

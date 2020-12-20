@@ -1,48 +1,48 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=voiper
-pkgver=0.07
-pkgrel=7
-pkgdesc='A VoIP security testing toolkit incorporating several VoIP fuzzers and auxiliary tools to assist the auditor.'
+pkgname='voiper'
+pkgver='0.07'
+pkgrel=6
+pkgdesc='A VoIP security testing toolkit incorporating several VoIP fuzzers and auxilliary tools to assist the auditor.'
 url='http://voiper.sourceforge.net/'
 groups=('blackarch' 'blackarch-voip')
 depends=('python' 'wxpython')
 license=('GPL')
 arch=('any')
-source=("http://downloads.sourceforge.net/$pkgname/$pkgname-$pkgver.tar.gz")
-sha512sums=('55d7b3933db182e128e0d328b97b87bfcce789e01c33e9ce19e9c82c1df7630e79d446c415aa71ae87e86b1a575d3fcde87484aebe19415df9162952c637b2c4')
+source=("http://downloads.sourceforge.net/voiper/voiper-${pkgver}.tar.gz")
+sha1sums=('2b5b7a1ef0049c24a2c4fdda4402bdb2be708ea8')
 
 package() {
-  cd trunk
+  cd "$srcdir/trunk"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/voiper"
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/voiper/"
 
-  cat > "$pkgdir/usr/bin/$pkgname-fuzzer" << EOF
+  cat > "$pkgdir/usr/bin/voiper-fuzzer" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/voiper
 exec python2 fuzzer.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname-fuzzer"
+  chmod a+x "$pkgdir/usr/bin/voiper-fuzzer"
 
-  cat > "$pkgdir/usr/bin/$pkgname-crash-replay" << EOF
+  cat > "$pkgdir/usr/bin/voiper-crash-replay" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/voiper
 exec python2 crash_replay.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname-crash-replay"
+  chmod a+x "$pkgdir/usr/bin/voiper-crash-replay"
 
-  cat > "$pkgdir/usr/bin/$pkgname-torturer" << EOF
+  cat > "$pkgdir/usr/bin/voiper-torturer" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
+cd /usr/share/voiper
 exec python2 torturer.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname-torturer"
-}
+  chmod a+x "$pkgdir/usr/bin/voiper-torturer"
 
+}

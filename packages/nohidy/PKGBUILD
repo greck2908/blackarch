@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=nohidy
-pkgver=67.22c1283
+pkgname='nohidy'
+pkgver=66.f95a67b
 pkgrel=1
 pkgdesc='The system admins best friend, multi platform auditing tool.'
 groups=('blackarch' 'blackarch-recon' 'blackarch-networking'
@@ -12,41 +12,39 @@ url='https://github.com/flipchan/Nohidy'
 license=('GPL2')
 depends=('python2')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/flipchan/Nohidy.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/flipchan/Nohidy')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Nohidy"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/Nohidy"
 
   grep -iRl 'python' . | xargs sed -i 's|python$|python2|g'
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Nohidy"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/nohidy"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md README.txt \
-    Help/*
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/nohidy/" README.md README.txt Help/*
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/nohidy/LICENSE"
 
   rm -rf README* LICENSE Help
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/nohidy"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/nohidy" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 main.py "\$@"
+cd /usr/share/nohidy
+exec python2 main.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/nohidy"
 }
-

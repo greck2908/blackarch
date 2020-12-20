@@ -1,54 +1,35 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=hoper
+pkgname='hoper'
 pkgver=12.3951159
-pkgrel=7
+pkgrel=1
 pkgdesc="Trace URL's jumps across the rel links to obtain the last URL."
 groups=('blackarch' 'blackarch-recon')
-arch=('any')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/gabamnml/hoper'
 license=('MIT')
-depends=('ruby' 'ruby-bundler' 'libxslt')
+depends=('ruby2.3')
 makedepends=('git')
-source=("git+https://github.com/gabamnml/$pkgname.git")
-install="$pkgname.install"
-sha512sums=('SKIP')
+source=('git+https://github.com/gabamnml/hoper.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/hoper"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
-prepare() {
-  cd $pkgname
-
-  sed -i 's|#!/usr/bin/env ruby -wU|#!/usr/bin/env ruby|g' "exe/$pkgname"
-
-  sed -i 's|"bundler", "~> 1.12"|"bundler"|g' "$pkgname.gemspec"
-  sed -i 's|"rake", "~> 1.10.0"|"bundler"|g' "$pkgname.gemspec"
-}
-
 package() {
-  cd $pkgname
+  cd "$srcdir/hoper"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" *.md
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+	local _gemdir="$(ruby-2.3 -e'puts Gem.default_dir')"
 
-  rm *.md LICENSE.txt
+	gem-2.3 install --no-user-install -n "$pkgdir/usr/bin" -i "$pkgdir/$_gemdir" \
+    hoper
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
-
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname
-exec bundle exec ./exe/$pkgname "\$@"
-EOF
-
-  chmod a+x "$pkgdir/usr/bin/$pkgname"
+  install -Dm644 -t "$pkgdir/usr/share/doc/hoper/" README.md
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/hoper/LICENSE.txt"
 }
-

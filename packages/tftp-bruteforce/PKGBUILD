@@ -1,32 +1,34 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=tftp-bruteforce
-pkgver=0.1
-pkgrel=7
-pkgdesc='A fast TFTP filename bruteforcer written in perl.'
-url='http://www.hackingexposedcisco.com/'
+pkgname='tftp-bruteforce'
+pkgver='0.1'
+pkgrel=6
+pkgdesc="TFTP-bruteforcer is a fast TFTP filename bruteforcer written in perl."
+url="http://www.hackingexposedcisco.com/"
 groups=('blackarch' 'blackarch-cracker')
 license=('LGPL')
 depends=('perl')
 arch=('any')
 source=('http://dl.packetstormsecurity.net/UNIX/audit/TFTP-bruteforce.tar.gz')
-sha512sums=('903c1f7671dc001ed4329dad54c294b00746a8479654199c506bb1faf7c0f95f4a23c20fd39948167078016f3bea36b3ac025fe5de648cc9cdfeda4f881c16b1')
+sha1sums=('51c044e2cce831c846d4a4c822431f6427cf4e81')
 
 package() {
-  cd TFTP-bruteforce
+  cd "$srcdir/TFTP-bruteforce"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/tftp-bruteforce"
 
-  install -Dm 755 -t "$pkgdir/usr/share/$pkgname/" tftpbrute.pl brutefile.txt
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.txt
+  install -Dm755 tftpbrute.pl "$pkgdir/usr/share/tftp-bruteforce"
+  install -m644 README.txt brutefile.txt "$pkgdir/usr/share/tftp-bruteforce"
 
   cat > "$pkgdir/usr/bin/tftpbrute" << EOF
 #!/bin/sh
-exec /usr/share/$pkgname/tftpbrute.pl
+echo >&2
+echo >&2 '/usr/share/tftp-bruteforce/brutefile.txt exists.'
+echo >&2 'Enjoy.'
+echo >&2
+exec /usr/share/tftp-bruteforce/tftpbrute.pl
 EOF
 
   chmod +x "$pkgdir/usr/bin/tftpbrute"
 }
-

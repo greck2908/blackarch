@@ -1,34 +1,33 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=hyde
+pkgname='hyde'
 pkgver=11.ec09462
 pkgrel=1
 groups=('blackarch' 'blackarch-networking' 'blackarch-dos')
 pkgdesc='Just another tool in C to do DDoS (with spoofing).'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/CoolerVoid/Hyde'
 license=('custom:unknown')
 makedepends=('git')
-source=("git+https://github.com/CoolerVoid/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/CoolerVoid/hyde.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/hyde"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/hyde"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/hyde"
 
-  install -Dm 755 "bin/$pkgname" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README
+  install -Dm755 bin/hyde "$pkgdir/usr/bin/hyde"
+  install -Dm644 README "$pkgdir/usr/share/doc/hyde/README"
 }
-

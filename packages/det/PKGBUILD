@@ -1,44 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=det
+pkgname='det'
 pkgver=31.417cbce
-pkgrel=4
+pkgrel=1
 pkgdesc='(extensible) Data Exfiltration Toolkit.'
 groups=('blackarch' 'blackarch-networking' 'blackarch-misc')
 arch=('any')
 url='https://github.com/sensepost/det'
 license=('custom:unknown')
 depends=('python2' 'python2-tweepy' 'python2-pysocks' 'python2-dnslib'
-         'python2-pycryptodome' 'python2-scapy')
+         'python2-crypto' 'scapy')
 makedepends=('git')
-source=("git+https://github.com/sensepost/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/sensepost/det.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/det"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/det"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/det"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/det/README.md"
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/det"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/det" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/det
+exec python2 det.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/det"
 }
-

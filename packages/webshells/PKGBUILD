@@ -1,31 +1,28 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=webshells
-pkgver=36.ea3a60d
+pkgname='webshells'
+pkgver=21.9463b07
 pkgrel=1
 groups=('blackarch' 'blackarch-backdoor' 'blackarch-webapp')
 pkgdesc='Web Backdoors.'
 url='https://github.com/BlackArch/webshells'
 arch=('any')
-license=('custom:unknown')
+license=('custom')
 makedepends=('git')
-source=("git+https://github.com/BlackArch/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/BlackArch/webshells.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/webshells"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/webshells"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/webshells"
 
-  rm README.md
-
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/webshells"
 }
-

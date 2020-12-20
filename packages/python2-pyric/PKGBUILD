@@ -1,0 +1,26 @@
+# This file is part of BlackArch Linux ( http://blackarch.org ).
+# See COPYING for license details.
+
+pkgname='python2-pyric'
+pkgver='0.1.6.3'
+pkgrel=2
+pkgdesc='Python Radio Interface Controller Linux wireless library for the Python Wireless Developer and Pentester.'
+arch=('any')
+url='https://pypi.python.org/pypi/PyRIC/'
+license=('GPL3')
+depends=('python2')
+makedepends=('python2-setuptools')
+source=("https://pypi.python.org/packages/08/64/a99f27d3b4347486c7bfc0aa516016c46dc4c0f380ffccbd742a61af1eda/PyRIC-${pkgver}.tar.gz")
+sha1sums=('729453aac3c8a9b95bb149163db7749088f603a0')
+
+build() {
+  cd "$srcdir/PyRIC-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "$srcdir/PyRIC-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+}

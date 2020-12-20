@@ -1,20 +1,20 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ostinato
-pkgver=1.1
+pkgname='ostinato'
+pkgver='0.8'
 pkgrel=1
-pkgdesc='An open-source, cross-platform packet/traffic generator and analyzer with a friendly GUI. It aims to be "Wireshark in Reverse" and thus become complementary to Wireshark.'
+url='http://code.google.com/p/ostinato/'
 groups=('blackarch' 'blackarch-sniffer' 'blackarch-networking')
-url='https://github.com/pstavirs/ostinato/'
-arch=('x86_64' 'aarch64')
+pkgdesc='An open-source, cross-platform packet/traffic generator and analyzer with a friendly GUI. It aims to be "Wireshark in Reverse" and thus become complementary to Wireshark.'
+source=("https://bintray.com/artifact/download/pstavirs/ostinato/ostinato-src-${pkgver}.tar.gz")
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+depends=('qt4' 'libpcap' 'protobuf')
 license=('GPL3')
-depends=('qt4' 'libpcap' 'protobuf' 'protobuf-c')
-source=("https://github.com/pstavirs/$pkgname/archive/v$pkgver.tar.gz")
-sha512sums=('a45e157d155d4f2efe9a1594a140647b5cbd7264985b15a9ed47d86198c9df9d763170097dcfd40fae1317206e53c9155f08c48c747cce458e0cae7f3a841449')
+sha1sums=('4a81453adee602736d1c854722b8318d3836e6d3')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/ostinato-$pkgver"
 
   qmake-qt4 PREFIX=/usr ost.pro
 
@@ -22,10 +22,9 @@ build() {
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/ostinato-$pkgver"
 
-  install -Dm 775 "client/$pkgname" "$pkgdir/usr/bin/$pkgname"
-  install -m 775 server/drone "$pkgdir/usr/bin/drone"
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm775 client/ostinato "$pkgdir/usr/bin/ostinato"
+  install -m775 server/drone "$pkgdir/usr/bin/drone"
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/ostinato/COPYING"
 }
-

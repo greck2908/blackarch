@@ -1,0 +1,26 @@
+# This file is part of BlackArch Linux ( http://blackarch.org ).
+# See COPYING for license details.
+
+pkgname='python2-libarchive'
+pkgver='0.4.4'
+pkgrel=1
+pkgdesc='Python adapter for universal, libarchive-based archive access.'
+arch=('any')
+url='https://pypi.python.org/pypi/libarchive/'
+license=('GPL2')
+depends=('python2')
+makedepends=('python2-setuptools')
+source=("https://pypi.python.org/packages/66/32/a05f6f90d0973ee1a64e11a51f6e3679f2b78c578eb7d761f4db823c3d91/libarchive-${pkgver}.tar.gz")
+sha1sums=('f77218583f3575ac411f15d079dd4cb870636676')
+
+build() {
+  cd "$srcdir/libarchive-$pkgver"
+
+  python2 setup.py build
+}
+
+package() {
+  cd "$srcdir/libarchive-$pkgver"
+
+  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1
+}

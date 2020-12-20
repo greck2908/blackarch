@@ -1,41 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=webborer
-pkgver=170.c20d51c
+pkgname='webborer'
+pkgver=131.a6ab3b2
 pkgrel=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 pkgdesc='A directory-enumeration tool written in Go.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/Matir/webborer'
-license=('Apache')
-depends=('glibc')
-makedepends=('git' 'go-pie')
+license=('Apache2')
+depends=('glibc' 'go')
+makedepends=('go' 'git')
 source=('git+https://github.com/Matir/webborer.git')
-sha512sums=('SKIP')
-_url="github.com/Matir/$pkgname"
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/webborer"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  mkdir -p "src/$_url" && rm -rf "src/$_url" && mv $pkgname "src/$_url" &&
-    cd "src/$_url"
+  cd "$srcdir"
 
-  GOPATH="$srcdir" go get -d -t $_url
+  mkdir -p src/$url && rm -rf src/$url && mv webborer src/$url && cd src/$url
+
+  GOPATH="$srcdir" go get -d -t github.com/Matir/webborer
 }
 
 package() {
-  install -dm 755 "$pkgdir/usr/bin"
+  cd "$srcdir"
 
-  GOPATH="$srcdir" go build -v $_url
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 755 "$srcdir/$pkgname" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/README.md" "src/$_url/"*.md
-  install -Dm 644 "src/$_url/LICENSE" \
-    "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  GOPATH="$srcdir" go build -v github.com/Matir/webborer
+
+  install -Dm755 "$srcdir/webborer" "$pkgdir/usr/bin/webborer"
+  install -Dm644 -t "$pkgdir/usr/share/doc/webborer/README.md" \
+    src/$url/*.md
+  install -Dm644 src/$url/LICENSE "$pkgdir/usr/share/licenses/webborer/LICENSE"
 }
-

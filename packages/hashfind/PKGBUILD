@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=hashfind
+pkgname='hashfind'
 pkgver=8.e9a9a14
 pkgrel=2
 groups=('blackarch' 'blackarch-crypto')
@@ -11,26 +11,26 @@ url='https://github.com/rurapenthe/hashfind'
 license=('GPL2')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/rurapenthe/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/rurapenthe/hashfind.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/hashfind"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/hashfind"
 
-  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' "$pkgname.py"
+  sed -i 's|/usr/bin/env python|/usr/bin/env python2|' hashfind.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/hashfind"
 
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" doc/* README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 hashfind.py "$pkgdir/usr/bin/hashfind"
+  install -Dm644 -t "$pkgdir/usr/share/doc/hashfind" doc/*
+  install -Dm644 README.md "$pkgdir/usr/share/doc/hashfind/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/hashfind/LICENSE"
 }
-

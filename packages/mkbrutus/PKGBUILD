@@ -1,30 +1,24 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=mkbrutus
-pkgver=27.ddd5f8e
-pkgrel=1
+pkgname='mkbrutus'
+pkgver='1.0.2'
+pkgrel=2
 groups=('blackarch' 'blackarch-cracker')
 pkgdesc='Password bruteforcer for MikroTik devices or boxes running RouterOS.'
 url='http://mkbrutusproject.github.io/MKBRUTUS/'
 arch=('any')
 license=('GPL3')
 depends=('python3')
-makedepends=('git')
-source=("$pkgname::git+https://github.com/mkbrutusproject/MKBRUTUS.git")
-sha512sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+source=("https://github.com/mkbrutusproject/MKBRUTUS/archive/v${pkgver}.tar.gz")
+sha1sums=('f3cac38e12ed3f14af22942730436f3aab55f861')
 
 package() {
-  cd $pkgname
+  cd "$srcdir/MKBRUTUS-$pkgver"
 
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/licenses/$pkgname/" agpl.txt LICENSE
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md CHANGELOG
+  install -Dm755 mkbrutus.py "$pkgdir/usr/bin/mkbrutus"
+  install -Dm644 agpl.txt "$pkgdir/usr/share/licenses/mkbrutus/agpl.txt"
+  install -m644 LICENSE "$pkgdir/usr/share/licenses/mkbrutus/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/mkbrutus/README.md"
+  install -m644 CHANGELOG "$pkgdir/usr/share/doc/mkbrutus/CHANGELOG"
 }
-

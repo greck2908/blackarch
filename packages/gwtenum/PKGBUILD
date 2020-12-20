@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=gwtenum
+pkgname='gwtenum'
 pkgver=7.f27a5aa
 pkgrel=5
 epoch=1
@@ -12,26 +12,27 @@ license=('CCPL')
 arch=('any')
 depends=('python2')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/GDSSecurity/GWT-Penetration-Testing-Toolset.git")
-sha512sums=('SKIP')
+source=("git+https://github.com/GDSSecurity/GWT-Penetration-Testing-Toolset.git")
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/GWT-Penetration-Testing-Toolset"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/GWT-Penetration-Testing-Toolset"
 
   _tools="gwtenum gwtfuzzer gwtparse"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/gwtenum"
+  mkdir -p "$pkgdir/usr/bin"
 
-  cp -r * "$pkgdir/usr/share/$pkgname/"
+  cp -r * "$pkgdir/usr/share/gwtenum"
 
-  for tool in $_tools ; do
+  for tool in $_tools
+  do
     cat > "$pkgdir/usr/bin/$tool" << EOF
 #!/bin/sh
 cd /usr/share/gwtenum/$tool
@@ -40,4 +41,3 @@ EOF
     chmod 755 "$pkgdir/usr/bin/$tool"
   done
 }
-

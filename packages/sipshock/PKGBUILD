@@ -1,40 +1,39 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=sipshock
+pkgname='sipshock'
 pkgver=7.6ab5591
-pkgrel=6
+pkgrel=2
 groups=('blackarch' 'blackarch-scanner' 'blackarch-voip')
 pkgdesc='A scanner for SIP proxies vulnerable to Shellshock.'
 arch=('any')
 url='https://github.com/zaf/sipshock'
 license=('GPL3')
-depends=('glibc' 'go')
+depends=('go')
 makedepends=('git')
-source=("git+https://github.com/zaf/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/zaf/sipshock.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/sipshock"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/sipshock"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/sipshock"
 
-  install -Dm 644 "$pkgname.go" "$pkgdir/usr/share/$pkgname/$pkgname.go"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" Readme.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 sipshock.go "$pkgdir/usr/share/sipshock/sipshock.go"
+  install -Dm644 Readme.md "$pkgdir/usr/share/doc/sipshock/Readme.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/sipshock/LICENSE"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/sipshock" << EOF
 #!/bin/sh
-exec go run /usr/share/$pkgname/$pkgname.go "\$@"
+exec go run /usr/share/sipshock/sipshock.go "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/sipshock"
 }
-

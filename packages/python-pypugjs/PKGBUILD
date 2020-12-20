@@ -1,28 +1,26 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=python-pypugjs
-_pkgname=pypugjs
-pkgver=5.9.4
-pkgrel=2
+pkgname='python-pypugjs'
+pkgver='4.2.2'
+pkgrel=1
 pkgdesc='PugJS syntax template adapter for Django, Jinja2, Mako and Tornado templates - copy of PyJade with the name changed.'
-url='https://github.com/kakulukia/pypugjs'
+url='https://pypi.python.org/pypi/pypugjs/'
 arch=('any')
 license=('MIT')
 depends=('python')
 makedepends=('python-setuptools')
-source=("https://github.com/kakulukia/pypugjs/archive/v$pkgver.tar.gz")
-sha512sums=('24ebf306a76afab570cb13806d27e12766163bb114a8e4fe20ee5f19eb7311203e8b647eeb2f150efb2f9dfa1db9e56f4218cc3deb15d81f22b12d1b11f83c32')
+source=("https://pypi.python.org/packages/21/bb/d541110bd5a5c1ecd9dab2778dc9a39ca5a5e9962845e9d3e598962ee3ca/pypugjs-${pkgver}.tar.gz")
+sha1sums=('754859b632b7cc97b262b0c29b9a6be7befda7d3')
 
 build() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/pypugjs-$pkgver"
 
   python setup.py build
 }
 
 package() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/pypugjs-$pkgver"
 
-  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  python setup.py install --root="$pkgdir" --optimize=1
 }
-

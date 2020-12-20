@@ -1,37 +1,27 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=pocsuite
-pkgver=430.877d1b1
+pkgname='pocsuite'
+pkgver='2.0.6'
 pkgrel=1
 groups=('blackarch' 'blackarch-exploitation')
 pkgdesc='An open-sourced remote vulnerability testing framework developed by the Knownsec Security Team.'
 url='https://github.com/knownsec/Pocsuite'
 arch=('any')
-depends=('python2' 'python2-pyopenssl' 'python2-lxml' 'python2-requests')
-makedepends=('git' 'python2-setuptools')
+depends=('python2' 'python2-pyopenssl')
+makedepends=('python2-setuptools')
 license=('GPL')
-source=("$pkgname::git+https://github.com/knownsec/Pocsuite.git")
-sha512sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+source=("https://github.com/knownsec/Pocsuite/archive/${pkgver}.tar.gz")
+sha1sums=('d8648d0e89198bbd683bb2d15e6ad9e9d025c3a6')
 
 build() {
-  cd $pkgname
+  cd "$srcdir/Pocsuite-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Pocsuite-$pkgver"
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
-
-  sed -i 's|python|python2|' \
-    "$pkgdir/usr/lib/python2.7/site-packages/pocsuite/thirdparty/pyparsing/setup.py"
+  python2 setup.py install --root="$pkgdir" --optimize=1
 }
-

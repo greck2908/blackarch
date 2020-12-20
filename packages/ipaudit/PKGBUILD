@@ -1,20 +1,20 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ipaudit
-pkgver=1.1
-pkgrel=2
+pkgname='ipaudit'
+pkgver='1.1'
+pkgrel=1
 pkgdesc='Monitors network activity on a network.'
 url='http://ipaudit.sourceforge.net'
 depends=('libpcap')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 groups=('blackarch' 'blackarch-networking')
 license=('GPL')
-source=("http://downloads.sourceforge.net/sourceforge/$pkgname/$pkgname-$pkgver.tar.gz")
-sha512sums=('5eb1971b454c8c96c02dc260e537a9a627554b7c9d1e269be9de2ffdb5cbfed00272b643de7b15865659cef0db482e4c460f96b1545bcd6c4f208c96d7401ef9')
+source=("http://downloads.sourceforge.net/sourceforge/ipaudit/ipaudit-${pkgver}.tar.gz")
+sha1sums=('09f842d782dcb33f5c58331678defaaab732a645')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/ipaudit-$pkgver"
 
   ./configure --prefix=/usr --mandir=/usr/share/man
 
@@ -22,16 +22,15 @@ build() {
 }
 
 package(){
-  cd "$pkgname-$pkgver/src"
+  cd "$srcdir/ipaudit-$pkgver/src"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/ipaudit"
 
-  cp -aR $pkgname stamp-h1 ipstrings total "$pkgdir/usr/share/$pkgname/"
+  cp -aR ipaudit stamp-h1 ipstrings total "$pkgdir/usr/share/ipaudit/"
 
-  ln -s "/usr/share/$pkgname/$pkgname" "$pkgdir/usr/bin/$pkgname"
-  ln -s "/usr/share/$pkgname/stamp-h1" "$pkgdir/usr/bin/$pkgname-stamp-h1"
-  ln -s "/usr/share/$pkgname/ipstrings" "$pkgdir/usr/bin/$pkgname-ipstrings"
-  ln -s "/usr/share/$pkgname/total" "$pkgdir/usr/bin/$pkgname-total"
+  ln -s /usr/share/ipaudit/ipaudit "$pkgdir/usr/bin/ipaudit"
+  ln -s /usr/share/ipaudit/stamp-h1 "$pkgdir/usr/bin/ipaudit-stamp-h1"
+  ln -s /usr/share/ipaudit/ipstrings "$pkgdir/usr/bin/ipaudit-ipstrings"
+  ln -s /usr/share/ipaudit/total "$pkgdir/usr/bin/ipaudit-total"
 }
-

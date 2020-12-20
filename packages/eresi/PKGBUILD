@@ -1,49 +1,53 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=eresi
-pkgver=1291.4769c175
+pkgname='eresi'
+pkgver=1267.d0facbfd
 pkgrel=1
 pkgdesc='The ERESI Reverse Engineering Software Interface.'
 groups=('blackarch' 'blackarch-binary' 'blackarch-reversing'
         'blackarch-debugger' 'blackarch-disassembler')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/thorkill/eresi'
 license=('GPL2')
 depends=('openssl' 'linux-headers')
 makedepends=('git')
-source=("git+https://github.com/thorkill/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/thorkill/eresi.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/eresi"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/eresi"
 
   export DESTDIR="$pkgdir/usr"
 
-  ./configure --enable-32-64
+  if [ ${CARCH} = "x86_64" ]
+  then
+    ./configure --enable-32-64
+  else
+    ./configure --enable-32
+  fi
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/eresi"
 
-  install -dm 755 "$pkgdir/usr/lib"
+  mkdir -p "$pkgdir/usr/lib"
 
   make DESTDIR="$pkgdir/usr" install
 
-  install -Dm 644 doc/LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 doc/LICENSE "$pkgdir/usr/share/licenses/eresi/LICENSE"
 
   rm doc/LICENSE
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.FIRST doc/*
+  install -Dm644 -t "$pkgdir/usr/share/doc/eresi/" README.FIRST doc/*
 
   rm "$pkgdir/usr/bin/"{e2dbg,elfsh,eresi-config,etrace,evarista,kedbg}
 }
-

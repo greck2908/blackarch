@@ -1,20 +1,20 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=bluemaho
-pkgver=090417
+pkgname='bluemaho'
+pkgver='090417'
 pkgrel=1
 pkgdesc="A GUI-shell (interface) for suite of tools for testing security of bluetooth devices"
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url="http://wiki.thc.org/BlueMaho"
 license=('GPL3')
 depends=('wxpython' 'bluediving' 'bss' 'bt-audit' 'hidattack' 'glib2')
 groups=('blackarch' 'blackarch-wireless')
-source=("http://wiki.thc.org/BlueMaho?action=AttachFile&do=get&target=bluemaho_v$pkgver.tgz")
-sha512sums=('216db6f836b20b7f70f3a56bec95ab0a607a2af5')
+source=("http://wiki.thc.org/BlueMaho?action=AttachFile&do=get&target=bluemaho_v${pkgver}.tgz")
+sha1sums=('216db6f836b20b7f70f3a56bec95ab0a607a2af5')
 
 prepare() {
-  cd "$pkgname-$pkgver/exploits/sources/bluepimp"
+  cd "$srcdir/bluemaho-$pkgver/exploits/sources/bluepimp"
 
   sed -i 's:hci_remote_name:hci_read_remote_name:' obex_socket.c
 
@@ -24,7 +24,7 @@ prepare() {
 }
 
 build() {
-  cd "$pkgname-$pkgver/tools"
+  cd "$srcdir/bluemaho-$pkgver/tools"
 
   chmod -R -x *
   chmod -R +X *
@@ -34,27 +34,26 @@ build() {
   chmod -x *
   chmod +x *.sh
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname/tools"
+  mkdir -p "$pkgdir/usr/share/bluemaho/tools"
 
-  cd "$pkgdir/usr/share/$pkgname/tools"
-
+  cd "$pkgdir/usr/share/bluemaho/tools"
   for tool in 'atshell' 'bccmd' 'psm_scan' 'rfcomm_scan' 'bss' 'btobex' \
               'carwhisperer' 'l2cap-packet' 'redfang' 'ussp-push'; do
-    ln -sf "/usr/bin/$tool" .
+    ln -sf /usr/bin/$tool .
   done
 
-  cd "$srcdir/$pkgname-$pkgver/tools"
+  cd "$srcdir/bluemaho-$pkgver/tools"
   rm -rf sources/
-  cp -r * "$pkgdir/usr/share/$pkgname/tools"
+  cp -r * "$pkgdir/usr/share/bluemaho/tools"
 
   # Symlinks available exploits
-  install -dm 755 "$pkgdir/usr/share/$pkgname/exploits/"
-  cd "$pkgdir/usr/share/$pkgname/exploits/"
+  mkdir -p $pkgdir/usr/share/bluemaho/exploits/
+  cd "$pkgdir/usr/share/bluemaho/exploits/"
 
   ln -sf /usr/bin/hidattack .
   ln -sf /usr/share/hidattack/ha.inp hidattack.inp
 
-  cd "$srcdir/$pkgname-$pkgver/exploits"
+  cd "$srcdir/bluemaho-$pkgver/exploits"
   chmod -x *
 
   # Build other exploits
@@ -93,7 +92,7 @@ package() {
   rm hidattack*
 
   rm -rf sources/
-  cp * "$pkgdir/usr/share/bluemaho/exploits/"
+  cp * $pkgdir/usr/share/bluemaho/exploits/
 
   cd ../config
   rm build.sh
@@ -103,5 +102,5 @@ package() {
   chmod -x *
   cd ../../../
 
-  cp -r bluemaho.py config "$pkgdir/usr/share/$pkgname/"
+  cp -r bluemaho.py config $pkgdir/usr/share/bluemaho/
 }

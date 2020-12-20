@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=bob-the-butcher
-pkgver=0.7.1
+pkgname='bob-the-butcher'
+pkgver='0.7.1'
 pkgrel=3
 pkgdesc='A distributed password cracker package.'
 arch=('x86_64')
@@ -10,22 +10,21 @@ url='http://btb.banquise.net/'
 license=('GPL2')
 depends=('libevent')
 groups=('blackarch' 'blackarch-cracker')
-source=("http://dl.packetstormsecurity.net/Crackers/$pkgname-$pkgver.tar.gz")
-sha512sums=('3889f1cf08e25c4ed3081ab1d7cb761970363cf1041f1185a65d68804f965738168c1aa864a197a6773ea0faca7ad547e59f5bc02849c095f885a271ec2fef85')
+source=("http://dl.packetstormsecurity.net/Crackers/bob-the-butcher-$pkgver.tar.gz")
+sha1sums=('d17a140796683c198fb762da80ca0cd3b8010e94')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/bob-the-butcher-$pkgver"
 
   ./configure --prefix=/usr --program-suffix="-sse2"
-
   make CFLAGS="$CFLAGS"
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/bob-the-butcher-$pkgver"
 
   make DESTDIR="$pkgdir/" install
 
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -D -m644 "COPYING" \
+    "$pkgdir/usr/share/licenses/bob-the-butcher/COPYING"
 }
-

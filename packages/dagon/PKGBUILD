@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dagon
-pkgver=244.f065d7b
-pkgrel=2
+pkgname='dagon'
+pkgver=240.5dfbe32
+pkgrel=1
 pkgdesc='Advanced Hash Manipulation.'
 groups=('blackarch' 'blackarch-crypto')
 arch=('any')
@@ -12,33 +12,32 @@ license=('custom:unknown')
 depends=('python2' 'python2-colorlog' 'python2-requests' 'python2-passlib'
          'python2-pysha3' 'python2-bcrypt' 'python2-pydes')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/Ekultek/Dagon.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/Ekultek/Dagon.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Dagon"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Dagon"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/dagon"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/dagon/" README.md
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/dagon/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/dagon" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/dagon
+exec python2 dagon.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/dagon"
 }
-

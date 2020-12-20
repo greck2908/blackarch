@@ -1,27 +1,27 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=vpnpivot
+pkgname='vpnpivot'
 pkgver=22.37bbde0
 pkgrel=1
 pkgdesc='Explore the network using this tool.'
 groups=('blackarch' 'blackarch-recon' 'blackarch-networking')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/0x36/VPNPivot'
 license=('custom:unknown')
 depends=('linux-headers' 'openssl')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/0x36/VPNPivot.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/0x36/VPNPivot.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/VPNPivot"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/VPNPivot"
 
   ./autogen.sh
 
@@ -31,10 +31,9 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/VPNPivot"
 
   make DESTDIR="$pkgdir" install
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/vpnpivot/" README.md
 }
-

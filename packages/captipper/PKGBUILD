@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=captipper
-pkgver=74.3fb2836
+pkgname='captipper'
+pkgver=70.b08608d
 pkgrel=1
 groups=('blackarch' 'blackarch-forensic' 'blackarch-malware' 'blackarch-sniffer')
 pkgdesc='Malicious HTTP traffic explorer tool.'
@@ -11,36 +11,35 @@ url='http://www.omriher.com/2015/01/captipper-malicious-http-traffic.html'
 license=('Apache')
 depends=('python2' 'python2-simplejson' 'python2-colorama')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/omriher/CapTipper.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/omriher/CapTipper.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/CapTipper"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/CapTipper"
 
   find -name '*.py' -exec sed -i 's/env python$/env python2/' '{}' \;
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/CapTipper"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/captipper"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md README.txt
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/captipper" README.md README.txt
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/captipper/LICENSE"
 
   rm README.md README.txt
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/captipper"
 
-  ln -s /usr/share/captipper/CapTipper.py "$pkgdir/usr/bin/$pkgname"
+  ln -s /usr/share/captipper/CapTipper.py "$pkgdir/usr/bin/captipper"
 
-  chmod +x "$pkgdir/usr/share/$pkgname/CapTipper.py"
+  chmod +x "$pkgdir/usr/share/captipper/CapTipper.py"
 }
-

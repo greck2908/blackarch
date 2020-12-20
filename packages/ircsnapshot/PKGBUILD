@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ircsnapshot
+pkgname='ircsnapshot'
 pkgver=94.cb02a85
 pkgrel=2
 groups=('blackarch' 'blackarch-recon' 'blackarch-scanner')
@@ -11,27 +11,26 @@ url='https://github.com/bwall/ircsnapshot'
 license=('MIT')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/bwall/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/bwall/ircsnapshot.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ircsnapshot"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/ircsnapshot"
 
   sed -i 's|/usr/bin/env python|/usr/bin/env python2|g' \
-    "$pkgname/$pkgnae.py"
+    ircsnapshot/ircsnapshot.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ircsnapshot"
 
-  install -Dm 755 "$pkgname/$pkgname.py" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 744 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 744 LICENSE.TXT "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 ircsnapshot/ircsnapshot.py "$pkgdir/usr/bin/ircsnapshot"
+  install -Dm744 README.md "$pkgdir/usr/share/doc/ircsnapshot/README.md"
+  install -Dm744 LICENSE.TXT "$pkgdir/usr/share/licenses/ircsnapshot/LICENSE.TXT"
 }
-

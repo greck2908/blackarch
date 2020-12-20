@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=hexorbase
-pkgver=6
+pkgname='hexorbase'
+pkgver='6'
 pkgrel=2
 epoch=2
 groups=('blackarch' 'blackarch-fuzzer' 'blackarch-scanner')
@@ -13,31 +13,30 @@ license=('GPL3')
 depends=('python2' 'python2-pyqt4' 'mysql-python' 'python2-psycopg2' 'pymssql'
          'python2-qscintilla')
 optdepends=('python2-cx_oracle: Oracle database')
-source=("$pkgname::svn+http://hexorbase.googlecode.com/svn/HexorBase/")
-sha512sums=('SKIP')
+source=('svn+http://hexorbase.googlecode.com/svn/HexorBase/')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/HexorBase"
 
-  _ver=$(svnversion)
+  local _ver=$(svnversion)
 
   printf "%s" "${_ver//[[:alpha:]]}"
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/HexorBase"
 
-  install -dm 755 "$pkgdir/usr/bin/"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/share/hexorbase"
+  mkdir -p "$pkgdir/usr/bin/"
 
-  cp -a --no-preserve=ownership * "$pkgdir/usr/share/$pkgname/"
+  cp -a --no-preserve=ownership * "$pkgdir/usr/share/hexorbase"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/hexorbase" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 /usr/share/$pkgname/execute.py "\$@"
+cd /usr/share/hexorbase
+exec python2 /usr/share/hexorbase/execute.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/hexorbase"
 }
-

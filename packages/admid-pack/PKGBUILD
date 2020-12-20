@@ -1,33 +1,30 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=admid-pack
-_pkgname=ADMIDpack
-pkgver=0.1
-pkgrel=2
+pkgname='admid-pack'
+pkgver='0.1'
+pkgrel=1
 epoch=1
-pkgdesc='ADM DNS spoofing tools - Uses a variety of active and passive methods to spoof DNS packets.'
 groups=('blackarch' 'blackarch-spoof')
-arch=('x86_64' 'aarch64')
+pkgdesc="ADM DNS spoofing tools - Uses a variety of active and passive methods to spoof DNS packets. Very powerful."
 url='http://packetstormsecurity.com/files/10080/ADMid-pkg.tgz.html'
 license=('GPL')
 depends=('libpcap')
-source=('http://dl.packetstormsecurity.net/groups/ADM/ADM-DNS-SPOOF/ADMid-pkg.tgz')
-sha512sums=('29195f735d27779a8e119325b5d4ccf72e92b957445634bd619569d02d06dfd9b5f5678aed2ea37bc2adc995bf6470ee752f6c62525fda3c32f4aa24d382b9fe')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+source=('http://packetstorm.foofus.com/groups/ADM/ADM-DNS-SPOOF/ADMid-pkg.tgz')
+sha1sums=('6e3b7ea5e5b0f90d410c540ca2aff28ac2adbc1e')
 
 build() {
-  cd "$_pkgname/src"
-
+  cd "$srcdir/ADMIDpack/src"
   make CC="gcc $CFLAGS"
 }
 
 package() {
-  cd $_pkgname
+  cd "$srcdir/ADMIDpack/"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/doc/admid-pack"
 
   cp -a --no-preserve=ownership ADMbin/* "$pkgdir/usr/bin"
-  cp -a --no-preserve=ownership Docs/* "$pkgdir/usr/share/doc/$pkgname/"
+  cp -a --no-preserve=ownership Docs/* "$pkgdir/usr/share/doc/admid-pack"
 }
-

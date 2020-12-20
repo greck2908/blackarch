@@ -1,42 +1,40 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=parameth
-pkgver=56.8da6f27
-pkgrel=2
+pkgname='parameth'
+pkgver=49.42e712b
+pkgrel=1
 pkgdesc='This tool can be used to brute discover GET and POST parameters.'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 arch=('any')
 url='https://github.com/mak-/parameth'
 license=('custom:unknonw')
-depends=('python2' 'python2-argparse' 'python2-requests' 'python2-numpy'
-         'python2-fuzzywuzzy')
+depends=('python2' 'python2-argparse' 'python2-requests' 'python2-numpy')
 makedepends=('git')
-source=("git+https://github.com/mak-/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/mak-/parameth.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/parameth"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/parameth"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/parameth"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 -t "$pkgdir/usr/share/doc/parameth/" README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/parameth/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/parameth" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/parameth
+exec python2 parameth.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/parameth"
 }
-

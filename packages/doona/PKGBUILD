@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=doona
-pkgver=143.bb03dad
+pkgname='doona'
+pkgver=142.710584f
 pkgrel=1
 groups=('blackarch' 'blackarch-fuzzer' 'blackarch-exploitation')
 pkgdesc='A fork of the Bruteforce Exploit Detector Tool (BED).'
@@ -11,34 +11,38 @@ url='https://github.com/wireghoul/doona'
 license=('GPL2')
 depends=('perl')
 makedepends=('git')
-source=("git+https://github.com/wireghoul/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/wireghoul/doona.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/doona"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/doona"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/doona"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" Docs/*
-  install -Dm 644 Docs/gpl.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README "$pkgdir/usr/share/doc/doona/README"
+  install -m644 Docs/CHANGES "$pkgdir/usr/share/doc/doona/CHANGES"
+  install -m644 Docs/FAQ "$pkgdir/usr/share/doc/doona/FAQ"
+  install -m644 Docs/HOWTO "$pkgdir/usr/share/doc/doona/HOWTO"
+  install -m644 Docs/TODO "$pkgdir/usr/share/doc/doona/TODO"
 
-  rm -rf Docs "$pkgdir/usr/share/doc/$pkgname/gpl.txt"
+  cd Docs
+  rm ../README CHANGES FAQ HOWTO TODO
+  cd ..
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/doona"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/doona" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec perl $pkgname.pl "\$@"
+cd /usr/share/doona
+exec perl doona.pl "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/doona"
 }
-

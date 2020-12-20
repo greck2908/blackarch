@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=flashlight
+pkgname='flashlight'
 pkgver=109.90d1dc5
 pkgrel=1
 groups=('blackarch' 'blackarch-recon')
@@ -11,34 +11,33 @@ url='https://github.com/galkan/flashlight'
 license=('custom:unknown')
 depends=('python2' 'python2-yaml')
 makedepends=('git')
-source=("git+https://github.com/galkan/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/galkan/flashlight.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/flashlight"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/flashlight"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/flashlight"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/flashlight/README.md"
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/flashlight/LICENSE.txt"
 
   rm README.md LICENSE.txt
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/flashlight"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/flashlight" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/flashlight
+exec python2 flashlight.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/flashlight"
 }
-

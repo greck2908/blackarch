@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=jwscan
+pkgname='jwscan'
 pkgver=7.874b3a5
 pkgrel=2
 groups=('blackarch' 'blackarch-reversing' 'blackarch-binary')
@@ -11,29 +11,28 @@ url='https://github.com/katjahahn/JWScan'
 license=('Apache')
 depends=('java-environment')
 makedepends=('git' 'sbt')
-source=("$pkgname::git+https://github.com/katjahahn/JWScan.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/katjahahn/JWScan.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/JWScan"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/JWScan"
 
-  install -dm 755 "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 755 "$pkgname.jar" "$pkgdir/usr/share/$pkgname/$pkgname.jar"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 jwscan.jar "$pkgdir/usr/share/jwscan/jwscan.jar"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/jwscan/README.md"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/jwscan/LICENSE"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/jwscan" << EOF
 #!/bin/sh
-exec java -jar /usr/share/$pkgname/$pkgname.jar "\$@"
+exec java -jar /usr/share/jwscan/jwscan.jar "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/jwscan"
 }
-

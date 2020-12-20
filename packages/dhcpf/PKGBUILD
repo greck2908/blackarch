@@ -1,49 +1,48 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=dhcpf
+pkgname='dhcpf'
 pkgver=3.a770b20
 pkgrel=2
 groups=('blackarch' 'blackarch-fingerprint')
 pkgdesc='Passive DHCP fingerprinting implementation.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/elceef/dhcpf'
 license=('custom:unknown')
 makedepends=('git')
 depends=('libpcap')
-source=("git+https://github.com/elceef/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/elceef/dhcpf.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/dhcpf"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/dhcpf"
 
   ./Build.sh
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/dhcpf"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/dhcpf"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/dhcpf/README.md"
 
   rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/dhcpf/"
 
   cat > "$pkgdir/usr/bin/dhcpf" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec ./$pkgname "\$@"
+cd /usr/share/dhcpf
+exec ./dhcpf "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/dhcpf"
 }
-

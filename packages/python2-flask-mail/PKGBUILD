@@ -1,28 +1,25 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=python2-flask-mail
-_pkgname=Flask-Mail
-pkgver=0.9.1
-pkgrel=3
-pkgdesc='Flask extension for sending email.'
-url='https://pypi.org/project/Flask-Mail/#files'
-arch=('any')
+pkgname='python2-flask-mail'
+pkgver='0.9.1'
+pkgrel=1
+pkgdesc='A Flask extension for sending email messages.'
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
+url='https://pypi.python.org/pypi/Flask-Mail'
 license=('BSD')
-depends=('python2' 'python2-flask' 'python2-blinker')
-makedepends=('python2-setuptools')
-source=("https://files.pythonhosted.org/packages/05/2f/6a545452040c2556559779db87148d2a85e78a26f90326647b51dc5e81e9/$_pkgname-$pkgver.tar.gz")
-sha512sums=('1d19f0bade77c66e73624d8af0919165f8b6f208a00c1e4025049b50ad56912557b8446cb80f8567adf697e92b126954a5f130bd9fa7a2345d4e98e35b29ac47')
+depends=('python2-flask' 'python2-blinker')
+source=("https://pypi.python.org/packages/source/F/Flask-Mail/Flask-Mail-${pkgver}.tar.gz")
+sha1sums=('ff3838a1933597f541dcad83a81c331cb7367fed')
 
 build() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/Flask-Mail-$pkgver"
 
   python2 setup.py build
 }
 
 package() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/Flask-Mail-$pkgver"
 
-  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+  python2 setup.py install --root="$pkgdir" --optimize=1
 }
-

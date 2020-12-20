@@ -1,9 +1,9 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=albatar
-pkgver=32.c1613fe
-pkgrel=1
+pkgname='albatar'
+pkgver=24.142f892
+pkgrel=2
 pkgdesc='A SQLi exploitation framework in Python.'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-exploitation')
 arch=('any')
@@ -11,18 +11,17 @@ url='https://github.com/lanjelot/albatar'
 license=('custom:unknown')
 depends=('python2' 'python2-pycurl')
 makedepends=('git')
-source=("git+https://github.com/lanjelot/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/lanjelot/albatar.git')
+sha1sums=('SKIP')
 
 pkgver() {
-	cd $pkgname
+	cd "$srcdir/albatar"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-	cd $pkgname
+	cd "$srcdir/albatar"
 
-  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/" *.py
+  install -Dm644 -t "$pkgdir/usr/share/albatar/" *.py
 }
-

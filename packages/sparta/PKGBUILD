@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=sparta
+pkgname='sparta'
 pkgver=21.b0a4514
 pkgrel=1
 groups=('blackarch' 'blackarch-scanner' 'blackarch-cracker'
@@ -12,19 +12,19 @@ url='http://sparta.secforce.com/'
 license=('GPL3')
 depends=('python2' 'python2-pyqt4' 'python2-lxml' 'impacket' 'python2-elixir')
 makedepends=('git')
-source=("git+https://github.com/SECFORCE/$pkgname.git"
-        'dirty_fix.patch')
-sha512sums=('SKIP'
-            '53c3eb1ab2bc72742c967ab9b230aa3d49f4558a8a82210d04086a5c10ecb420c4d4399d8ba9ebe645bebbe355a4c4697fca7ac6f94628b5d2a1053dd5de8c28')
+source=('git+https://github.com/SECFORCE/sparta.git' 'dirty_fix.patch')
+sha1sums=('SKIP'
+          'ebc2c54e61873c1cf52a71d46b5d1b73259ddea6')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/sparta"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/sparta"
 
   patch -Np1 -i ../dirty_fix.patch
 }
@@ -32,22 +32,21 @@ prepare() {
 package() {
   cd "$srcdir/sparta"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/sparta"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" doc/* README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/sparta" doc/* README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/sparta/LICENSE"
 
   rm README.md LICENSE
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/sparta"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/sparta" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/sparta
+exec python2 sparta.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/sparta"
 }
-

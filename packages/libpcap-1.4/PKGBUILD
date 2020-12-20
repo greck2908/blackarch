@@ -1,42 +1,36 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=libpcap-1.4
-_pkgname=libpcap
-pkgver=1.4.0
-pkgrel=4
+pkgname='libpcap-1.4'
+pkgver='1.4.0'
+pkgrel=3
 pkgdesc="A system-independent interface for user-level packet capture"
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url="http://www.tcpdump.org/"
 license=('BSD')
-depends=('glibc' 'libnl' 'sh' 'libusb')
+depends=('glibc' 'libnl' 'sh' 'libusbx')
 makedepends=('flex')
-source=(http://www.tcpdump.org/release/libpcap-$pkgver.tar.gz)
-sha512sums=('b7662867c6449c603a65c37e63ce881260dee80989ccb5b71b1e55fa437fb18ac9bb123a7b8ed68302baf4511b97bca40d9f08dea7b0dd0eb6a2ac4a7b73cf15')
+source=(http://www.tcpdump.org/release/libpcap-$pkgver.tar.gz{,.sig})
+sha1sums=('9c9710aab68be58ed1d41b5c36dc2599419a80e0'
+          'SKIP')
 
 build() {
-  cd "$_pkgname-$pkgver"
-
+  cd "$srcdir/libpcap-$pkgver"
   ./configure --prefix=/usr --enable-ipv6 --with-libnl
-
   sed -i 's/libpcap\.so/libpcap-1.4.so/g' Makefile
   sed -i 's/^shared: libpcap/shared: libpcap-1.4/' Makefile
-
   make
 }
 
 package() {
-  cd "$_pkgname-$pkgver"
+  cd "$srcdir/libpcap-$pkgver"
 
-  install -dm 755 "$pkgdir/usr/bin"
-
-  make DESTDIR="$pkgdir" install
+  mkdir -p "$pkgdir/usr/bin"
+  make "DESTDIR=$pkgdir" install
 
   # backwards compatibility, programs often look for net/bpf.h
-  install -dm 755 "$pkgdir/usr/include/net"
-
+  mkdir -p "$pkgdir/usr/include/net"
   cd "$pkgdir/usr/include/net"
-
   ln -s ../pcap-bpf.h bpf.h
 
   # install the license
@@ -47,4 +41,3 @@ package() {
   rm -rf "$pkgdir/usr/bin"
   rm -rf "$pkgdir/usr/include"
 }
-

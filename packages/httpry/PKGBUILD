@@ -1,40 +1,39 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=httpry
-pkgver=0.1.8
+pkgname='httpry'
+pkgver='0.1.8'
 pkgrel=2
 groups=('blackarch' 'blackarch-sniffer')
 pkgdesc='A specialized packet sniffer designed for displaying and logging HTTP traffic.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://dumpsterventures.com/jason/httpry/'
 license=('GPL2')
 depends=('libpcap')
 makedepends=('gzip')
-source=("http://dl.packetstormsecurity.net/sniffers/$pkgname-$pkgver.tar.gz")
-sha512sums=('28d9fc37229e8b47711227762134e5b6e81bde0a44947f2e527771da2d042ba7e7c38b1ec205808a9e444e1235c91932ba16df4a31cc3d739c6474b25e149636')
+source=("http://dl.packetstormsecurity.net/sniffers/httpry-${pkgver}.tar.gz")
+sha1sums=('163dcd1ab8cb2e8cef3cda2d7f0dea1b04deb338')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/httpry-$pkgver"
 
   make
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/httpry-$pkgver"
 
-  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+  mkdir -p "$pkgdir/usr/share/doc/httpry"
 
   cd doc
 
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" AUTHORS ChangeLog \
-    README format-string method-string perl-tools
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/httpry/COPYING"
+  install -Dm644 -t "$pkgdir/usr/share/doc/httpry" AUTHORS ChangeLog README \
+    format-string method-string perl-tools
 
   cd ..
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  gzip "$pkgname.1" && install -Dm 644 "$pkgname.1.gz" \
-    "$pkgdir/usr/share/man1/$pkgname.1.gz"
+  install -Dm755 httpry "$pkgdir/usr/bin/httpry"
+  gzip httpry.1 && install -Dm644 httpry.1.gz \
+    "$pkgdir/usr/share/man1/httpry.1.gz"
 }
-

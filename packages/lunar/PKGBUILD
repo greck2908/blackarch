@@ -1,8 +1,8 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=lunar
-pkgver=677.42406f2
+pkgname='lunar'
+pkgver=558.6e9c89e
 pkgrel=1
 pkgdesc='A UNIX security auditing tool based on several security frameworks.'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-defensive')
@@ -11,33 +11,32 @@ url='https://github.com/lateralblast/lunar'
 license=('custom:unknown')
 depends=('bash' 'netkit-bsd-finger' 'bc')
 makedepends=('git')
-source=("git+https://github.com/lateralblast/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/lateralblast/lunar.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/lunar"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/lunar"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/lunar"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md changelog
+  install -Dm644 -t "$pkgdir/usr/share/doc/lunar/" README.md changelog
 
   rm README.md changelog
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/lunar/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/lunar" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec bash $pkgname.sh "\$@"
+cd /usr/share/lunar
+exec bash lunar.sh "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/lunar"
 }
-

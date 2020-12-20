@@ -1,29 +1,30 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ruby-domain_name
-_gemname=domain_name
-pkgver=0.5.20190701
-pkgrel=2
+pkgname='ruby-domain_name'
+_gemname='domain_name'
+pkgver='0.5.20161129'
+pkgrel=4
 pkgdesc='Domain Name manipulation library for Ruby.'
 arch=('any')
-license=('custom:unknown')
-depends=('ruby-unf' 'ruby-unf_ext')
-makedepends=('ruby-rdoc')
+license=('unknown')
+makedepends=('ruby')
+depends=('ruby-unf<1.0.0' 'ruby-unf>=0.0.5' 'ruby-unf_ext>=0.0.6')
 url='https://github.com/knu/ruby-domain_name'
-source=("https://rubygems.org/gems/domain_name-0.5.20190701.gem")
-sha512sums=('445f0e8a377bb700f8a3b926970f4351d28759e237947d6c755afff52726141c6b821b43b2a761d4d0d6237969304ef749404a5f383f69710b04803410dc70aa')
-noextract=("domain_name-$pkgver.gem")
+source=("http://rubygems.org/downloads/domain_name-${pkgver}.gem")
+sha1sums=('fee5b5ad600643758732a5091756fbbddf2a9768')
+noextract=("domain_name-${pkgver}.gem")
 
 package() {
-  _gemdir=$(ruby -e 'puts Gem.default_dir')
+  cd "$srcdir"
+
+  local _gemdir=$(ruby -e 'puts Gem.default_dir')
 
   if [[ $CARCH == arm* ]] ; then
     gem install --no-user-install --ignore-dependencies --no-rdoc --no-ri \
-      -i "$pkgdir$_gemdir" "$_gemname-$pkgver.gem"
+      -i "$pkgdir$_gemdir" domain_name-${pkgver}.gem
   else
     gem install --no-user-install --ignore-dependencies -i "$pkgdir$_gemdir" \
-      "$_gemname-$pkgver.gem"
+      domain_name-${pkgver}.gem
   fi
 }
-

@@ -1,46 +1,46 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=drupal-module-enum
-pkgver=11.525543c
-pkgrel=3
+pkgname='drupal-module-enum'
+pkgver=7.58a8e69
+pkgrel=2
 pkgdesc='Enumerate on drupal modules.'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-scanner')
 arch=('any')
 url='https://github.com/Tethik/drupal-module-enumeration'
 license=('MIT')
-depends=('python2' 'python2-httplib2')
+depends=('python2')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/Tethik/drupal-module-enumeration.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/Tethik/drupal-module-enumeration.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/drupal-module-enumeration"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/drupal-module-enumeration"
 
   sed -i 's|bin/python|bin/python2|' scanner.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/drupal-module-enumeration"
 
-  install -dm 755 "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/bin"
 
-  install -Dm 655 -t "$pkgdir/usr/share/$pkgname" scanner.py drupal-modules.lst
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm655 -t "$pkgdir/usr/share/drupal-module-enum" scanner.py \
+    drupal-modules.lst
+  install -Dm644 -t "$pkgdir/usr/share/doc/drupal-module-enum/" README.md
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/drupal-module-enum/LICENSE"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/drupal-module-enum" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 scanner.py "\$@"
+cd /usr/share/drupal-module-enum
+exec python2 scanner.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/drupal-module-enum"
 }
-

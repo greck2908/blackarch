@@ -1,155 +1,53 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=responder
-pkgver=352.36ec5cc
+pkgname='responder'
+pkgver=201.0bdc183
 pkgrel=1
-epoch=3
-pkgdesc='A LLMNR and NBT-NS poisoner, with built-in HTTP/SMB/MSSQL/FTP/LDAP rogue authentication server supporting NTLMv1/NTLMv2/LMv2 (multirelay version).'
+epoch=2
+pkgdesc='A LLMNR and NBT-NS poisoner, with built-in HTTP/SMB/MSSQL/FTP/LDAP rogue authentication server supporting NTLMv1/NTLMv2/LMv2, Extended Security NTLMSSP and Basic HTTP authentication.'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-fuzzer' 'blackarch-spoof'
         'blackarch-networking')
 arch=('any')
-depends=('python2' 'python2-configparser' 'python2-pycryptodome')
+depends=('python2')
 makedepends=('git')
-url='https://github.com/lgandx/Responder'
+url='https://github.com/SpiderLabs/Responder/'
 license=('GPL3')
-source=("$pkgname::git+https://github.com/lgandx/Responder.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/SpiderLabs/Responder.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Responder"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Responder"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/responder"
+  mkdir -p "$pkgdir/usr/share/doc/responder"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/responder" README.md
 
-  rm README.md LICENSE *.sh
+  rm README.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/responder"
 
-  # Responder
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/responder" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 Responder.py "\$@"
+cd /usr/share/responder
+exec python2 Responder.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod +x "$pkgdir/usr/bin/responder"
 
-  # Responder DumpHash
-  cat > "$pkgdir/usr/bin/$pkgname-dumphash" << EOF
+  cat > "$pkgdir/usr/bin/dhcp-responder" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 DumpHash.py "\$@"
+cd /usr/share/responder
+exec python2 DHCP.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname-dumphash"
-
-  # Responder Report
-  cat > "$pkgdir/usr/bin/$pkgname-report" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname
-exec python2 Report.py "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname-report"
-
-  # Responder DHCP
-  cat > "$pkgdir/usr/bin/$pkgname-dhcp" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname/tools
-exec python2 DHCP.py "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname-dhcp"
-
-  # Responder DHCP_Auto
-  cat > "$pkgdir/usr/bin/$pkgname-dhcp-auto" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname/tools
-exec bash DHCP_Auto.sh "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname-dhcp-auto"
-
-  # Responder FindSMB2Uptime
-  cat > "$pkgdir/usr/bin/$pkgname-findsmb2uptime" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname/tools
-exec python2 FindSMB2UPTime.py "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname-findsmb2uptime"
-
-  # Responder FindSQLSrv
-  cat > "$pkgdir/usr/bin/$pkgname-findsqlsrv" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname/tools
-exec python2 FindSQLSrv.py "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname-findsqlsrv"
-
-  # Responder ICMP-Redirect
-  cat > "$pkgdir/usr/bin/$pkgname-icmp-redirect" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname/tools
-exec python2 Icmp-Redirect.py "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname-icmp-redirect"
-
-  # Responder Multirelay
-  cat > "$pkgdir/usr/bin/$pkgname-multirelay" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname/tools
-exec python2 MultiRelay.py "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname-multirelay"
-
-  # Responder RunFinger
-  cat > "$pkgdir/usr/bin/$pkgname-runfinger" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname/tools
-exec python2 RunFinger.py "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname-runfinger"
-
-  # Responder cachedump
-  cat > "$pkgdir/usr/bin/$pkgname-cachedump" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname/tools/MultiRelay/creddump
-exec python2 cachedump.py "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname-cachedump"
-
-  # Responder lsadump
-  cat > "$pkgdir/usr/bin/$pkgname-lsadump" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname/tools/MultiRelay/creddump
-exec python2 lsadump.py "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname-lsadump"
-
-  # Responder pwdump
-  cat > "$pkgdir/usr/bin/$pkgname-pwdump" << EOF
-#!/bin/sh
-cd /usr/share/$pkgname/tools/MultiRelay/creddump
-exec python2 pwdump.py "\$@"
-EOF
-
-  chmod +x "$pkgdir/usr/bin/$pkgname-pwdump"
+  chmod +x "$pkgdir/usr/bin/dhcp-responder"
 }
-

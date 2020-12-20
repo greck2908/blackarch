@@ -1,43 +1,42 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=peach-fuzz
+pkgname='peach-fuzz'
 pkgver=55.404e8ee
-pkgrel=3
+pkgrel=2
 pkgdesc='Simple vulnerability scanning framework.'
 groups=('blackarch' 'blackarch-fuzzer' 'blackarch-code-audit')
 arch=('any')
 url='https://github.com/Caleb1994/peach'
 license=('custom:unknown')
-depends=('python2' 'python2-colorama' 'pwntools')
+depends=('python2' 'python2-colorama')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/Caleb1994/peach.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/Caleb1994/peach.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/peach"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/peach"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/peach-fuzz"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
+  install -Dm644 README.md "$pkgdir/usr/share/doc/peach-fuzz/README.md"
 
   rm *.md
 
-  cp -a * "$pkgdir/usr/share/$pkgname"
+  cp -a * "$pkgdir/usr/share/peach-fuzz"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/peach-fuzz" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 peach.py "\$@"
+cd /usr/share/peach-fuzz
+exec python2 peach.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/peach-fuzz"
 }
-

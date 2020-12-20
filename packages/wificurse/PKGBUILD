@@ -1,36 +1,35 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=wificurse
-pkgver=0.3.9
-pkgrel=5
+pkgname='wificurse'
+pkgver='0.3.9'
+pkgrel=4
 groups=('blackarch' 'blackarch-wireless')
 pkgdesc='WiFi jamming tool.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/oblique/wificurse'
 makedepends=('git')
 license=('GPL3')
-source=("git+https://github.com/oblique/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/oblique/wificurse.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd "$pkgname/src"
+  cd "$srcdir/wificurse/src"
 
   awk -F' ' '/#define VERSION/ {gsub("\"",""); print $(NF)}' wificurse.h
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/wificurse"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/wificurse"
 
   make PREFIX="$pkgdir/usr" install
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README
-  install -Dm 644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 README "$pkgdir/usr/share/doc/wificurse/README"
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/wificursse/LICENSE"
 }
-

@@ -1,22 +1,22 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=recoverjpeg
-pkgver=2.6.3
+pkgname='recoverjpeg'
+pkgver='2.6.1'
 pkgrel=1
 groups=('blackarch' 'blackarch-forensic')
 pkgdesc='Recover jpegs from damaged devices.'
 url='http://www.rfc1149.net/devel/recoverjpeg'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 license=('GPL')
 depends=('glibc' 'python' 'bash')
 optdepends=('libexif: needed for sort-pictures'
 'imagemagick: needed for sort-pictures')
-source=("http://www.rfc1149.net/download/$pkgname/$pkgname-$pkgver.tar.gz")
-sha512sums=('2ad016d337b965ddad38117d82ccc3b41b9f38afa20509c4fa1ca503ad10d009ffb8d21287a19d76c5f0eaf11da1986d5a417b762a4813db164f9198b2aae51b')
+source=("http://www.rfc1149.net/download/recoverjpeg/recoverjpeg-${pkgver}.tar.gz")
+sha1sums=('8b509402015839263ba0eb0ac59b892d6f9381e7')
 
 build() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/recoverjpeg-$pkgver"
 
   ./configure --prefix=/usr --mandir=/usr/share/man
 
@@ -24,8 +24,7 @@ build() {
 }
 
 package() {
-  cd "$pkgname-$pkgver"
+  cd "$srcdir/recoverjpeg-$pkgver"
 
   make DESTDIR=$pkgdir install
 }
-

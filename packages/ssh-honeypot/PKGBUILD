@@ -1,36 +1,35 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ssh-honeypot
-pkgver=86.1f72fa6
+pkgname='ssh-honeypot'
+pkgver=53.05a6377
 pkgrel=1
 pkgdesc='Fake sshd that logs ip addresses, usernames, and passwords.'
 groups=('blackarch' 'blackarch-honeypot')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/droberson/ssh-honeypot'
 license=('GPL3')
 depends=('libssh')
-makedepends=('git' 'clang' 'make' 'json-c')
-source=("git+https://github.com/droberson/$pkgname.git")
-sha512sums=('SKIP')
+makedepends=('git')
+source=('git+https://github.com/droberson/ssh-honeypot.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/ssh-honeypot"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/ssh-honeypot"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/ssh-honeypot"
 
-  install -Dm 755 "bin/$pkgname" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE.md "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 bin/ssh-honeypot "$pkgdir/usr/bin/ssh-honeypot"
+  install -Dm644 -t "$pkgdir/usr/share/doc/ssh-honeypot/" README.md
+  install -Dm644 LICENSE.md "$pkgdir/usr/share/licenses/ssh-honeypot/LICENSE.md"
 }
-

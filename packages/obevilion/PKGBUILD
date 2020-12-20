@@ -1,44 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=obevilion
-pkgver=409.29fbe9d
-pkgrel=2
+pkgname='obevilion'
+pkgver=408.021c9f2
+pkgrel=1
 pkgdesc='Another archive cracker created in python | cracking [zip/7z/rar].'
 groups=('blackarch' 'blackarch-cracker')
 arch=('any')
 url='https://github.com/BL4CKvGHOST/Ob3vil1on'
 license=('GPL3')
-depends=('python2' 'python2-colorama' 'python2-pyqt4' 'tk' 'unrar')
+depends=('python2' 'python2-colorama' 'python2-pyqt4')
 makedepends=('git')
-source=("$pkgname::git+https://github.com/BL4CKvGHOST/Ob3vil1on.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/BL4CKvGHOST/Ob3vil1on.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/Ob3vil1on"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/Ob3vil1on"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/obevilion"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm644 -t "$pkgdir/usr/share/doc/obevilion/" README.md
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/obevilion/COPYING"
 
   rm README.md COPYING
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/obevilion/"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/obevilion" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 Obevilion.py "\$@"
+cd /usr/share/obevilion
+exec python2 Obevilion.py "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/obevilion"
 }
-

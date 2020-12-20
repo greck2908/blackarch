@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=jooforce
+pkgname='jooforce'
 pkgver=11.43c21ad
 pkgrel=2
 groups=('blackarch' 'blackarch-webapp' 'blackarch-cracker')
@@ -11,28 +11,27 @@ url='https://github.com/rastating/jooforce'
 license=('GPL3')
 depends=('python2')
 makedepends=('git')
-source=("git+https://github.com/rastating/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/rastating/jooforce.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/jooforce"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 prepare() {
-  cd $pkgname
+  cd "$srcdir/jooforce"
 
-  sed -i '1i\#!/usr/bin/python2' "$pkgname.py"
+  sed -i '1i\#!/usr/bin/python2' jooforce.py
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/jooforce"
 
-  install -Dm 755 "$pkgname.py" "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 COPYING.txt "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm755 jooforce.py "$pkgdir/usr/bin/jooforce"
+  install -Dm644 README.md "$pkgdir/usr/share/doc/jooforce/README.md"
+  install -Dm644 COPYING.txt "$pkgdir/usr/share/licenses/jooforce/COPYING.txt"
 
   rm README.md COPYING.txt
 }
-

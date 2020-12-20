@@ -1,21 +1,22 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=guymager
-pkgver=0.8.12
-pkgrel=1
+pkgname='guymager'
+pkgver='0.8.4'
+pkgrel=3
 groups=('blackarch' 'blackarch-forensic')
 pkgdesc='A forensic imager for media acquisition.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://guymager.sourceforge.net/'
 license=('GPL')
-depends=('qt5-base')
+depends=('qt4' 'gksu')
 options=('!strip')
 _ar=amd64
-sha512sums=('90e65c7739c40a739530ffdd1817171f18442826d2c7bf47fca1ddc45a6a207f278f7b8caa69f798c7af17b1891dff7f5bb7a4f5da3ae6348e474995889c4136')
-source=("http://deb.pinguin.lu/$_ar/$pkgname-beta_$pkgver-1_$_ar.deb")
+sha1sums=('f0150a634861cd89c6b557358ad2414bf1b7ff1e')
+source=("http://apt.pinguin.lu/$_ar/guymager-beta_${pkgver}-1_${_ar}.deb")
 
 package() {
-  tar xfJ data.tar.xz -C $pkgdir
-}
+  cd "$srcdir"
 
+  tar xfJ data.tar.xz -C "$pkgdir"
+}

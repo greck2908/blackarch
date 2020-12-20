@@ -1,26 +1,19 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=nield
-pkgver=38.0c0848d
+pkgname='nield'
+pkgver='0.6.1'
 pkgrel=1
 groups=('blackarch' 'blackarch-networking')
 pkgdesc='A tool to receive notifications from kernel through netlink socket, and generate logs related to interfaces, neighbor cache(ARP,NDP), IP address(IPv4,IPv6), routing, FIB rules, traffic control.'
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='http://nield.sourceforge.net/'
 license=('GPL2')
-makedepends=('git')
-source=("git+https://github.com/t2mune/$pkgname.git")
-sha512sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+source=("https://github.com/t2mune/nield/archive/v${pkgver}.tar.gz")
+sha1sums=('c4d6c4f5ce2f3c780b278ca943e98cbcf6ef2dd7')
 
 build() {
-  cd $pkgname
+  cd "$srcdir/nield-$pkgver"
 
   if [[ "$CARCH" == "x86_64" ]];
   then
@@ -33,11 +26,11 @@ build() {
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/nield-$pkgver"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" INSTALL ChangeLog
-  install -Dm 644 COPYING "$pkgdir/usr/share/licenses/$pkgname/COPYING"
+  install -Dm644 INSTALL "$pkgdir/usr/share/doc/nield/INSTALL"
+  install -m644 ChangeLog "$pkgdir/usr/share/doc/nield/ChangeLog"
+  install -Dm644 COPYING "$pkgdir/usr/share/licenses/nield/COPYING"
 
   make DESTDIR="$pkgdir" install
 }
-

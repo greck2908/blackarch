@@ -1,7 +1,7 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=credmap
+pkgname='credmap'
 pkgver=116.d862247
 pkgrel=1
 groups=('blackarch' 'blackarch-misc' 'blackarch-defensive')
@@ -11,34 +11,33 @@ arch=('any')
 license=('custom:unknown')
 depends=('python2' 'python2-lxml')
 makedepends=('git')
-source=("git+https://github.com/lightos/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/lightos/credmap.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/credmap"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/credmap"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/credmap"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" README.md
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/credmap/" README.md
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/credmap/LICENSE.txt"
 
   rm README.md LICENSE.txt
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/credmap"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/credmap" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-exec python2 $pkgname.py "\$@"
+cd /usr/share/credmap
+exec python2 credmap.py "\$@"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/credmap"
 }
-

@@ -1,36 +1,28 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=ssllabs-scan
-pkgver=249.a7f3d49
+pkgname='ssllabs-scan'
+pkgver='1.4.0'
 pkgrel=1
 pkgdesc='Command-line client for the SSL Labs APIs'
 groups=('blackarch' 'blackarch-scanner' 'blackarch-crypto')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/ssllabs/ssllabs-scan'
-license=('APACHE')
-depends=('glibc')
-makedepends=('git' 'go-pie')
-source=("git+https://github.com/ssllabs/$pkgname.git")
-sha512sums=('SKIP')
-
-pkgver() {
-  cd $pkgname
-
-  echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
-}
+license=('apache')
+depends=('go')
+source=("https://github.com/ssllabs/ssllabs-scan/archive/v${pkgver}.tar.gz")
+sha1sums=('a4de083094a6181122161b3a3d272f7be4fafe9c')
 
 build() {
-	cd $pkgname
+	cd "$srcdir/ssllabs-scan-$pkgver"
 
   make
 }
 
 package() {
-	cd $pkgname
+	cd "$srcdir/ssllabs-scan-$pkgver"
 
-	install -Dm 755 ssllabs-scan-v3 "$pkgdir/usr/bin/$pkgname"
-  install -Dm 644 -t "$pkgdir/usr/share/$pkgname" *.sql
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname" README.md AUTHORS TODO.md
+	install -Dm755 ssllabs-scan "$pkgdir/usr/bin/ssllabs-scan"
+  install -Dm644 -t "$pkgdir/usr/share/ssllabs-scan" *.sql
+  install -Dm644 -t "$pkgdir/usr/share/doc/ssllabs-scan" README.md AUTHORS TODO
 }
-

@@ -1,44 +1,43 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=whichcdn
+pkgname='whichcdn'
 pkgver=22.5fc6ddd
-pkgrel=5
+pkgrel=3
 pkgdesc='Tool to detect if a given website is protected by a Content Delivery Network.'
 groups=('blackarch' 'blackarch-webapp' 'blackarch-recon')
 arch=('any')
 url='https://github.com/Nitr4x/whichCDN'
 license=('MIT')
-depends=('python' 'python-requests')
-makedepends=('git')
-source=("$pkgname::git+https://github.com/Nitr4x/whichCDN.git")
-sha512sums=('SKIP')
+depends=('python2' 'python2-argparse' 'python2-requests')
+makedepends=('git' 'python2-setuptools')
+source=('git+https://github.com/Nitr4x/whichCDN.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/whichCDN"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/whichCDN"
 
-  install -dm 755 "$pkgdir/usr/bin"
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
+  mkdir -p "$pkgdir/usr/bin"
+  mkdir -p "$pkgdir/usr/share/whichcdn"
 
-  install -Dm 644 -t "$pkgdir/usr/share/doc/$pkgname/" *.md
-  install -Dm 644 LICENCE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm644 -t "$pkgdir/usr/share/doc/whichcdn/" *.md
+  install -Dm644 LICENCE.txt "$pkgdir/usr/share/licenses/whichcdn/LICENSE.txt"
 
   rm *.md LICENCE.txt
 
-  cp -a * "$pkgdir/usr/share/$pkgname/"
+  cp -a * "$pkgdir/usr/share/whichcdn"
 
-  cat > "$pkgdir/usr/bin/$pkgname" << EOF
+  cat > "$pkgdir/usr/bin/whichcdn" << EOF
 #!/bin/sh
-cd /usr/share/$pkgname
-python ./whichCDN "\$@"
+cd /usr/share/whichcdn
+python2 whichCDN "\${@}"
 EOF
 
-  chmod +x "$pkgdir/usr/bin/$pkgname"
+  chmod a+x "$pkgdir/usr/bin/whichcdn"
 }
-

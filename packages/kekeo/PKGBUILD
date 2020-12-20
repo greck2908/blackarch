@@ -1,21 +1,23 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=kekeo
-pkgver=2.2.0_20200718
+pkgname='kekeo'
+pkgver='2.0.0.20170612'
 pkgrel=1
 pkgdesc='A little toolbox to play with Microsoft Kerberos in C.'
 url='https://github.com/gentilkiwi/kekeo'
 groups=('blackarch' 'blackarch-windows' 'blackarch-cracker')
 license=('custom:unknown')
 arch=('any')
-source=("https://github.com/gentilkiwi/$pkgname/releases/download/${pkgver//_/-}/kekeo.zip")
-sha512sums=('67f476692166c34bf56d355500ea91fd506b1702fd5fc7278a0de10132318f68fc6826fd7f0830ba26b1bfef7f242f7ebaf920e26ae2390398efe3b269a56009')
+source=("https://github.com/gentilkiwi/kekeo/releases/download/${pkgver/.2/-2}/kekeo.zip")
+sha1sums=('2fbb48770e9dc75cc35fcf83528adb39122cae9c')
 
 package() {
-  install -dm 755 "$pkgdir/usr/share/windows/$pkgname"
+  cd "$srcdir"
 
-  rm "$pkgname.zip"
-  cp -a * "$pkgdir/usr/share/windows/$pkgname/"
+  mkdir -p "$pkgdir/usr/share/windows/kekeo"
+
+  rm kekeo.zip
+
+  cp -a * "$pkgdir/usr/share/windows/kekeo"
 }
-

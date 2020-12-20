@@ -1,39 +1,38 @@
-# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# This file is part of BlackArch Linux ( http://blackarch.org ).
 # See COPYING for license details.
 
-pkgname=payloadmask
+pkgname='payloadmask'
 pkgver=16.ff38964
 pkgrel=1
 pkgdesc='Web Payload list editor to use techniques to try bypass web application firewall.'
 groups=('blackarch' 'blackarch-webapp')
-arch=('x86_64' 'aarch64')
+arch=('x86_64' 'armv6h' 'armv7h' 'aarch64')
 url='https://github.com/CoolerVoid/payloadmask'
 license=('GPL3')
 makedepends=('git')
-source=("git+https://github.com/CoolerVoid/$pkgname.git")
-sha512sums=('SKIP')
+source=('git+https://github.com/CoolerVoid/payloadmask.git')
+sha1sums=('SKIP')
 
 pkgver() {
-  cd $pkgname
+  cd "$srcdir/payloadmask"
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
 }
 
 build() {
-  cd $pkgname
+  cd "$srcdir/payloadmask"
 
   make
 }
 
 package() {
-  cd $pkgname
+  cd "$srcdir/payloadmask"
 
-  install -dm 755 "$pkgdir/usr/share/$pkgname"
-  install -dm 755 "$pkgdir/usr/share/doc/$pkgname"
+  mkdir -p "$pkgdir/usr/share/payloadmask"
+  mkdir -p "$pkgdir/usr/share/doc/payloadmask"
 
-  install -Dm 755 $pkgname "$pkgdir/usr/bin/$pkgname"
-  cp -a README.md doc/* "$pkgdir/usr/share/doc/$pkgname/"
-  install -Dm 644 -t "$pkgdir/usr/share/$pkgname/payloads/" payloads/*
-  install -Dm 644 LICENSE.txt "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+  install -Dm755 payloadmask "$pkgdir/usr/bin/payloadmask"
+  cp -a README.md doc/* "$pkgdir/usr/share/doc/payloadmask"
+  install -Dm644 -t "$pkgdir/usr/share/payloadmask/payloads/" payloads/*
+  install -Dm644 LICENSE.txt "$pkgdir/usr/share/licenses/payloadmask/LICENSE.txt"
 }
-
