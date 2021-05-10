@@ -4,16 +4,16 @@
 pkgbase=python-bitarray
 pkgname=('python2-bitarray' 'python-bitarray')
 _pkgname=bitarray
-pkgver=1.6.1
-pkgrel=2
+pkgver=2.1.0
+pkgrel=1
 pkgdesc='Efficient arrays of booleans for Python.'
 arch=('x86_64' 'aarch64')
 url='https://pypi.org/project/bitarray/#files'
 license=('PSF')
 makedepends=('python2-setuptools' 'python-setuptools')
 options=(!emptydirs)
-source=("https://files.pythonhosted.org/packages/79/e8/7c8fafd17338bd2efdde30376903d13859bfecc24d564a5c1538b3a09338/$_pkgname-$pkgver.tar.gz")
-sha512sums=('ad0ce244dfeaa571821b704968ddc08bea16dac94428a4571a599153704a4bdda5d7135c42c81ede655d48455378bfff7292a91fe49724bd5a6f48bb436a9fba')
+source=("https://files.pythonhosted.org/packages/b1/98/2bb5f77098a3c8f068c2415ad1532ec9df65a019d0604b4d174541382136/$_pkgname-$pkgver.tar.gz")
+sha512sums=('e91200b8829b63f297a1882fab293ac007991740a739587ba473abce183aa79a85e08db8a0fca5729b6e1d3e130965b2f14dc40acccf12d3231852498e2fb141')
 
 prepare() {
   cp -a "$_pkgname-$pkgver"{,-2}

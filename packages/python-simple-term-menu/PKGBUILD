@@ -3,7 +3,7 @@
 
 pkgname=python-simple-term-menu
 _pkgname=simple-term-menu
-pkgver=0.10.4
+pkgver=1.1.0
 pkgrel=1
 pkgdesc='Creates simple menus for interactive command line programs.'
 arch=('any')
@@ -11,8 +11,8 @@ url='https://pypi.org/project/simple-term-menu/#files'
 license=('MIT')
 depends=('python')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/e6/7c/1a0c8ebadcff7789a8760ed7ddc5981021d942eafaf06c40a51ce12480c6/$_pkgname-$pkgver.tar.gz")
-sha256sums=('fadd5ce8ee1f774fae4f3b856b335e372999bae0128ee12ca565884030953882')
+source=("https://files.pythonhosted.org/packages/c3/95/6cee6ed4a475903cb281497c3fcf8ba81f0b2877f94fedb86bcdc892fbd2/$_pkgname-$pkgver.tar.gz")
+sha512sums=('66e36ffbf8b7faeab2552683a3cc5570112b92202bcdf6941625f4c83af41656b8f18a0707339f09866049187f0290640baf221a7df56c3ab0d5d76c9fbe897a')
 
 build() {
   cd "$_pkgname-$pkgver"

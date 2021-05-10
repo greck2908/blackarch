@@ -2,7 +2,7 @@
 # See COPYING for license details.
 
 pkgname=phpsploit
-pkgver=968.6e8eb46
+pkgver=972.ee83c32
 pkgrel=1
 pkgdesc='Stealth post-exploitation framework.'
 groups=('blackarch' 'blackarch-webapp')

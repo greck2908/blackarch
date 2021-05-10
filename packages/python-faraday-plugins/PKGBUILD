@@ -3,8 +3,8 @@
 
 pkgname=python-faraday-plugins
 _pkgname=faraday-plugins
-pkgver=1.3.0
-pkgrel=2
+pkgver=1.4.5
+pkgrel=1
 pkgdesc='Faraday plugins package.'
 arch=('any')
 url='https://pypi.org/project/faraday-plugins/#files'
@@ -13,8 +13,8 @@ depends=('python' 'python-html2text' 'python-click' 'python-simplejson'
          'python-requests' 'python-lxml' 'python-beautifulsoup4' 'python-dateutil'
          'python-pytz')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/48/57/5b753f693330b78d0a70444c8dab28ae3e4c3bb9968c9ba4389ba0350411/$_pkgname-$pkgver.tar.gz")
-sha512sums=('f302e407b92ccb8aca5584e063df82b31bd1010926709deba988a02744940c8dedc815b7717b073e4c09b230b695f08498c597f81c95a8e24e386b61935d5325')
+source=("https://files.pythonhosted.org/packages/3b/08/a89d9ff13ea5fb953c8b5d9c683ee15f0ab1bbe7ff9bcd6f5a26230b46a2/$_pkgname-$pkgver.tar.gz")
+sha512sums=('eca0c6c53ea0972894aed19cf25456575b472ed489ac3700f0a5ac1f77b590aceb2d25de9c4c9b57ebc708a9e62db459ef558e649c699d91f56d7e7026a74f2c')
 
 build() {
   cd "$_pkgname-$pkgver"

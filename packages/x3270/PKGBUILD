@@ -2,9 +2,10 @@
 # See COPYING for license details.
 
 pkgname=x3270
-pkgver=4.0ga9
+_pkgname=suite3270
+pkgver=4.0ga14
 pkgrel=1
-epoch=1
+epoch=2
 pkgdesc='An IBM 3270 terminal emulator for the X Window System.'
 arch=('x86_64' 'aarch64')
 url='http://x3270.bgp.nu/'
@@ -14,11 +15,11 @@ makedepends=('imake' 'openssl' 'libx11' 'libxaw' 'libxt' 'xbitmaps'
              'xorg-mkfontdir' 'xorg-bdftopcf' 'tcl')
 backup=('etc/x3270/ibm_hosts')
 source=("http://x3270.bgp.nu/download/04.00/suite3270-$pkgver-src.tgz")
-sha512sums=('5b75ef40e9ea4152dcca999ed1f206c662ba2fb227663c3c6681626bdb171c759805f19020b0d5cda6bc787d85b43b88f9a33784e88f6bb576b78fa4f528bdf8')
+sha512sums=('0c76946420bbc2a483ab321658350a5b3e1c03e66b65e99f1a8cb4d350e07eedd44f9f24671244f3c374f512e5d211304785b8e44ae125265ce8f71f0a9dcc65')
 install="$pkgname.install"
 
 build() {
-  cd "suite3270-${pkgver:0:3}"
+  cd "$_pkgname-${pkgver:0:3}"
 
   if [[ "$CARCH" == "aarch64" ]]; then
     ./configure --prefix=/usr --bindir=/usr/bin --sbindir=/usr/bin \
@@ -32,7 +33,7 @@ build() {
 }
 
 package() {
-  cd "suite3270-${pkgver:0:3}"
+  cd "$_pkgname-${pkgver:0:3}"
 
   install -dm 755 "$pkgdir/usr/share/fonts/3270/fonts.dir"
 

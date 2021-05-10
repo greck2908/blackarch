@@ -2,17 +2,18 @@
 # See COPYING for license details.
 
 pkgname=yay
-pkgver=10.1.2
+pkgver=10.2.1
 pkgrel=1
 pkgdesc='Yet another yogurt. Pacman wrapper and AUR helper written in go.'
 arch=('x86_64' 'aarch64')
 groups=('blackarch' 'blackarch-misc')
 url='https://github.com/Jguer/yay'
 license=('GPL3')
-depends=('pacman' 'sudo' 'git')
+depends=('pacman' 'git')
 makedepends=('go-pie')
+optdepends=('sudo')
 source=("https://github.com/Jguer/$pkgname/archive/v$pkgver.tar.gz")
-sha512sums=('85973a83232398cff94f5dd3f662a2671557b3bc5e45f1cd9d35873fd8f3855194a8e5b8d707b0e644845b1438394250cae5bb6d017bb0b54fca15332ce22047')
+sha512sums=('f4e0c6293dbd00004e05467cc7ebfa5e126e8de4012353a5e734f93cb526cf681ec60de6c31f2fd433f43a5f403a544e09170fbe64622d17f4a9f33f030d6dfb')
 
 build() {
   cd "$pkgname-$pkgver"

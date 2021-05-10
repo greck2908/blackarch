@@ -2,8 +2,8 @@
 # See COPYING for license details.
 
 pkgname=pyrdp
-pkgver=1582.456cd06
-pkgrel=2
+pkgver=1682.9191bcb
+pkgrel=1
 pkgdesc='Python 3 RDP MITM and library.'
 groups=('blackarch' 'blackarch-sniffer' 'blackarch-networking')
 arch=('x86_64' 'aarch64')
@@ -13,7 +13,7 @@ depends=('python' 'python-appdirs' 'python-cryptography' 'python-names'
          'python-pyasn1' 'python-pycryptodome' 'python-pyopenssl' 'python-pytz'
          'python-rsa' 'python-service-identity' 'python-twisted' 'python-dbus'
          'python-notify2')
-makedepends=('git')
+makedepends=('git' 'python-setuptools')
 source=("$pkgname::git+https://github.com/GoSecure/$pkgname.git")
 sha512sums=('SKIP')
 

@@ -35,8 +35,7 @@ package_python2-cx_oracle() {
 
   cd "$_pkgname-$pkgver-2"
 
-  python2 setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
-    --skip-build
+  python2 setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
   mv "$pkgdir/usr/$_pkgname-doc" "$pkgdir/usr/share/doc/${pkgname[0]}/"
   mv "$pkgdir/usr/share/doc/${pkgname[0]}/LICENSE.txt" \
@@ -50,8 +49,7 @@ package_python-cx_oracle() {
 
   cd "$_pkgname-$pkgver"
 
-  python setup.py install --prefix=/usr --root="$pkgdir" --optimize=1 \
-    --skip-build
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
   mv "$pkgdir/usr/$_pkgname-doc" "$pkgdir/usr/share/doc/${pkgname[1]}/"
   mv "$pkgdir/usr/share/doc/${pkgname[1]}/LICENSE.txt" \

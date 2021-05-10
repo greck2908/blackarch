@@ -3,16 +3,16 @@
 
 pkgname=python-pyppeteer-stealth
 _pkgname=pyppeteer_stealth
-pkgver=2.6.0
-pkgrel=2
+pkgver=2.7.3
+pkgrel=1
 pkgdesc='A plugin for pyppeteer to prevent detection.'
 arch=('any')
 url='https://pypi.org/project/pyppeteer-stealth/'
 license=('MIT')
 depends=('python' 'python-pyppeteer')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/f0/8c/dde1228fd167931def544982e6eb0a384036e370ca205f458a361ca204ad/pyppeteer_stealth-$pkgver.tar.gz")
-sha512sums=('4c721c3e98876d5935adfe5356a761bc250df86b7d29e43eb5bd782dd00fb569fc71114cea5bbe9b7267c965054124c89335e0f9f54eb9a7c53ed2a65735749d')
+source=("https://files.pythonhosted.org/packages/8e/82/d6c74d15343f45fb217df3db883ff0bc06101a6d5da2c57beacb5a06488a/pyppeteer_stealth-$pkgver.tar.gz")
+sha512sums=('b9c86425180615f13a926f651eef749e26c7e4d211f3f40d27284761c55ba6d0583b0889dea1c2ccf8de16a4af1de1528aca0233059924c8d060a68e3241a200')
 
 build() {
   cd "$_pkgname-$pkgver"

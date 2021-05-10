@@ -1,4 +1,3 @@
-afl blackarch-fuzzer blackarch-binary
 afpfs-ng blackarch-networking blackarch-misc
 aircrack-ng blackarch-wireless
 arduino blackarch-hardware
@@ -23,7 +22,6 @@ darkstat blackarch-sniffer blackarch-networking
 ddrescue blackarch-forensic
 distorm blackarch-disassembler blackarch-reversing
 dmg2img blackarch-forensic blackarch-misc
-dnstracer blackarch-recon
 dscanner blackarch-code-audit
 dsniff blackarch-sniffer blackarch-networking
 elfkickers blackarch-binary
@@ -84,7 +82,6 @@ mfoc blackarch-cracker blackarch-wireless
 mitmproxy blackarch-proxy blackarch-exploitation
 mtr blackarch-networking
 multimon-ng blackarch-radio
-nbtscan blackarch-scanner blackarch-recon
 ncrack blackarch-cracker
 netsniff-ng blackarch-sniffer
 ngrep blackarch-networking
@@ -110,7 +107,8 @@ python-capstone blackarch-reversing blackarch-disassembler
 python-jsbeautifier blackarch-reversing blackarch-webapp
 radamsa blackarch-fuzzer
 radare2 blackarch-reversing blackarch-decompiler blackarch-disassembler blackarch-debugger
-radare2-cutter blackarch-reversing blackarch-decompiler blackarch-disassembler blackarch-debugger
+iaito blackarch-reversing blackarch-decompiler blackarch-disassembler blackarch-debugger
+r2ghidra blackarch-reversing blackarch-decompiler blackarch-disassembler blackarch-debugger
 reaver blackarch-wireless blackarch-cracker
 rfdump blackarch-wireless
 rkhunter blackarch-forensic blackarch-defensive
@@ -160,7 +158,7 @@ urh blackarch-radio
 valabind blackarch-misc
 valgrind blackarch-binary blackarch-code-audit
 veracrypt blackarch-crypto blackarch-defensive
-volatility blackarch-forensic
+volatility3 blackarch-forensic
 vulscan blackarch-scanner blackarch-fuzzer
 wavemon blackarch-wireless
 wifite blackarch-wireless blackarch-cracker

@@ -3,18 +3,18 @@
 # Contributor: peeweep <peeweep at 0x0 dot ee>
 
 pkgname=quark-engine
-pkgver=20.04
-pkgrel=3
+pkgver=21.01.6
+pkgrel=1
 pkgdesc='An Obfuscation-Neglect Android Malware Scoring System.'
 groups=('blackarch' 'blackarch-mobile' 'blackarch-malware')
 arch=('any')
 license=('GPL')
 url='https://github.com/quark-engine/quark-engine'
 depends=('python' 'python-prettytable' 'androguard' 'python-tqdm'
-         'python-colorama' 'python-click')
+         'python-colorama' 'python-click' 'python-graphviz' 'python-gitpython')
 makedepends=('python-setuptools')
 source=("$pkgname.tar.gz::https://github.com/quark-engine/$pkgname/archive/v$pkgver.tar.gz")
-sha512sums=('b63101be0a4b892163907a3a1fa80890222cbc5d7243a73b4bea7a32051e9f66f24f535164ede20b20f0ed8238a09a57746ec839968425689ed55040be723471')
+sha512sums=('6d8c5b39f54bd46e09fbdd5f9da901aea64855b8bcc64b60c7e39f470057f7e2f481e7b7b26123405118da4455db4f20e70c9565c1eb3fba9c81a221865db28a')
 
 build () {
   cd "$pkgname-$pkgver"

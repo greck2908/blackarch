@@ -3,7 +3,7 @@
 
 pkgname=python-pyspnego
 _pkgname=pyspnego
-pkgver=0.1.4
+pkgver=0.1.6
 pkgrel=1
 pkgdesc='Windows Negotiate Authentication Client and Server.'
 arch=('any')
@@ -11,8 +11,8 @@ url='https://pypi.org/project/pyspnego/#files'
 license=('MIT')
 depends=('python' 'python-cryptography')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/6e/be/884c72d430bbe9a0b195e2d0ea3cf6056c8e3c9c424b498317119688d22a/$_pkgname-$pkgver.tar.gz")
-sha512sums=('3c4d3057a14e70c7d05abc390205f60969428df33e8aabadb88a868cbe100f579a5708e8bb71aa6093e8dfdc28018ef9131dca49dddfc3f1d00b2b1a5a6fa1d0')
+source=("https://files.pythonhosted.org/packages/31/67/1e34ece99b804bd26b0043d584ffb5bc789e34001ac1612eeb073b5c283f/$_pkgname-$pkgver.tar.gz")
+sha512sums=('c46f1c4e58e4448ae1bd0d950bd16962855ceee5682e4b86194a141fece13b15f7df7d91ad3fcebd19feecaa76c6e4809c14ebe3f14bce4888d4a4e3d4139a89')
 
 build() {
   cd "$_pkgname-$pkgver"

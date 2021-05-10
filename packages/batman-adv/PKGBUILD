@@ -2,7 +2,7 @@
 # See COPYING for license details.
 
 pkgname=batman-adv
-pkgver=2020.3
+pkgver=2021.0
 pkgrel=1
 groups=('blackarch' 'blackarch-wireless')
 pkgdesc='Batman kernel module, (included upstream since .38)'
@@ -12,7 +12,7 @@ license=('GPL')
 depends=('libnl')
 makedepends=('linux-headers')
 source=("https://downloads.open-mesh.org/batman/releases/$pkgname-$pkgver/$pkgname-$pkgver.tar.gz")
-sha512sums=('15a73a8b8e7b99376fc74fe598cb96bb3a6dc2f75fbaa91833b37351998fa2fec5b5db08ce059b3fef1e72db96afdb3e9f076b68d019bdc8ae5e35945c8d8dd0')
+sha512sums=('9aad403e42ff630acfca55c5a6951f66dbff5635fdcc27c01b30780b9d251ea7da7f593bd45444879d75c048c0de3e34277994cc13d89399b2e72775c7f4c431')
 install="$pkgname.install"
 
 build() {

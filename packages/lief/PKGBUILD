@@ -3,8 +3,8 @@
 
 pkgname=lief
 _pkgname=LIEF
-pkgver=0.10.1
-pkgrel=3
+pkgver=0.11.3
+pkgrel=1
 pkgdesc='Library to Instrument Executable Formats.'
 groups=('blackarch' 'blackarch-disassembler' 'blackarch-reversing')
 arch=('x86_64' 'aarch64')
@@ -13,7 +13,7 @@ license=('Apache')
 depends=('python')
 makedepends=('python-setuptools' 'cmake')
 source=("https://github.com/lief-project/LIEF/archive/$pkgver.tar.gz")
-sha512sums=('08cc6374fa5026099e4d43cb6bcd6401a8eadb6ea9749f5cde09ce80a555eb5ebc05ef6db8f01085ff20d56ba506fa0ab07e8d5f2e12dea723bebeb0f93410e3')
+sha512sums=('7a2c814e3c0952c679ad85e12f26b8b6a305d73ede6d9ea141a6e8d81689f736dbf28bf2bf36f9ee946eeb0b76736c0de4ec1b2d3741886ba0fbeb17559b4e06')
 
 prepare() {
   cd "$_pkgname-$pkgver"

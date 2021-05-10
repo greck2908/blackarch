@@ -3,7 +3,7 @@
 
 pkgname=python-pyvex
 _pkgname=pyvex
-pkgver=9.0.4940
+pkgver=9.0.6885
 pkgrel=1
 pkgdesc='A Python interface to libVEX and VEX IR.'
 arch=('x86_64' 'aarch64')
@@ -12,8 +12,8 @@ license=('BSD')
 depends=('python' 'python-pycparser' 'python-cffi' 'python-archinfo'
          'python-bitstring' 'python-future' 'python-requests')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/7c/1e/9d1e2055bcdfd68cf266794c0bfa7b7e9e0b41cd2f8d1c5dbb6cb8af2f69/$_pkgname-$pkgver.tar.gz")
-sha512sums=('d6adb5987b057ce0ca69d53c8957997a15b707e8774ce12bf965e8c6f9e05e48be156754d8b09408f53fc78051e3fe762021d75b2b462e960ba6756f52222bae')
+source=("https://files.pythonhosted.org/packages/eb/25/32d40bcb7b0591c839f720f74341a226662038d6532147497b669afe3d9c/$_pkgname-$pkgver.tar.gz")
+sha512sums=('8eab636018b41bf6378e1b483e4f7bfdbbdfd0f699baf931160f46b781a1f97f60166375268ecb82056772332c18850cb7ec790bbd05feb779a18e18b525a068')
 
 build() {
   cd "$_pkgname-$pkgver"

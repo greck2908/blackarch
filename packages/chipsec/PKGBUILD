@@ -2,7 +2,7 @@
 # See COPYING for license details.
 
 pkgname=chipsec
-pkgver=1051.d746954
+pkgver=1075.9a2536c
 pkgrel=1
 epoch=4
 pkgdesc='Platform Security Assessment Framework.'
@@ -13,13 +13,21 @@ url='https://github.com/chipsec/chipsec'
 license=('GPL2')
 depends=('dkms' 'libelf' 'linux-headers' 'nasm' 'python' 'python-lxml')
 makedepends=('git' 'python-setuptools')
-source=("git+https://github.com/chipsec/$pkgname.git")
-sha512sums=('SKIP')
-
+source=("git+https://github.com/chipsec/$pkgname.git"
+        'Makefile.patch')
+sha512sums=('SKIP'
+            'b3bd500b37871e8c0c9132613fd9254014c5288b24d7e88acacc695dbb3ff2d384c72186536e2fe5225c31b438f5d08fad991503c9335021cf03c3ed8c29e85f'
+           )
 pkgver() {
   cd $pkgname
 
   echo $(git rev-list --count HEAD).$(git rev-parse --short HEAD)
+}
+
+prepare() {
+  cd "$pkgname/drivers/linux"
+
+  patch -Np0 < "$srcdir/Makefile.patch"
 }
 
 build() {
@@ -43,7 +51,7 @@ package() {
     chipsec-manual.pdf
   install -Dm 644 -t "$pkgdir/usr/share/licenses/$pkgname/" LICENSE COPYING
 
-  rm -rf "$pkgdir/usr/chipsec-manual.pdf"
+  rm -f "$pkgdir/usr/chipsec-manual.pdf"
 
   for i in "$pkgdir/usr/bin/"*; do
     mv $i "$(echo $i | tr -s '_' '-')"

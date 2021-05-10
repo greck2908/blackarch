@@ -2,7 +2,7 @@
 # See COPYING for license details.
 
 pkgname=snyk
-pkgver=1.393.0
+pkgver=1.542.0
 pkgrel=1
 pkgdesc='CLI and build-time tool to find and fix known vulnerabilities in open-source dependencies.'
 arch=('any')
@@ -10,7 +10,7 @@ groups=('blackarch' 'blackarch-code-audit' 'blackarch-scanner')
 url='https://github.com/snyk/snyk'
 license=('Apache')
 source=("https://github.com/$pkgname/$pkgname/releases/download/v$pkgver/$pkgname-linux")
-sha512sums=('c00f3bd9f392e54ac82031f078abbb27fb0d8c6f70fb37389290dc318eae16a4bac613f160b7ae8c8c3b96d8b156dfda19983eac50d26f3439685b2fa39429db')
+sha512sums=('154cd579d6bad297c29d10c7bdb59585af8b9f85912021aa37ccc793385346df01cd33f992de6ce3215de7c98209eea5eaea3588270ae6a93a526106ad05763d')
 noextract=('snyk-linux')
 options=('!strip')
 

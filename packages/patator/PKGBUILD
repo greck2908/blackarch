@@ -2,7 +2,7 @@
 # See COPYING for license details.
 
 pkgname=patator
-pkgver=194.2692d6a
+pkgver=199.5947f5f
 pkgrel=1
 epoch=1
 groups=('blackarch' 'blackarch-cracker')

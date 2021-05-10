@@ -1,0 +1,29 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-mypy
+_pkgname=mypy
+pkgver=0.812
+pkgrel=1
+pkgdesc='Optional static typing for Python.'
+arch=('any')
+url='https://pypi.org/project/mypy/#files'
+license=('MIT')
+depends=('python' 'python-typed-ast' 'python-typing-extensions'
+         'python-mypy_extensions')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/78/b1/6079ca9a5afbedb663a0c3db82bd2bcba1574ccdb55acd9b9855ed79dd39/$_pkgname-$pkgver.tar.gz")
+sha512sums=('e4c00157058cd2c5f0ba17923c2cc7b5c5c2baf817390affc2cfb19ca7b52a5271ca3522a29dc8ca1f39a5ae40b06e5e33b2d5d581a36bdbb69c3c79acd2a121')
+
+build() {
+  cd "$_pkgname-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "$_pkgname-$pkgver"
+
+  python setup.py install --prefix=/usr --root="$pkgdir" -O1 --skip-build
+}
+

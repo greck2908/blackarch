@@ -3,16 +3,16 @@
 
 pkgname=python-rdap
 _pkgname=rdap
-pkgver=1.1.0
-pkgrel=2
+pkgver=1.2.2
+pkgrel=1
 pkgdesc='Registration Data Access Protocol tools.'
 arch=('any')
 url='https://pypi.org/project/rdap/#files'
 license=('Apache')
 depends=('python' 'python-six')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/0f/fa/56d9c38157f303effa0ab9cbf50e164543ab7dbeaefc61525a403985add9/$_pkgname-$pkgver.tar.gz")
-sha512sums=('2df3cf03a08dd110654c5e7c73da3c0f89e9065f67b401bdd666b4f5eabb6209523eafa86606265925b8ac3b3a8e9d28c92a67e67e66d674877883b254c5f973')
+source=("https://files.pythonhosted.org/packages/9d/0d/3fb8db7a5707767bf8b5770c06234108c24dda5e97c0d649f28c0b0dbac3/$_pkgname-$pkgver.tar.gz")
+sha512sums=('1bf80b1f5fd3e01de35cf54513c90f6c821632bd3bf85e4b53f0b0425984fa43b52b02b5319391f840a41291be9083c86b17fc4a3de584c910582145de684011')
 
 build() {
   cd "$_pkgname-$pkgver"

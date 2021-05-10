@@ -2,7 +2,7 @@
 # See COPYING for license details.
 
 pkgname=maltrail
-pkgver=47052.9f6fd4b0ae
+pkgver=59359.ecdf46e456
 pkgrel=1
 pkgdesc='Malicious traffic detection system.'
 groups=('blackarch' 'blackarch-defensive' 'blackarch-networking'

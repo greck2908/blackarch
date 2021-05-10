@@ -2,7 +2,7 @@
 # See COPYING for license details.
 
 pkgname=zeek
-pkgver=11226.ed4afa95d
+pkgver=11805.d092b9f75
 pkgrel=1
 groups=('blackarch' 'blackarch-networking' 'blackarch-defensive'
         'blackarch-sniffer')

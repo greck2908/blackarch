@@ -3,16 +3,16 @@
 
 pkgname=python-pytsk3
 _pkgname=pytsk3
-pkgver=20200117
-pkgrel=2
+pkgver=20210419
+pkgrel=1
 pkgdesc='Python bindings for the sleuthkit.'
 arch=('x86_64' 'aarch64')
-url='https://github.com/py4n6/pytsk'
+url='https://pypi.org/project/pytsk3/#files'
 license=('Apache')
 depends=('python')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/83/25/cad66a5f52de8b984120351b1a643d77f53dd96b4345f86a8139fc36da14/$_pkgname-$pkgver.tar.gz")
-sha512sums=('be933115870b4b600cc08fe11f7a41e5a59982d28ebf876d7cfa64362074d2656450f4bf217c90f7238293745f515c6fa16e34e6619542ab4a2118087cf271c3')
+source=("https://files.pythonhosted.org/packages/ee/e7/6fb3d9045133d772570323f7caa0cc0541acb4681eeecb209571b362736e/$_pkgname-$pkgver.tar.gz")
+sha512sums=('e9641f3f6e44f41aa7306efc923543a047ad980f4598ef064e47a02d428172332e201a5003e4dd0d338bbbaf28004b7424fcd7c158694dac497ad0916940d6da')
 
 build() {
   cd "$_pkgname-$pkgver"

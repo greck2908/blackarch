@@ -3,8 +3,8 @@
 
 pkgname=python-pynput
 _pkgname=pynput
-pkgver=1.7.1
-pkgrel=2
+pkgver=1.7.3
+pkgrel=1
 pkgdesc='Monitor and control user input devices.'
 arch=('any')
 url='https://pypi.org/project/pynput/#files'
@@ -12,8 +12,8 @@ license=('GPL')
 depends=('python' 'python-six')
 makedepends=('python-setuptools')
 options=(!emptydirs)
-source=("https://files.pythonhosted.org/packages/71/32/a74e99d7b538ed324550edca364ae708cc9c3ba06896f51cd36160b3acf6/$_pkgname-$pkgver.tar.gz")
-sha512sums=('dbce0b165569e9f842cff11254b8b7de17cd98a3fde90a3bc96ae02677e93bb7cde8afd06a0cd0d15a0612ba793a48666563816b04e83ba49d35f865e71b022f')
+source=("https://files.pythonhosted.org/packages/39/5c/e65bac80b4da3fe5f2e16c9e44083f48ec413dac1c5615a9480da261f56a/$_pkgname-$pkgver.tar.gz")
+sha512sums=('3cbca8d63266b7de3250c6cd55c4d90231386ac2c0c65052b8dfc287a8a3db2b56099cccded1ea471e7048697b7d62e5dea89cf16ec3f135f39cd7ffe6925023')
 
 build() {
   cd "$_pkgname-$pkgver"

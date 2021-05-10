@@ -4,16 +4,16 @@
 pkgbase=python-py2neo
 pkgname=('python2-py2neo' 'python-py2neo')
 _pkgname=py2neo
-pkgver=2020.1.1
+pkgver=2021.1.1
 epoch=1
-pkgrel=2
+pkgrel=1
 pkgdesc='Python client library and toolkit for Neo4j.'
 arch=('x86_64' 'aarch64')
 url='https://pypi.python.org/pypi/py2neo/'
 license=('Apache')
 makedepends=('python2-setuptools' 'python-setuptools')
-source=("https://files.pythonhosted.org/packages/2e/a8/1b08a0c357ec27ca111976b00ccc95d0f075d103b08f0068b5ebed606a3c/$_pkgname-$pkgver.tar.gz")
-sha512sums=('a828563baf5be5670d0a220e25f555dda978dc513c3f10f5a2490899ff08377a148bed639b98814f0c6847ae659aacd5d07c365381fd0bbdcac4f44673d6bff5')
+source=("https://files.pythonhosted.org/packages/92/12/970053073d9d122bbe221ffde343fe96084d4a1a388f098efc09ae6287cb/$_pkgname-$pkgver.tar.gz")
+sha512sums=('5900b44c467a5770a842058ae3def1e65c445fa621c2e1366b2ff4ec23a788605c6b05b29eba1172baf05f0fb7f8ec93791ff64355cdbaa27246cf45d99a2659')
 
 prepare() {
   cp -a "$_pkgname-$pkgver"{,-2}

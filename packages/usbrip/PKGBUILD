@@ -2,8 +2,8 @@
 # See COPYING for license details.
 
 pkgname=usbrip
-pkgver=279.2e8a1f6
-pkgrel=2
+pkgver=282.77a5f79
+pkgrel=1
 pkgdesc='USB device artifacts tracker.'
 groups=('blackarch' 'blackarch-forensic')
 arch=('any')

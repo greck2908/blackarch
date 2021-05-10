@@ -1,0 +1,29 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-ssh-mitm
+_pkgname=ssh-mitm
+pkgver=0.5.2
+pkgrel=1
+pkgdesc='SSH mitm server for security audits supporting public key authentication, session hijacking and file manipulation.'
+arch=('any')
+groups=('blackarch' 'blackarch-exploitation' 'blackarch-sniffer')
+url='https://ssh-mitm.at'
+license=('LGPL3')
+depends=('python' 'python-paramiko' 'python-pytz' 'python-enhancements')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/32/6e/fc3deaa26d600965faafb533493af33a14bbf52d7eff1c13a38c837039e5/$_pkgname-$pkgver.tar.gz")
+sha512sums=('0fb83d7346ff0129e28b41447d1796153424901aece98f207155c20c4ee94e4f65c9de3c49fc6080b127ba3d999434931757f2b4c5fd15e0dfed46e2987ee05b')
+
+build() {
+  cd "$_pkgname-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "$_pkgname-$pkgver"
+
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+}
+

@@ -3,7 +3,7 @@
 
 pkgname=python-claripy
 _pkgname=claripy
-pkgver=9.0.4940
+pkgver=9.0.6885
 pkgrel=1
 pkgdesc='An abstraction layer for constraint solvers.'
 arch=('any')
@@ -11,8 +11,8 @@ url='https://pypi.org/project/claripy/#files'
 license=('custom:unknown')
 depends=('python' 'z3' 'python-future' 'python-cachetools' 'python-decorator'
          'python-pysmt')
-source=("https://files.pythonhosted.org/packages/ea/ec/c3d2a4cbebcfd8693b3787a96df5775b7914dbec7904f9b98783d14d42ff/$_pkgname-$pkgver.tar.gz")
-sha512sums=('5e3b2d65dcd99fa9322c4425f1228177d4b951273fdefe017d5614c3aa60ae3137381d0f647f052803649d7aaf58c1d45b81ac2447fc09cdc5c6787b621e5837')
+source=("https://files.pythonhosted.org/packages/07/7f/68aeea1176afb04e8fe1fc83a76b70d24f4510e13e255dbb4101f85378ad/$_pkgname-$pkgver.tar.gz")
+sha512sums=('50868ed6d54c0f7e66675a294abf6fe8509355f461f6594ab2cdb5eb38f7efba146285c48fe92decd9a2855d14e53753254571426e0a5be3133cf4d4ad636c92')
 
 build() {
   cd "$_pkgname-$pkgver"

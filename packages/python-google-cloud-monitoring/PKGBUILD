@@ -3,16 +3,16 @@
 
 pkgname=python-google-cloud-monitoring
 _pkgname=google-cloud-monitoring
-pkgver=2.0.0
-pkgrel=2
+pkgver=2.2.1
+pkgrel=1
 pkgdesc='Stackdriver Monitoring API client library.'
 arch=('any')
 url='https://pypi.org/project/google-cloud-monitoring/#files'
 license=('Apache')
 depends=('python' 'python-google-api-core')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/f1/a0/90fd74b32a32747d3534934c9dd6acd0842ac9a6d173a89947674b57caca/$_pkgname-$pkgver.tar.gz")
-sha512sums=('76abddb5efd4318b4911cfb48453677bdaad3da75918bdabdcc5e5be4f90c320bfb6a879b7d56eb2fbe302569df487f18d923f54f593b2b98a4d711d02aea7c4')
+source=("https://files.pythonhosted.org/packages/c6/92/b52153d6c688237402cc52cf117f27157eaaf6a5c58229115e123efb2bb2/$_pkgname-$pkgver.tar.gz")
+sha512sums=('06a94920f107bf5da43c5564633b15760bf956f9c7a2b683f7f4cdc05bc87347d588cca1355483c91956c55d98ca51c22f748598d93915358020876f75e89e63')
 
 build() {
   cd "$_pkgname-$pkgver"

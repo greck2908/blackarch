@@ -3,8 +3,8 @@
 
 pkgname=python-dataset
 _pkgname=dataset
-pkgver=1.4.1
-pkgrel=2
+pkgver=1.5.0
+pkgrel=1
 pkgdesc='Toolkit for Python-based data processing.'
 arch=('any')
 url='https://pypi.org/project/dataset/'
@@ -12,8 +12,8 @@ license=('MIT')
 depends=('python' 'python-six' 'python-sqlalchemy' 'python-alembic'
          'python-normality')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/22/38/bf5eccab6345130e488bdb2e11cd66fe2ab35aa2d57dfaaca087a23583c5/$_pkgname-$pkgver.tar.gz")
-sha512sums=('6fa199907949beb036c6fd89199bdf42a1f61f621d2b107e9ed4f9fb1fa58d373ceed4107d14d8f6460f06b40b6e96f7c56d2bf11922cffb05abf4a72eecebad')
+source=("https://files.pythonhosted.org/packages/38/10/bfd0333ac824b490ba478336c429a3ae255482595f70f35790a2282fdd8d/$_pkgname-$pkgver.tar.gz")
+sha512sums=('c69dc61c3d9b041e6175bde5fc5db415d5a39388d4f73076e57d02e1930cce5555685d55d2d025d07bf2351e575b150cfb4338b07490aa3f6adff57259b3f885')
 
 build() {
   cd "$_pkgname-$pkgver"

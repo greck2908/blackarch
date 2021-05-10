@@ -3,7 +3,7 @@
 
 pkgname=commonspeak
 _pkgname=commonspeak2
-pkgver=44.661762b
+pkgver=46.ba24110
 pkgrel=1
 pkgdesc='Leverages publicly available datasets from Google BigQuery to generate wordlists.'
 arch=('x86_64')
@@ -22,6 +22,9 @@ pkgver() {
 }
 
 build() {
+  # This package is completely broken, the current setup does not build (https://paste.rs/TpC) and the
+  # new process doesn't as well (https://paste.rs/bx3)
+
   mkdir -p "src/$_url" && rm -rf "src/$_url" && mv $pkgname "src/$_url" &&
     cd "src/$_url"
 

@@ -3,7 +3,7 @@
 
 pkgname=python-google-play-scraper
 _pkgname=google-play-scraper
-pkgver=0.1.2
+pkgver=0.2.1
 pkgrel=1
 pkgdesc='Provides APIs to easily crawl the Google Play Store for Python without no external dependencies.'
 arch=('any')
@@ -11,8 +11,8 @@ url='https://pypi.org/project/google-play-scraper/#files'
 license=('MIT')
 depends=('python')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/ac/de/87c97ba42c156e53f0eb67a2b68a13d6f77da98d24f6d52f70c631c8e526/$_pkgname-$pkgver.tar.gz")
-sha512sums=('647e5396ed38daa0ef82ee05c88f3e9bd0458d29a974b8862da621800749780441b01e70982c1949c24fbbe80735b302c6b5b23a8a86075414f1e9def7d36921')
+source=("https://files.pythonhosted.org/packages/1d/4c/55f501b3e41b4508f622f79ca2ea385b84bfe88f5e4b9a626cbdcab87496/$_pkgname-$pkgver.tar.gz")
+sha512sums=('b7dbbcbe1d69bcd03b59640e2e76c1b8229c3b639ada9260b23ab9bcde2db55d38afdfd75744937fb05c46b6366d1ae1151d20e11d9d6c5ac67bf9b9306c2ca5')
 
 build() {
   cd "$_pkgname-$pkgver"

@@ -3,16 +3,16 @@
 
 pkgname=python-asysocks
 _pkgname=asysocks
-pkgver=0.0.10
-pkgrel=2
+pkgver=0.1.1
+pkgrel=1
 pkgdesc='Socks5 / Socks4 client and server library.'
 arch=('any')
-url='https://pypi.org/project/asysocks/#files' # https://github.com/skelsec/asysocks
+url='https://pypi.org/project/asysocks/#files'
 license=('MIT')
 depends=('python')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/30/bb/a17cf296930119d1bea9a6079ddb9245d44cb43388d6792252a7c9eeba63/$_pkgname-$pkgver.tar.gz")
-sha512sums=('a5d794f0483dc61efa7eb98719768b4e19ff3b02ecb8c3ac68965d17209c7610974e9b6ef16f681097fd4bd9e30e0e366e934bf7287d252397802cac493e36bf')
+source=("https://files.pythonhosted.org/packages/45/16/94b94ab3460ee4942502696cad86367bf813c292f6d9dd7a0c27ac7cbf12/$_pkgname-$pkgver.tar.gz")
+sha512sums=('c5df0a6c2eb4c24202a54148266dea7f4e4cd97fa88372ae95edad16363dc8310041b688bb257616e262c8b25d05c5c521c2298cd7a99a928adda1df3cef5ded')
 
 build() {
   cd "$_pkgname-$pkgver"

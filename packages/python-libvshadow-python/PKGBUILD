@@ -4,15 +4,15 @@
 pkgbase=python-libvshadow-python
 pkgname=('python2-libvshadow-python' 'python-libvshadow-python')
 _pkgname=libvshadow
-pkgver=20191221
-pkgrel=2
+pkgver=20210425
+pkgrel=1
 pkgdesc='Library and tools to access the Volume Shadow Snapshot (VSS) format.'
 arch=('x86_64' 'aarch64')
 url='https://pypi.org/project/libvshadow-python/#files'
 license=('LGPL3')
 makedepends=('python2-setuptools' 'python-setuptools')
-source=("https://files.pythonhosted.org/packages/42/11/365087ea337f541835c8673ef29072e97dd1c2419c1178e9c97a195fce49/$_pkgname-python-$pkgver.tar.gz")
-sha512sums=('7e9157f95449a3de26ec4cfbbe9574d9855b01aa5cd110b424bb7d8ad3e010ebb28dbeee3337e1ae52afecf603d0194a06ca2438fe4461d1f314541701756d22')
+source=("https://files.pythonhosted.org/packages/2a/18/b3d80d7f10369205caf0eb746495ebaaec6f4c7f92f4d62aa4e0b3638d25/$_pkgname-$pkgver.tar.gz")
+sha512sums=('8493d4aa60b2134f355a8bfba84cd0420b33b2e56b39cfd1fea67888a9470f3984f713ddf48091633c41a5c5171a912a9b940774a02a3d9103f25b839c73a1ea')
 
 prepare() {
   cp -a "$_pkgname-$pkgver"{,-2}

@@ -2,8 +2,8 @@
 # See COPYING for license details.
 
 pkgname=xspear
-pkgver=140.ca5eb9d
-pkgrel=1
+pkgver=141.5fe0a29
+pkgrel=2
 epoch=1
 groups=('blackarch' 'blackarch-webapp' 'blackarch-fuzzer')
 pkgdesc='Powerful XSS Scanning and Parameter analysis tool&gem.'

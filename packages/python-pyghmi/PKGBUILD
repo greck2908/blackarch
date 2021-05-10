@@ -4,15 +4,15 @@
 pkgbase=python-pyghmi
 pkgname=('python2-pyghmi' 'python-pyghmi')
 _pkgname=pyghmi
-pkgver=1.5.19
-pkgrel=2
+pkgver=1.5.25
+pkgrel=1
 pkgdesc='Python General Hardware Management Initiative (IPMI and others).'
 arch=('any')
 url='https://pypi.org/project/pyghmi/#files'
 license=('Apache')
 makedepends=('python2-setuptools' 'python-setuptools')
-source=("https://files.pythonhosted.org/packages/1a/d1/09c5dfc3dcd022911c49389a178d01e6869c25db9a1d76db7d27a5a01ce6/$_pkgname-$pkgver.tar.gz")
-sha512sums=('2d94f3abcae9a45b08e40ab779e0f8f2434e3eea260772dc49007deb8382cc7dc75b10c91f952c26e220d7f937c2d3d8d663a0dc54337d3e2a59c6bfe6929f72')
+source=("https://files.pythonhosted.org/packages/e9/d5/8aa17aa6360954f91c9c1ab945c777316ec546759c9fbaeb9d96ce12ad13/$_pkgname-$pkgver.tar.gz")
+sha512sums=('eba687c10c3bfc33bd6b933511b6e2111effc2cab5a12c3972e039198c50e2b0691d00e28c03b774001ae9babff37ed06a10a214241dc28a0cfce78ad87c7635')
 
 prepare() {
   cp -a "$_pkgname-$pkgver"{,-2}

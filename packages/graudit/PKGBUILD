@@ -2,7 +2,7 @@
 # See COPYING for license details.
 
 pkgname=graudit
-pkgver=498.52a8ff8
+pkgver=514.8df53c9
 pkgrel=1
 pkgdesc='Grep rough source code auditing tool.'
 arch=('any')

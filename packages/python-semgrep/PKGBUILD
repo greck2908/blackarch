@@ -3,28 +3,32 @@
 
 pkgname=python-semgrep
 _pkgname=semgrep
-pkgver=0.34.0
+pkgver=0.50.1
 pkgrel=1
 pkgdesc='Lightweight static analysis for many languages.'
-arch=('any')
-url='https://pypi.org/project/semgrep/#files'
+arch=('x86_64')
+url='https://github.com/returntocorp/semgrep'
 license=('LGPL')
 depends=('python' 'python-colorama' 'python-requests' 'python-attrs'
          'python-tqdm' 'python-packaging' 'python-ruamel-yaml' 'python-wheel'
          'python-jsonschema' 'python-junit-xml')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/1e/11/315f67a6b28ec1b6c3cb95e6c5ce34a5f0ceec84d0dd31587872d594a1aa/$_pkgname-$pkgver.tar.gz")
-        'setup.py.patch')
-sha512sums=('ac282380c32aa4f91265c31399f337ea741d2899615e2a9f16335d35ddb48d1c23062fce4a7edbfbaf0c40e486d648180971f74eb01b5455ccddc95532b19698')
-            '437b32308bf3c1116daf98edf143a08af22c014dd43badd3463eb6f508590900934fb437dee6e625cdf50bf531ac8ce272eec6ce0d35c916a971a2045cc536df')
+source=("https://files.pythonhosted.org/packages/4d/4b/b45947f0d507236cd95dba67eff1481ecaa34a2a6189065a92853d7511f1/$_pkgname-$pkgver.tar.gz"
+        "https://github.com/returntocorp/$_pkgname/releases/download/v$pkgver/$_pkgname-v$pkgver-ubuntu-16.04.tgz")
+sha512sums=('f1d026d04a88d4c2c29d928898870caa713ab4799e80fef1bd7a8e3a71ca287e1bc8bc47f12dc2792dca4d14bac3136bb709192b4c71ac79d69df755d9f765df'
+            '26c672de7288bf598191092c5ea166707eac4a2ce5475555bfa47ed5708b99178303ee1706da4bced8114e69fbb88c72352188194492266cccfb364a2d1f3bd6')
 
 prepare() {
-  # dirty fix
-  patch -p1 < setup.py.patch
+  cd "$_pkgname-$pkgver"
+
+  sed -i 's/ruamel.yaml==0.16.10/ruamel.yaml>=0.16.10/' setup.py
 }
 
 build() {
   cd "$_pkgname-$pkgver"
+
+  export SEMGREP_CORE_BIN="$srcdir/semgrep-files/semgrep-core"
+  export SPACEGREP_BIN="$srcdir/semgrep-files/spacegrep"
 
   python setup.py build
 }
@@ -35,5 +39,9 @@ package() {
   python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
 
   rm -rf "$pkgdir/usr/lib/python3.9/site-packages/tests"
+
+  # default is enough for now
+  strip "$pkgdir/usr/lib/python3.9/site-packages/$_pkgname/bin/spacegrep"
+  strip "$pkgdir/usr/lib/python3.9/site-packages/$_pkgname/bin/semgrep-core"
 }
 

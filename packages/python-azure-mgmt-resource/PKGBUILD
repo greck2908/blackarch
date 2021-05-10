@@ -3,16 +3,16 @@
 
 pkgname=python-azure-mgmt-resource
 _pkgname=azure-mgmt-resource
-pkgver=15.0.0
-pkgrel=2
+pkgver=16.1.0
+pkgrel=1
 pkgdesc='Microsoft Azure Resource Management Client Library for Python.'
 arch=('any')
 url='https://pypi.org/project/azure-mgmt-resource/#files'
 license=('MIT')
 depends=('python')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/9b/a9/4430d728c8b1db0ff2eac5b7a2b210c5ba70a7590613664e4c8e8fb10c11/$_pkgname-$pkgver.zip")
-sha512sums=('d4a7522a181abdb395d8c91af4f7cc736b0e5c8e0460fb236260d994f6f2cc9cf415d3317527b1ad1038fcc9a3614c8953a6318e8fc3d0c7083e7458723f70f8')
+source=("https://files.pythonhosted.org/packages/a2/bc/afc5f0aac38026b339224b2321bcab43fd5cd810fe8f0de8100996d15af5/$_pkgname-$pkgver.zip")
+sha512sums=('e085197044b136f8d97c87edc9983b5ee240e76a5c7de2fe5d2656d09b38d714231ac8927919197d7feb75ca681f8c811fe723d9cf3f74a21452cfa8226c5562')
 
 build() {
   cd "$_pkgname-$pkgver"

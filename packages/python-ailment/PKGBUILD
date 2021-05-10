@@ -4,15 +4,15 @@
 pkgbase=python-ailment
 pkgname=('python2-ailment' 'python-ailment')
 _pkgname=ailment
-pkgver=9.0.4940
+pkgver=9.0.6885
 pkgrel=1
 pkgdesc='The angr Imtermediate Language.'
 arch=('any')
 url='https://pypi.org/project/ailment/#files'
 license=('BSD')
 makedepends=('python2-setuptools' 'python-setuptools')
-source=("https://files.pythonhosted.org/packages/e7/3b/1efb8e8eccab628174708d4b88ec00a43251ae91391fe671a6e2fb2969b6/$_pkgname-$pkgver.tar.gz")
-sha512sums=('907b08daa147aa30b9fd10a6ffde2e15630066bbbd446c96edeffd9b110a07d4ca60970de22efe152d75599c870f4e668b7932ef7d34fd1de90dca9533a9a9a8')
+source=("https://files.pythonhosted.org/packages/84/18/e8cd50a7a34b6da90e33f4f195a9b81b371e479a746f2d8e4622dd7b5916/$_pkgname-$pkgver.tar.gz")
+sha512sums=('d7bae65809fc290ba66625dfbc61c62f0e9061fe4dd29c2758ecd30a3c86c5fa095cea5c2dd7350a186a722e03cba7d2b13663ecfc80e77d9986308bab96435d')
 
 prepare() {
   cp -a "$_pkgname-$pkgver"{,-2}

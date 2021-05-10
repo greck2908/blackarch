@@ -3,8 +3,8 @@
 
 pkgname=python-httpx
 _pkgname=httpx
-pkgver=0.16.1
-pkgrel=2
+pkgver=0.18.1
+pkgrel=1
 pkgdesc='Fully featured HTTP client which provides sync and async APIs, and support for both HTTP/1.1 and HTTP/2.'
 arch=('any')
 url='https://pypi.org/project/httpx/#files'
@@ -13,8 +13,8 @@ depends=('python' 'python-urllib3' 'python-h11' 'python-h2' 'python-certifi'
          'python-chardet' 'python-hstspreload' 'python-idna' 'python-rfc3986'
          'python-sniffio' 'python-brotlipy')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/28/1e/1726b212239edc78999874e0ba8c86baec99e5d36ccfae9911514feae80c/$_pkgname-$pkgver.tar.gz")
-sha512sums=('99321176d5bfe927804abe9c93eff098ce7498f6a42db0cacad4a9420d7e5e557ad1ada04126ab3bedfb718631ee7398d0ce42e2c5854f819e4ac36f892c1671')
+source=("https://files.pythonhosted.org/packages/91/e3/290e3a3729cf92ed39d1bee594e698f99bbb7f9b0a041282c987a6376d66/$_pkgname-$pkgver.tar.gz")
+sha512sums=('991fe8084f8537bdece3efa97522852a60d71a05aea7c1cd2fe6999371059db6465640e5e5af4eca28660a651d14e32f9c3dd7d8e6dca88900232d01ce3db35d')
 
 build() {
   cd "$_pkgname-$pkgver"

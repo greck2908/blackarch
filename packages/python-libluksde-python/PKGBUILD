@@ -1,0 +1,28 @@
+# This file is part of BlackArch Linux ( https://www.blackarch.org/ ).
+# See COPYING for license details.
+
+pkgname=python-libluksde-python
+_pkgname=libluksde-python
+pkgver=20210419
+pkgrel=1
+pkgdesc='Python bindings module for libluksde.'
+url='https://pypi.org/project/libluksde-python/'
+arch=('x86_64' 'aarch64')
+license=('LGPL3')
+depends=('python')
+makedepends=('python-setuptools')
+source=("https://files.pythonhosted.org/packages/dc/48/5ae3fdeba89b8cac7c543117d5c93d075a8381d68c971ddd17973ba89f53/$_pkgname-$pkgver.tar.gz")
+sha512sums=('d3ac720856c0cf7fa5efdd2d47929a6e0246a951f4bfab10ab6530874e018cd8613c23bb3eaf2cdd952ab8625c90b3ffa37cd79b223d68bc4a8b953e7bac4d0e')
+
+build() {
+  cd "libluksde-$pkgver"
+
+  python setup.py build
+}
+
+package() {
+  cd "libluksde-$pkgver"
+
+  python setup.py install --root="$pkgdir" --prefix=/usr -O1 --skip-build
+}
+

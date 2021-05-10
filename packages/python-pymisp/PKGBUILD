@@ -4,15 +4,15 @@
 pkgbase=python-pymisp
 pkgname=('python-pymisp')
 _pkgname=pymisp
-pkgver=2.4.135.3
-pkgrel=2
+pkgver=2.4.142
+pkgrel=1
 pkgdesc='Python API for MISP.'
 arch=('any')
 url='https://pypi.org/project/pymisp/#files'
 license=('BSD')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/42/4f/e43db204c86c107ac978d7b64e1d0fea7d343505333796ad4190704cb90a/$_pkgname-$pkgver.tar.gz")
-sha512sums=('e0c1f8aac80bf2bc9fc3d0ef16bffb7c180003b74f0ecf64cdc7c7b1d9db0bcedb1e78c834491fd4735d184ab43333613fc1ceff47d8b640559f947e5c9d1f45')
+source=("https://files.pythonhosted.org/packages/ce/9d/f58a2993edfb51197ba2ddc92eec43c95a7e7012dd8c239a1c456816393a/$_pkgname-$pkgver.tar.gz")
+sha512sums=('061faa7b651e719be377adf89c71f5292fdc73f5df51a58353ff847162f003939f46368b9949c1b5ccdf570d6acca81bab05f1c3cf0b90e4ce7b5d62ef03d779')
 
 build() {
   cd "$srcdir/$_pkgname-$pkgver"

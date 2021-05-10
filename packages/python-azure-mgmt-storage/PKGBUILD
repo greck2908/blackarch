@@ -3,16 +3,16 @@
 
 pkgname=python-azure-mgmt-storage
 _pkgname=azure-mgmt-storage
-pkgver=16.0.0
-pkgrel=2
+pkgver=17.1.0
+pkgrel=1
 pkgdesc='Microsoft Azure Storage Management Client Library for Python.'
 arch=('any')
 url='https://pypi.org/project/azure-mgmt-storage/#files'
 license=('MIT')
 depends=('python' 'python-azure-common' 'python-msrestazure' 'python-msrest')
 makedepends=('python-setuptools')
-source=("https://files.pythonhosted.org/packages/d9/9a/31529fb92dc5a8c0a0eae73a0e8af8696b1330f53799b93f0aa59566d674/$_pkgname-$pkgver.zip")
-sha512sums=('1193ccea2f49b112beb2514aedc048eeb51b843f7e21fe77a0c973fcc87ec09e9abdf389a0404b599940daf54ef6c2203c63820a43efa98d9dd4f7d3ba95e1d6')
+source=("https://files.pythonhosted.org/packages/aa/57/0faa0480a53384fc9ef7491bf9245bcc86c078f39e46cf1a6e95d8fecfff/$_pkgname-$pkgver.zip")
+sha512sums=('6bde555eecbd36db9fa03c663915f4f43ccce0ed9b6a21e635e5487539dda713e3d33d3803868f215ca7020bc53c230651a3b551d2decd9d21f7d76d7eb53154')
 
 build() {
   cd "$_pkgname-$pkgver"

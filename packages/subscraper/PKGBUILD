@@ -2,8 +2,9 @@
 # See COPYING for license details.
 
 pkgname=subscraper
-pkgver=37.d6332a8
+pkgver=38.5602e41
 pkgrel=1
+epoch=1
 pkgdesc='Tool that performs subdomain enumeration through various techniques.'
 groups=('blackarch' 'blackarch-recon' 'blackarch-scanner')
 arch=('any')
